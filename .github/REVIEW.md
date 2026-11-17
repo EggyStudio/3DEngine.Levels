@@ -90,6 +90,12 @@ this module comes third, after Modeling, on Modeling.
     WritePrototypePictures, the console commands, FeatureTestLevelTests and docs/levels.md pointing
     here. BevyCSharp took it at `f4e99658` on 2026-10-31, its item 85; 3DEngine's binding is open.
 
+5. **The middle dot out.** The owner wrote on 2026-11-08 that the middle dot is not used anywhere;
+    `Levels/LevelFace.cs`'s doc comment says the texel's coordinates with the word dot or in words
+    in place of `p · UAxis` and `p · VAxis`, and STYLE.md's Punctuation gains the sentence that the
+    middle dot is not used, a row of links separated by a space, a list by commas and a product said
+    in words. With the next batch here.
+
 ## Verdicts
 
 None yet.
