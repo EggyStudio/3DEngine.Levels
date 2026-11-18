@@ -732,3 +732,16 @@ left unwritten, a spot turned, a tree of no species and the refusals, holds 500 
 two pitches among them, to the same rotation, and every whole channel of a color to the number it
 was read as; all seven of its first tests failed on stubs. The README's row names the three, and
 CHEATSHEET.md is written again. The tests pass, 168 where there were 159 (dotnet test Levels.Tests).
+
+The second of the three in the commit carrying this line. LevelLight.IlluminanceAt takes an angle
+from a spot's axis, its light full inside the inner cone, nothing past the outer, and between them
+the square of a ramp in the angle's cosine from the outer's to the inner's, as glTF's
+KHR_lights_punctual gives it, the ramp's width held to a thousandth of a cosine where the cones are
+one, some 0.11 degrees at 30; a point light and the sun are the same every way. LevelSpotConeTests
+holds it on LevelLight's default cones, three angles inside, three between, three at and past the
+outer, a spot of one cone and the point and the sun, and seven of its eleven cases failed while the
+angle was taken and not read. The README's Light row names glTF's falloff. One difference stands for
+the review's word: KHR_lights_punctual's range window is 1 minus (d over the range) to the fourth,
+not squared, where the module's is squared, which takes more of the light away inside the range, 88
+where glTF's leaves 94 in a hundred at half of it, and fades it with no slope at the range.
+CHEATSHEET.md is written again. The tests pass, 179 where there were 168 (dotnet test Levels.Tests).

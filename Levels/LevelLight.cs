@@ -89,6 +89,8 @@ public sealed record LevelLight(
     /// what the light's range means.
     /// </summary>
     /// <param name="meters">The distance from the light in meters, from a sun read as any.</param>
+    /// <param name="degreesFromAxis">The angle of the way to the surface from a spot's
+    /// axis.</param>
     /// <remarks>
     /// <para>
     /// A point light's lumens over the whole sphere are its candelas times 4 pi, and a spot's over
@@ -96,7 +98,9 @@ public sealed record LevelLight(
     /// the inverse square of the distance, a distance under a centimeter taken as one, and is
     /// brought to nothing at the range by the window (1 minus (d over the range) to the fourth),
     /// squared, so it fades with no edge and gives nothing at the range or past it. The sun gives
-    /// its lux at any distance.
+    /// its lux at any distance. Off a spot's axis its light is full inside the inner cone, nothing
+    /// past the outer, and between them the square of a ramp in the angle's cosine from the outer
+    /// cone's to the inner's, as glTF's KHR_lights_punctual gives a spot's falloff.
     /// </para>
     /// <para>
     /// The window leaves 88 parts in a hundred of the inverse square at half the range and 12 at
@@ -105,7 +109,7 @@ public sealed record LevelLight(
     /// alone.
     /// </para>
     /// </remarks>
-    public double IlluminanceAt(double meters)
+    public double IlluminanceAt(double meters, double degreesFromAxis = 0)
     {
         if (Kind == LevelLightKind.Directional) return Intensity;
         var near = Math.Max(meters, 0.01);
@@ -114,7 +118,19 @@ public sealed record LevelLight(
             ? Intensity / (4 * Math.PI)
             : Intensity / (2 * Math.PI * (1 - Math.Cos(OuterCone * Math.PI / 180)));
         var window = 1 - Math.Pow(near / Range, 4);
-        return candelas / (near * near) * window * window;
+        return candelas / (near * near) * window * window * Cone(degreesFromAxis);
+    }
+
+    // A spot's share of its light at an angle from its axis, full inside the inner cone, nothing
+    // past the outer, and between them the square of a ramp in the angle's cosine, as glTF's
+    // KHR_lights_punctual gives it, its ramp's width held to a thousandth where the cones are one.
+    private double Cone(double degreesFromAxis)
+    {
+        if (Kind != LevelLightKind.Spot) return 1;
+        static double Cos(double degrees) => Math.Cos(degrees * Math.PI / 180);
+        var scale = 1 / Math.Max(0.001, Cos(InnerCone) - Cos(OuterCone));
+        var ramp = Math.Clamp((Cos(degreesFromAxis) - Cos(OuterCone)) * scale, 0, 1);
+        return ramp * ramp;
     }
 
     /// <summary>
