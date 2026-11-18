@@ -14,7 +14,8 @@ from PIL import Image, ImageDraw, ImageFont
 level = json.load(open(sys.argv[1]))
 SIZE, MARGIN = 720, 56
 SUN = (0.35, 0.85, 0.4)
-COLORS = {"proto/floor": (150, 150, 156), "proto/wall": (208, 206, 200), "proto/door": (106, 176, 106), "proto/stairs": (232, 142, 64)}
+# The prototypes' tones, the Materials module's as build/sheet writes them, a gray for any other.
+COLORS = {name: tuple(int(round(c * 255)) for c in tone) for name, tone in level["tones"].items()}
 DARK = (24, 24, 24)
 
 

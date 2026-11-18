@@ -15,11 +15,11 @@ platform at 2 and the walls at 8, the door under the wall above its doorway.
 
 ![](.github/assets/readings/2026-11-18-example-room-sheet.webp)
 The example room as the module alone gives it, from build/sheet/room.sh: its meshes from above,
-north up, each face in a tone of the sheet's own for its material, floor darker than wall by that
-palette and not by any prototype table, and lighter the higher it stands, with its lights, the
-spot's way, the sun's and its entities marked; from an oblique eye to the south-east, the ramp, the
-platform and the door in its doorway; and the lux its point light and its spot give the floor by
-LevelLight.IlluminanceAt, 52 at the most under the spot.
+north up, each face in the Materials module's prototype tone for its material, floor and wall one
+tone, and lighter the higher it stands, with its lights, the spot's way, the sun's and its entities
+marked; from an oblique eye to the south-east, the ramp, the platform and the door in its doorway;
+and the lux its point light and its spot give the floor by LevelLight.IlluminanceAt, 52 at the most
+under the spot.
 
 A made level through every reader and writer of the module at 100, 10,000 and 100,000 brushes,
 a third each boxes, ramps and boxes turned by 30 degrees, every hundredth a door's, with a light,
@@ -225,6 +225,8 @@ read.
 
 Commits that day
 
+- `a7dd3b3` A door's travel is read from the keys the module's door class names, the way it opens by
+  its size that way less its lip.
 - `1e5ecff` A level gives every problem it holds at once, each named by its entity and its key or
   brush, where reading stops at the first.
 - `669fd24` The example room has a sheet drawn from the module alone, its meshes from above and from

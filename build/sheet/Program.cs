@@ -65,7 +65,11 @@ for (var k = 0; k < nz; k++)
 }
 
 var floor = new { x0, z0, step = Step, nx, nz, lux };
-File.WriteAllText(args[1], JsonSerializer.Serialize(new { meshes, lights, entities, floor }));
+
+// Each prototype's tone in sRGB from 0 to 1, from the Materials module, by the material name the
+// level writes for it.
+var tones = Materials.Prototypes.Names.ToDictionary(name => "proto/" + name, name => Point(Materials.Prototypes.SrgbColor(name)));
+File.WriteAllText(args[1], JsonSerializer.Serialize(new { meshes, lights, entities, floor, tones }));
 Console.WriteLine($"{meshes.Count} meshes, {meshes.Sum(m => ((Array)m.GetType().GetProperty("triangles")!.GetValue(m)!).Length)} triangles, {lights.Count} lights, {entities.Count} entities");
 
 static float[] Point(Vector3 v) => [v.X, v.Y, v.Z];

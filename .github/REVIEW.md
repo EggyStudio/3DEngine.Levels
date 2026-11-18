@@ -873,3 +873,25 @@ read; FgdTests reads the class with its keys and defaults, a bare door travellin
 fgd's defaults. Thirteen of the fourteen cases failed on a stub. The README gains a Doors row and
 names DoorTravel, TrenchBroom's README names the class, and CHEATSHEET.md is written again. The tests
 pass, 218 where there were 211 (dotnet test Levels.Tests).
+
+The sheet's tones in the commit carrying this line. build/sheet's program references the Materials
+module's project from its checkout beside this one, or from the folder MaterialsPath names, and
+writes each prototype's sRGB tone from Materials' Prototypes into its JSON, which draw.py reads in
+place of a palette of its own; the library and its tests take nothing of Materials. The sheet is
+remade, floor and wall one tone told apart by their height and the sun, and its caption says so.
+
+Handoff for a fresh session. The module, `3DEngine.Levels` in the namespace Levels, reads and writes
+the Valve 220 map format (Level.Parse, Read and Load through ILevelFiles, Write and Save, every
+output of a level the same text it read), gives a level as a binding reads it (Flattened for
+TrenchBroom's layers and groups, ReadEntities with faults named by entity, Check for every problem
+at once), places entities (Placement, Place) and reads lights in lumens and lux with glTF's range
+window and cone (Light, SetLight, IlluminanceAt), trees, outputs, targets and doors, and builds
+meshes, hulls, one shape of triangles, cells of a grid and boxes from cells, with the TrenchBroom
+config, Levels.fgd and an example room. BevyCSharp still owes its part 4: LevelSpawner onto the
+module's API, its fgd's tree class dropped, any `light` key renamed `intensity`, and its two tests of
+the old assembly name. 3DEngine owes its binding, with public static-mesh and convex-hull bodies.
+The game takes Cells for its blocks. A fresh session reads AGENTS.md, then this file's head, Now
+and the last Replies, then README.md's Binding it in your engine and its conventions table, then
+CHEATSHEET.md; it builds under N 7.9's shared lock, regenerates CHEATSHEET.md with CHEATSHEET_WRITE=1
+and DEVLOG.md with Tools' devlog.py in every commit, moves Tools' pin by its pin.py, and runs Tools'
+commitcheck.py with --staged before each commit.

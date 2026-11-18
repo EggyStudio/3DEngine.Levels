@@ -11,4 +11,14 @@
         <ProjectReference Include="..\..\Levels\Levels.csproj" />
     </ItemGroup>
 
+    <!-- The prototypes' tones are the Materials module's, read from its checkout beside this one,
+         or from the folder MaterialsPath names, so the sheet keeps no table of its own; the
+         library and its tests take nothing of it. -->
+    <PropertyGroup>
+        <MaterialsPath Condition="'$(MaterialsPath)' == ''">$(MSBuildThisFileDirectory)..\..\..\Materials</MaterialsPath>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="$(MaterialsPath)\Materials\Materials.csproj" />
+    </ItemGroup>
+
 </Project>
