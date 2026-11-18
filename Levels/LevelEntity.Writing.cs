@@ -95,6 +95,12 @@ public sealed partial class LevelEntity
         if (Vector3.Distance(light.Color, now.Color) > SamePlace)
             this["_color"] = $"{Srgb(light.Color.X)} {Srgb(light.Color.Y)} {Srgb(light.Color.Z)}";
         if (light.Intensity != now.Intensity) this["intensity"] = Number(light.Intensity);
+        if (light.Pattern != now.Pattern)
+        {
+            Keys.RemoveAll(pair => pair.Key is "pattern" or "style");
+            if (light.Pattern is { Length: > 0 } pattern) this["pattern"] = pattern;
+        }
+
         if (light.Kind == LevelLightKind.Directional) return;
         if (light.Range != now.Range) this["range"] = Number(light.Range);
         if (light.Kind != LevelLightKind.Spot) return;

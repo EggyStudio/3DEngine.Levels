@@ -28,6 +28,8 @@ public sealed partial class LevelEntity
         if (light)
         {
             Try("_color", () => Point("_color"));
+            Try("pattern", () => Pattern());
+            if (this["pattern"] is not { Length: > 0 }) Try("style", () => Pattern());
             foreach (var key in new[] { "intensity", "range", "_inner_cone", "_cone" })
                 Try(key, () => AtLeastZero(key, 0));
             if (ClassName == LevelLight.SpotClass)

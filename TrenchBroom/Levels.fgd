@@ -17,6 +17,8 @@
 	_color(color255) : "Color" : "255 255 255" : "The color in sRGB, 0 to 255 a channel"
 	intensity(float) : "Lumens" : 800 : "The lumens sent over the whole sphere, 800 a 60 watt bulb's"
 	range(float) : "Range" : 10 : "How far in meters it reaches"
+	style(integer) : "Style" : 0 : "The number of a preset pattern, 0 steady"
+	pattern(string) : "Pattern" : : "Letters a to z its brightness follows ten a second, m its strength"
 ]
 
 @PointClass size(-8 -8 -8, 8 8 8) color(255 255 128) = light_spot : "A spot, its light sent in a cone the way its arrow points"
@@ -27,6 +29,8 @@
 	range(float) : "Range" : 10 : "How far in meters it reaches"
 	_inner_cone(float) : "Inner cone" : 25 : "Its full strength out to this angle in degrees from its axis"
 	_cone(float) : "Outer cone" : 30 : "Its light out to this angle in degrees from its axis"
+	style(integer) : "Style" : 0 : "The number of a preset pattern, 0 steady"
+	pattern(string) : "Pattern" : : "Letters a to z its brightness follows ten a second, m its strength"
 ]
 
 @PointClass size(-16 -16 -16, 16 16 16) color(255 200 64) = light_environment : "The sun, its light falling the way its arrow points across the whole level"
@@ -34,6 +38,8 @@
 	angles(string) : "Pitch yaw roll" : "0 0 0" : "The way it shines in degrees, a pitch above zero shining down"
 	_color(color255) : "Color" : "255 255 255" : "The color in sRGB, 0 to 255 a channel"
 	intensity(float) : "Lux" : 100000 : "The lux it gives a surface facing it, 100000 a clear noon's"
+	style(integer) : "Style" : 0 : "The number of a preset pattern, 0 steady"
+	pattern(string) : "Pattern" : : "Letters a to z its brightness follows ten a second, m its strength"
 ]
 
 @PointClass size(-16 -16 0, 16 16 96) color(80 160 60) = tree : "A tree grown from a species and a seed"

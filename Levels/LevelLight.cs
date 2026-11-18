@@ -56,6 +56,43 @@ public sealed record LevelLight(
     double InnerCone,
     double OuterCone)
 {
+    /// <summary>
+    /// The letter pattern the light's brightness follows, ten letters a second and round again, or
+    /// nothing for a steady light.
+    /// </summary>
+    /// <remarks>
+    /// A level gives it by its <c>pattern</c> key, letters from a to z, or by its <c>style</c>, the
+    /// number of one of <see cref="Presets"/>, the pattern first where it gives both, and a style
+    /// of 0 or none is steady.
+    /// </remarks>
+    public string? Pattern { get; init; }
+
+    /// <summary>
+    /// The map format's twelve conventional patterns by their number, which a light's
+    /// <c>style</c> names, 0 steady.
+    /// </summary>
+    public static IReadOnlyList<string> Presets { get; } =
+    [
+        // The twelve are the light styles Quake's world code sets, from its source.
+        "m", "mmnmmommommnonmmonqnmmo", "abcdefghijklmnopqrstuvwxyzyxwvutsrqponmlkjihgfedcba",
+        "mmmmmaaaaammmmmaaaaaabcdefgabcdefg", "mamamamamama", "jklmnopqrstuvwxyzyxwvutsrqponmlkj",
+        "nmonqnmomnmomomno", "mmmaaaabcdefgmmmmaaaammmaamm", "mmmaaammmaaammmabcdefaaaammmmabcdefmmmaaaa",
+        "aaaaaaaazzzzzzzz", "mmamammmmammamamaaamammma", "abcdefghijklmnopqrrqponmlkjihgfedcba",
+    ];
+
+    /// <summary>
+    /// What the light's strength is multiplied by at a time, its pattern's letter then, a at none,
+    /// m at one and z at 25 over 12, and one for a steady light.
+    /// </summary>
+    /// <param name="seconds">The time from the pattern's start, ten letters a second.</param>
+    public double StyleAt(double seconds)
+    {
+        if (Pattern is not { Length: > 0 } pattern) return 1;
+        var at = (int)Math.Floor(seconds * 10) % pattern.Length;
+        if (at < 0) at += pattern.Length;
+        return (pattern[at] - 'a') / 12.0;
+    }
+
     /// <summary>The class of a point light.</summary>
     public const string PointClass = "light";
 

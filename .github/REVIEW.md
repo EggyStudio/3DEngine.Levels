@@ -905,3 +905,14 @@ no face that collides; the README's binding collides through Collision, and the 
 Tool materials row. LevelToolsTests holds a box of one face of each, a trigger brush and a clip
 brush, and each name's rule; all eight failed on stubs. CHEATSHEET.md is written again. The tests
 pass, 226 where there were 218 (dotnet test Levels.Tests).
+
+The hour's step in the commit carrying this line, the light styles. LevelLight.Pattern is the letter
+pattern a light's brightness follows, read from its `pattern` key's letters a to z or from the
+preset its `style` numbers, the pattern first, a style of 0 or an empty pattern steady, and
+LevelLight.Presets holds the map format's twelve conventional patterns by their number, their source cited once at the table. LevelLight.StyleAt gives the
+factor at a time, ten letters a second and round again, a none, m one and z 25 over 12. A pattern of
+other letters and a style of no preset are refused and named by Check, SetLight writes an edited
+pattern in place of the style, Levels.fgd gives the three light classes the two keys, and the README
+gains a Light styles row. LevelLightStyleTests' eight cases failed on stubs, and FgdTests caught an
+empty pattern read as a fault before it was read as none. CHEATSHEET.md is written again. The tests
+pass, 234 where there were 226 (dotnet test Levels.Tests).

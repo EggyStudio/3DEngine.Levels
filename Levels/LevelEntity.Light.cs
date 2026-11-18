@@ -50,7 +50,18 @@ public sealed partial class LevelEntity
         }
 
         var direction = Vector3.Normalize(Vector3.Transform(-Vector3.UnitZ, placed.Rotation));
-        return new LevelLight(of, placed.Position, direction, color, intensity, range, inner, outer);
+        return new LevelLight(of, placed.Position, direction, color, intensity, range, inner, outer) { Pattern = Pattern() };
+    }
+
+    // The light's pattern, its pattern key's letters or the preset its style names, none steady.
+    private string? Pattern()
+    {
+        if (this["pattern"] is { Length: > 0 } letters)
+            return letters.All(c => c is >= 'a' and <= 'z') ? letters : throw Refused("pattern", letters, "letters from a to z");
+        if (this["style"] is not { } style) return null;
+        if (!int.TryParse(style, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out var number) || number >= LevelLight.Presets.Count)
+            throw Refused("style", style, $"the number of a preset from 0 to {LevelLight.Presets.Count - 1}");
+        return number == 0 ? null : LevelLight.Presets[number];
     }
 
     private double AtLeastZero(string key, double otherwise)

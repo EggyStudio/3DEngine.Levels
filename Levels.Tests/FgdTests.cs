@@ -17,9 +17,9 @@ public sealed partial class FgdTests
     {
         ["worldspawn"] = [Level.UnitsPerMeterKey],
         ["info_player_start"] = ["angle"],
-        [LevelLight.PointClass] = ["_color", "intensity", "range"],
-        [LevelLight.SpotClass] = ["angles", "_color", "intensity", "range", "_inner_cone", "_cone"],
-        [LevelLight.DirectionalClass] = ["angles", "_color", "intensity"],
+        [LevelLight.PointClass] = ["_color", "intensity", "range", "style", "pattern"],
+        [LevelLight.SpotClass] = ["angles", "_color", "intensity", "range", "_inner_cone", "_cone", "style", "pattern"],
+        [LevelLight.DirectionalClass] = ["angles", "_color", "intensity", "style", "pattern"],
         [LevelTree.Class] = ["species", "seed"],
         ["func_door"] = ["angle", "lip"],
     };
