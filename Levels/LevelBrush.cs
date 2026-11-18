@@ -41,17 +41,19 @@ public sealed partial class LevelBrush
     /// middle. A brush with several faces in one plane keeps the polygon for the first and none for
     /// the rest.
     /// </remarks>
-    public LevelPoint[]?[] Polygons()
+    public LevelPoint[]?[] Polygons() => Build(out _);
+
+    // The polygons and the corners they share, each corner once, built with no list or closure a
+    // face, so a level of many brushes allocates its polygons and little else.
+    internal LevelPoint[]?[] Build(out List<LevelPoint> corners)
     {
         var count = Faces.Count;
         var normals = new LevelPoint[count];
         var distances = new double[count];
         for (var face = 0; face < count; face++)
         {
-            var points = Faces[face];
-            var far = new[] { points.First, points.Second, points.Third }
-                .SelectMany(point => new[] { point.X, point.Y, point.Z })
-                .Select(Math.Abs).Max();
+            var (first, second, third) = (Faces[face].First, Faces[face].Second, Faces[face].Third);
+            var far = Math.Max(Math.Max(Farthest(first), Farthest(second)), Farthest(third));
             if (!(far <= Reach))
                 throw new InvalidOperationException($"The brush's face {face} has a point {LevelPoint.Number(far)} units out along an axis, past the {LevelPoint.Number(Reach)} within which its corners are found.");
             normals[face] = Faces[face].Normal;
@@ -60,8 +62,7 @@ public sealed partial class LevelBrush
         }
 
         // Every three planes that meet at one point within the rest give a corner, kept once.
-        var corners = new List<LevelPoint>();
-        var on = new List<List<int>>();
+        corners = new List<LevelPoint>(8);
         for (var a = 0; a < count; a++)
         for (var b = a + 1; b < count; b++)
         for (var c = b + 1; c < count; c++)
@@ -70,9 +71,9 @@ public sealed partial class LevelBrush
             var inside = true;
             for (var other = 0; other < count && inside; other++) inside = LevelPoint.Dot(normals[other], point) - distances[other] <= Within * Math.Max(1, Math.Abs(distances[other]));
             if (!inside) continue;
-            if (corners.FindIndex(known => (known - point).Length < Same) >= 0) continue;
-            corners.Add(point);
-            on.Add([]);
+            var known = false;
+            for (var k = 0; k < corners.Count && !known; k++) known = (corners[k] - point).Length < Same;
+            if (!known) corners.Add(point);
         }
 
         if (corners.Count < 4) throw new InvalidOperationException($"The brush's {count} planes close no solid.");
@@ -81,38 +82,92 @@ public sealed partial class LevelBrush
         // is flat, two of its planes facing each other in one place, and has no volume.
         for (var face = 0; face < count; face++)
         {
-            var (normal, distance) = (normals[face], distances[face]);
-            if (corners.All(corner => LevelPoint.Dot(normal, corner) - distance >= -Same))
-                throw new InvalidOperationException($"The brush's corners all lie in its face {face}'s plane, so it has no volume.");
-        }
-        for (var corner = 0; corner < corners.Count; corner++)
-        for (var face = 0; face < count; face++)
-        {
-            if (Math.Abs(LevelPoint.Dot(normals[face], corners[corner]) - distances[face]) <= Same) on[corner].Add(face);
+            var behind = false;
+            for (var k = 0; k < corners.Count && !behind; k++) behind = LevelPoint.Dot(normals[face], corners[k]) - distances[face] < -Same;
+            if (!behind) throw new InvalidOperationException($"The brush's corners all lie in its face {face}'s plane, so it has no volume.");
         }
 
-        // Each face's corners round their middle, clockwise seen from outside along the normal.
+        // Which corners lie in which face's plane, a row a face.
+        var on = new bool[count * corners.Count];
+        var total = 0;
+        for (var face = 0; face < count; face++)
+        for (var k = 0; k < corners.Count; k++)
+        {
+            if (Math.Abs(LevelPoint.Dot(normals[face], corners[k]) - distances[face]) > Same) continue;
+            on[face * corners.Count + k] = true;
+            total++;
+        }
+
+        // Each face's corners round their middle, clockwise seen from outside along the normal,
+        // and every edge kept by its two corners' indices.
         var polygons = new LevelPoint[]?[count];
-        var edges = new Dictionary<(LevelPoint, LevelPoint), int>();
+        var order = new int[corners.Count];
+        var angles = new double[corners.Count];
+        var (edgeFrom, edgeTo) = (new int[total], new int[total]);
+        var edges = 0;
         for (var face = 0; face < count; face++)
         {
-            var mine = Enumerable.Range(0, corners.Count).Where(corner => on[corner].Contains(face)).Select(corner => corners[corner]).ToList();
-            if (mine.Count < 3 || Enumerable.Range(0, face).Any(earlier => polygons[earlier] is not null && LevelPoint.Dot(normals[earlier], normals[face]) > 1 - 1e-9 && Math.Abs(distances[earlier] - distances[face]) < Same)) continue;
+            var mine = 0;
+            var middle = default(LevelPoint);
+            for (var k = 0; k < corners.Count; k++)
+            {
+                if (!on[face * corners.Count + k]) continue;
+                order[mine++] = k;
+                middle += corners[k];
+            }
 
-            var middle = mine.Aggregate(default(LevelPoint), (sum, point) => sum + point) * (1.0 / mine.Count);
+            if (mine < 3 || SharesAPlane(polygons, normals, distances, face)) continue;
+            middle *= 1.0 / mine;
             var normal = normals[face];
             var across = Math.Abs(normal.Z) < 0.9 ? new LevelPoint(0, 0, 1) : new LevelPoint(1, 0, 0);
             var right = LevelPoint.Cross(across, normal);
             right *= 1 / right.Length;
             var up = LevelPoint.Cross(normal, right);
-            var polygon = polygons[face] = [.. mine.OrderByDescending(point => Math.Atan2(LevelPoint.Dot(point - middle, up), LevelPoint.Dot(point - middle, right)))];
-            for (var i = 0; i < polygon.Length; i++) edges[(polygon[i], polygon[(i + 1) % polygon.Length])] = face;
+            for (var m = 0; m < mine; m++)
+            {
+                var point = corners[order[m]] - middle;
+                angles[m] = Math.Atan2(LevelPoint.Dot(point, up), LevelPoint.Dot(point, right));
+            }
+
+            // The greatest angle first, ties kept in the corners' order, by insertion.
+            for (var m = 1; m < mine; m++)
+            for (var n = m; n > 0 && angles[n] > angles[n - 1]; n--)
+            {
+                (angles[n], angles[n - 1]) = (angles[n - 1], angles[n]);
+                (order[n], order[n - 1]) = (order[n - 1], order[n]);
+            }
+
+            var polygon = polygons[face] = new LevelPoint[mine];
+            for (var m = 0; m < mine; m++)
+            {
+                polygon[m] = corners[order[m]];
+                (edgeFrom[edges], edgeTo[edges]) = (order[m], order[(m + 1) % mine]);
+                edges++;
+            }
         }
 
         // A solid's every edge runs one way round one face and back round the face beside it, and
         // planes that leave the solid open on a side give faces whose edges run round one alone.
-        if (edges.Keys.Any(edge => !edges.ContainsKey((edge.Item2, edge.Item1)))) throw new InvalidOperationException($"The brush's {count} planes close no solid.");
+        for (var e = 0; e < edges; e++)
+        {
+            var back = false;
+            for (var f = 0; f < edges && !back; f++) back = edgeFrom[f] == edgeTo[e] && edgeTo[f] == edgeFrom[e];
+            if (!back) throw new InvalidOperationException($"The brush's {count} planes close no solid.");
+        }
+
         return polygons;
+    }
+
+    private static double Farthest(LevelPoint point) => Math.Max(Math.Max(Math.Abs(point.X), Math.Abs(point.Y)), Math.Abs(point.Z));
+
+    // Whether an earlier face with a polygon lies in the same plane, which keeps the polygon for
+    // itself.
+    private static bool SharesAPlane(LevelPoint[]?[] polygons, LevelPoint[] normals, double[] distances, int face)
+    {
+        for (var earlier = 0; earlier < face; earlier++)
+            if (polygons[earlier] is not null && LevelPoint.Dot(normals[earlier], normals[face]) > 1 - 1e-9 && Math.Abs(distances[earlier] - distances[face]) < Same)
+                return true;
+        return false;
     }
 
     /// <summary>

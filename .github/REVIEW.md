@@ -629,3 +629,17 @@ where at 100,000 brushes Parse takes 744 ms and 122.5 MiB against 1,369 ms and 1
 the next to read. The same commit moves Tools' pin to `9d8e744` and ModuleTests to its block, each
 fact `Assert.True(fault is null, fault)`, and a fault planted in the README prints its sentence
 whole. The tests pass, 140 where there were 139 (dotnet test Levels.Tests).
+
+The geometry's allocations in the commit carrying this line. LevelBrush.Polygons built a list a
+face, a closure a corner, an array of a face's points and their numbers for the bound and a
+dictionary of edges; it builds its corners in one list, which faces' planes hold them in one array,
+each face's corners by indices sorted by their angles in place, and the edges as two arrays of
+indices, and Hulls takes each corner once in the order the polygons first give it with no LINQ.
+LevelGeometryMemoryTests holds every brush's Polygons to 3 KiB a brush, Meshes to 8 and Hulls to
+4 over a level of 10,000 brushes, and failed at 17,555, 20,750 and 19,365 bytes a brush. A digest
+of every polygon, mesh and hull of the 10,000 brushes, an arch, a doorway and BevyCSharp's feature
+test map, 18,753,337 characters, is the same before and after. The sheet after is
+`.github/assets/readings/2026-11-18-geometry-after.md`; at 100,000 brushes Polygons allocates 156.1
+MiB where it took 1,681.8, Meshes 443.2 where 1,984.1 and Hulls 194.9 where 1,854.3, some 1.6, 4.5
+and 2.0 KiB a brush, and the peak working set stays at 1,253 MiB, which the level and its text
+hold. The tests pass, 143 where there were 140 (dotnet test Levels.Tests).

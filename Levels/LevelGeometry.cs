@@ -95,8 +95,19 @@ public static class LevelGeometry
         var hulls = new List<LevelHull>();
         foreach (var brush in source.Brushes)
         {
-            var corners = brush.Polygons().OfType<LevelPoint[]>().SelectMany(polygon => polygon).Distinct().ToArray();
-            if (corners.Length >= 4) hulls.Add(new LevelHull([.. corners.Select(corner => corner.Meters(unitsPerMeter) - origin)]));
+            // Each corner once, in the order the polygons first give it.
+            var seen = new List<LevelPoint>(8);
+            foreach (var polygon in brush.Polygons())
+            {
+                if (polygon is null) continue;
+                foreach (var corner in polygon)
+                    if (!seen.Contains(corner)) seen.Add(corner);
+            }
+
+            if (seen.Count < 4) continue;
+            var meters = new Vector3[seen.Count];
+            for (var k = 0; k < seen.Count; k++) meters[k] = seen[k].Meters(unitsPerMeter) - origin;
+            hulls.Add(new LevelHull(meters));
         }
 
         return hulls;
