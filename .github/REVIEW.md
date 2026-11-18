@@ -421,3 +421,6 @@ loads the library by its new name and reads that Level stands in Levels, failing
 rename, and the README's binding section names the assembly. The workflow names folders alone and
 is unchanged, and the bench builds against the renamed library. The strict build is clean and the
 tests pass, 107 (dotnet test Levels.Tests).
+
+AGENTS.md's table of areas gains `build/bench`'s row in the commit carrying this line, the new
+path's row the review left to this session, nothing else in the file changing.

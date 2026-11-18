@@ -37,6 +37,7 @@ runs the tests on Linux, Windows and macOS on every push (NORM.md, N 6.1 and N 6
 | `Levels.Tests` | The xunit tests of the library |
 | `TrenchBroom` | The game config and the base entity classes TrenchBroom edits a level with, which an engine copies and adds its own classes to |
 | `build` | The version, `version.txt`'s major and minor set by hand and `version.sh`, which prints it with the patch counted from the history |
+| `build/bench` | A console program, outside `Levels.slnx`, that reads, writes and builds a level of 10,000 brushes and prints each step's time and memory, run with `dotnet run -c Release --project build/bench` |
 
 ## Conventions
 
