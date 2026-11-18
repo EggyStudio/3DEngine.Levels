@@ -10,3 +10,4 @@ Done that day
 
 - Item 1 at `751c272`. The documents, one commit.
 - Item 2 at `3ca2ac0`. The skeleton, one commit after item 1.
+- Item 3 at `a01b2df`. The code's move.

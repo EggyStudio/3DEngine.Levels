@@ -22,10 +22,10 @@ namespace Levels;
 /// the second point's way to the first crossed with its way to the third, points out of the brush.
 /// </para>
 /// <para>
-/// A point on the face falls at texel (p · UAxis / ScaleU + UOffset, p · VAxis / ScaleV + VOffset)
-/// of the material, so a face moved across the world slides under a material that stays where the
-/// world puts it, the world-aligned mapping a level is blocked out in. The rotation is kept for the
-/// editor that wrote it, since the mapping reads the axes it turned.
+/// A point p on the face falls at texel (p dot UAxis / ScaleU + UOffset, p dot VAxis / ScaleV +
+/// VOffset) of the material, so a face moved across the world slides under a material that stays
+/// where the world puts it, the world-aligned mapping a level is blocked out in. The rotation is
+/// kept for the editor that wrote it, since the mapping reads the axes it turned.
 /// </para>
 /// </remarks>
 public sealed record LevelFace(
