@@ -5,7 +5,7 @@ namespace Levels.Tests;
 
 /// <summary>
 /// A level's lights read from their classes' keys in physical units, as both engines make a light
-/// of them, with what TrenchBroom is given to draw them.
+/// of them.
 /// </summary>
 public sealed class LevelLightTests
 {
@@ -98,16 +98,5 @@ public sealed class LevelLightTests
     {
         Assert.Throws<FormatException>(() =>
             Entity(("classname", "light_spot"), ("_inner_cone", "40"), ("_cone", "30")).Light(32));
-    }
-
-    [Fact]
-    public void TheFgdNamesTheThreeLightClasses()
-    {
-        var at = new DirectoryInfo(AppContext.BaseDirectory);
-        while (at is not null && !File.Exists(Path.Combine(at.FullName, "Levels.slnx"))) at = at.Parent;
-        var fgd = File.ReadAllText(Path.Combine(at!.FullName, "TrenchBroom", "Levels.fgd"));
-
-        foreach (var name in new[] { LevelLight.PointClass, LevelLight.SpotClass, LevelLight.DirectionalClass })
-            Assert.Contains($"= {name} :", fgd);
     }
 }

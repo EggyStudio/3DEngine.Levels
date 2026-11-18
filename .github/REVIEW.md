@@ -286,3 +286,11 @@ missing seed is zero. Levels.fgd gains tree with those keys, and TrenchBroom's R
 BevyCSharp's fgd drops its tree with its part 4. LevelLight's remarks say an engine whose sky places
 the sun by its clock may leave light_environment's intensity unread. The strict build is clean and
 the tests pass, 73 where there were 67 (dotnet test Levels.Tests).
+
+The third in the commit carrying this line. FgdTests reads Levels.fgd's classes and keys and holds
+them to the readers both ways, the six classes the module reads named in the fgd and no other, each
+with the keys its reader reads and no other, and an entity of a class with no keys reading as one
+given every default the fgd shows, its units a meter, its placement, its light and its tree. A
+default changed in the fgd and a key taken out of it each turned the test red before the file was
+restored. LevelLightTests' check of the three light classes' names goes, the new test holding more.
+The strict build is clean and the tests pass, 79 where there were 73 (dotnet test Levels.Tests).
