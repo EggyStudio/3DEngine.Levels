@@ -118,8 +118,10 @@ public static class LevelBinding
 }
 ```
 
-BevyCSharp and 3DEngine take the module as two examples of an engine, and BevyCSharp's binding is
-`BevyCSharp/Levels/LevelSpawner.cs` in its repository.
+The tests' host, `Levels.Tests/Host/LevelBinding.cs`, is this code, and the tests run it against a
+level and a folder of pictures with no engine, so the build and the suite hold the binding to the
+module. BevyCSharp and 3DEngine take the module as two examples of an engine, and BevyCSharp's
+binding is `BevyCSharp/Levels/LevelSpawner.cs` in its repository.
 
 ## Building and testing
 

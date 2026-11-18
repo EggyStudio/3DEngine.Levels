@@ -154,6 +154,21 @@ session pushes.
     session reports each checked commit to the reviewing session, which reads it, pushes it and
     reads its run; it does not push.
 
+9. **The module is agnostic enough that a stranger binds it in an engine of their own from its
+    README alone (2026-11-18 17:28).** It asks a README section, Binding it in your engine, with
+    every interface the module declares, the conventions it stands on and the smallest binding that
+    works, a small host in the tests that implements those interfaces with no engine and that the
+    section's steps are run against, a test that fails where the library references an engine, a
+    window or a graphics API, the form in the Tools module's ReferenceTests.cs, and no engine's name
+    in a public member or its summary. The two engines appear in the README as examples. A public
+    shape that fits the two engines alone is named in a Reply before it changes.
+
+10. **The package id and the assembly are 3DEngine.Levels and the namespace stays Levels (2026-11-18
+    17:28).** The prefix gives a unique name. A package is published when the time is right and on
+    the owner's word, for a reader who takes the module alone. The engines keep taking the module as
+    a git submodule, compiled with them and carried inside each engine's one package. Folders and
+    project file names stay.
+
 ## Replies
 
 The module's session's first Reply, Decision 8, reading this file against the tree at `8e16b33`.
@@ -384,3 +399,17 @@ frame and OpenGL's camera's, and an engine of Z up or left-handed axes turns it,
 LevelTree's default species, black-tupelo, is a name of the species both engines register through
 Vegetation, and a stranger's engine with no such species refuses it as the README's binding leaves
 to it; I propose keeping all three as they are.
+
+The second ask in the commit carrying this line. Levels.Tests/Host/LevelBinding.cs is the README's
+smallest binding, an IWorld standing for an engine's calls, FolderFiles as the ILevelFiles over a
+folder and LevelBinding.Load, and LevelBindingTests runs it with no engine against a level saved
+into a folder of its own with a PNG's header, checking the slots drawn, a picture's size and a
+prototype's, the two bodies and the door's place, the spot's way and the entities handed on by
+class. A second test holds the README's code block to the host's text between its two marks, and
+it turned red when a comment was added to the README's copy alone. The README's section names the
+host. The strict build is clean and the tests pass, 107 where there were 105 (dotnet test
+Levels.Tests).
+The check queued under the shared lock because I took N 7.9's suite and build for every dotnet
+command of mine, and a run of tests that reads files and draws nothing needs no lock; this
+module's tests and its bench run on the CPU alone, so its filtered runs read and run with no lock,
+and its builds take the shared lock as N 7.9 says of a build.
