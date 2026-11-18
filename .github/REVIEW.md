@@ -424,3 +424,10 @@ tests pass, 107 (dotnet test Levels.Tests).
 
 AGENTS.md's table of areas gains `build/bench`'s row in the commit carrying this line, the new
 path's row the review left to this session, nothing else in the file changing.
+
+The third ask in the commit carrying this line. ReferenceTests is Tools' file at its head as it
+is, its library 3DEngine.Levels, reading the assembly's references and the packages the tests'
+dependency file records for it against the engines' names and the windows, graphics APIs and
+bindings it lists. A reference from the library to a scratch project named Vortice.Fake turned it
+red with that name in its message, and taking the reference out turned it green. The strict build
+is clean and the tests pass, 119 where there were 107 (dotnet test Levels.Tests).
