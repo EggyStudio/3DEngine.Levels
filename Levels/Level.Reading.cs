@@ -22,7 +22,7 @@ public sealed partial class Level
     /// <remarks>
     /// A face is read as Valve 220 writes it, three points in parentheses, a material, two axes in
     /// brackets, each with its offset, a rotation and two scales. A face in Quake's older format,
-    /// with no axes, is refused, since its mapping depends on rules this engine does not follow;
+    /// with no axes, is refused, since its mapping depends on rules the module does not follow;
     /// TrenchBroom converts a level to the Valve format from its map menu.
     /// </remarks>
     public static Level Parse(string text, string name = "the level")

@@ -194,3 +194,32 @@ on 66 lines before the rewrap and passes after it. The 16 files are rewrapped wi
 a summary, a remark or a return that does not fit one line opening onto lines of its own. STYLE.md's
 Comments names the width and the rule, and AGENTS.md's devlog row gains its link. The strict build
 is clean and the 24 tests pass (dotnet test Levels.Tests).
+
+What the module lacks for both engines to load one level alike, read from BevyCSharp's
+LevelSpawner, 380 lines of which about half know no engine, and 3DEngine reads no map file yet. The
+order proposed, one commit each with its tests.
+
+1. An entity's place. LevelEntity.Placement of a level's units a meter gives a position in meters
+   and a System.Numerics Quaternion, a point entity at its origin turned by its angle or angles so
+   its minus Z faces where TrenchBroom draws its arrow, a brush entity unturned at its origin or
+   its brushes' middle, and worldspawn at zero. Readers for a key as a number, three numbers or a
+   whole number come with it, refusing a malformed value with the key and its text named.
+2. The material names. The proto/ folder, the slot a name is drawn as, the prototype picture's 512
+   texels and the pictures searched under textures/ as a PNG then a JPEG, with an ILevelMaterials
+   of the module's over an interface for the files an engine reads, so a face repeats alike in both.
+3. An entity's keyvalues as text and back, which a component of each engine carries, and an
+   entity's meshes as one triangle shape for a static body.
+4. BevyCSharp's binding reduced to its world, its renderer and its physics on these, asked of its
+   session in a message once 1 to 3 are pushed, and 3DEngine's binding written on them as its own
+   item.
+
+The first is begun.
+
+The first of these in the commit carrying this line. LevelEntity.Placement gives LevelPlacement, a
+position in meters and a System.Numerics Quaternion, by BevyCSharp's Place and Turn as they are, and
+LevelEntity reads a key as a Number, a WholeNumber or a Point, refusing a malformed value with its
+class, key and text named. Its tests check the forward against the file's angles at seven turns, a
+pitch above zero looking down, the roll, a brush entity at its origin or its brushes' middle, the
+world at zero and the refusals. Level.cs and Level.Reading.cs say the module where they said this
+engine. The strict build is clean and the tests pass, 43 where there were 24 (dotnet test
+Levels.Tests).

@@ -22,7 +22,7 @@ namespace Levels;
 /// (<see cref="LevelPoint.Meters"/>).
 /// </para>
 /// <para>
-/// <see cref="Write"/> writes the canonical text, as TrenchBroom lays it out, so a file this engine
+/// <see cref="Write"/> writes the canonical text, as TrenchBroom lays it out, so a file the module
 /// wrote reads and writes back byte for byte, and one TrenchBroom wrote reads back the same
 /// brushes, entities and keyvalues in the same order, its numbers written as the shortest text that
 /// reads back as the same value.

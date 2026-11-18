@@ -17,7 +17,7 @@ namespace Levels;
 /// a list and not a dictionary, and a file read and written again keeps them in their order.
 /// </para>
 /// </remarks>
-public sealed class LevelEntity
+public sealed partial class LevelEntity
 {
     /// <summary>
     /// The keyvalues, in the file's order, a key more than once where the file gives it so.
