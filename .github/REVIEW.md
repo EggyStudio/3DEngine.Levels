@@ -306,3 +306,15 @@ FormatException or an InvalidOperationException and none read without end, numbe
 at their line, three points on one line refused by the face's number, and a brush too far out for
 its planes to meet refused. The strict build is clean and the tests pass, 89 where there were 79
 (dotnet test Levels.Tests).
+
+The second fault mended in the commit carrying this line. Level.Write wrote what Level.Parse could
+not read back, a key or a value ending in a backslash, which the format reads as an escaped quote,
+a material of a space, a quote, a bracket or a brace, an empty one or one beginning with two
+slashes, which reads as a comment, a number not finite, and a game name of two lines. Write refuses
+each with an InvalidOperationException naming the entity, the brush and the face, its ten cases
+failing before the mend. A material with two slashes inside it, as wall//a, reads back and is
+written. LevelWritingTests holds the round trip as well, a level of every shape, a box, a ramp, a
+doorway and a turned box, with a quoted value, a backslash, a key given twice and a value of two
+lines, read back with each key and face equal and written again to the byte, and 10,000 numbers
+written as the shortest text reading back the same. The strict build is clean and the tests pass,
+101 where there were 89 (dotnet test Levels.Tests).
