@@ -217,6 +217,8 @@ read.
 
 Commits that day
 
+- `5b63d28` The cells of a grid a brush fills are given with their materials by stated rules, so two
+  block readers lay the same blocks, beside a test of a point inside a brush.
 - `4d9629d` A light fades to its range by glTF's window, the same source its spot's cone stands on.
 - `00124e9` A level is loaded through a stream into a moving window, so a large file is never held
   as one text and loading allocates what parsing does.
@@ -237,8 +239,6 @@ Commits that day
   to resolve.
 - `919adce` The module names no engine and speaks of none in particular, its documents, summaries,
   comments and tests said in its own terms, the assembly's name apart.
-- `4a16d8c` The module keeps a cheat sheet of every public type and member, written from the built
-  library and held to it by a test, linked from the README.
 - `6d05415` A brush's polygons, meshes and hulls are built in a few kilobytes a brush where they
   took some twenty, giving the same shapes.
 - `b29d55b` A level's text is read with its tokens left where they stand, a large level's reading

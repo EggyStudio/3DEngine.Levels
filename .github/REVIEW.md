@@ -790,3 +790,18 @@ the module's test already has, and that CHEATSHEET.md and DEVLOG.md were written
 cheatsheet's lines that changed are the operators by symbol, the tuples by their names in both
 PictureSize and in Prism's and Slab's outlines, and the new Inside, Cells and LevelCell. The tests
 pass, 189 where there were 182 (dotnet test Levels.Tests).
+
+The first of the three in the commit carrying this line, with Tools' pin moved by pin.py. Level
+Flattened is the view a binding reads: TrenchBroom's layers and groups, entities of the class
+func_group whose `_tb_type` is `_tb_layer` or `_tb_group`, read as the world they stand in, their
+brushes the world's, and a layer whose `_tb_layer_omit_from_export` is 1 left out with every brush,
+group and entity in it, through the groups an entity stands in, the key names read from TrenchBroom's
+own source. The view shares the level's entities and brushes and leaves the level as it was, so a
+level read with layers writes back with them, which a test holds; its world stands where the
+worldspawn did, and a level of no worldspawn gains none. The README's binding and its host read
+through it, and the README's row names it. LevelLayersTests holds a layer's and a group's brushes in
+the world, a door in a group kept, an omitted layer's light, group and entity left out, the level
+written back with its layers, a level of no layers its own text, a world omitted from export, and
+the world's place; its first five failed on a stub. pin.py printed that Tools moved from `4e922ea`
+to `1e1ec63`, 2 commits, no fact new or changed, and wrote CHEATSHEET.md and DEVLOG.md again. The
+tests pass, 195 where there were 189 (dotnet test Levels.Tests).

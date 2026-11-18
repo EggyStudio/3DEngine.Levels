@@ -33,7 +33,7 @@ public static class LevelBinding
     public static void Load(string root, string path, IWorld world)
     {
         var files = new FolderFiles(root);
-        var level = Level.Load(files, path);
+        var level = Level.Load(files, path).Flattened();
         var units = level.UnitsPerMeter;
         var pictures = new LevelPictures(files);
         level.ReadEntities((index, entity) =>

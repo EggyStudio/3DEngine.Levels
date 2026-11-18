@@ -34,6 +34,7 @@ List<LevelEntity> Entities { get; }                      // The entities, worlds
 LevelEntity? World { get; }                              // The worldspawn entity, which holds the level's own brushes, or nothing where there is none
 double UnitsPerMeter { get; }                            // How many of the file's units make a meter, the worldspawn's UnitsPerMeterKey or DefaultUnitsPerMeter
 string Game { get; set; }                                // The game TrenchBroom's first comment names, which a file written again keeps, or Generic where it names none
+Level Flattened();                                       // The level as a binding reads it, TrenchBroom's layers and groups read as the world they stand in and a layer omitted from export left out whole
 void ReadEntities(Action<int, LevelEntity> read);        // Hands each entity to the engine in the level's order with its index, a fault the level's text causes named by the entity it stands in
 Level Load(string path);                                 // Reads a level from a file
 Level Load(ILevelFiles files, string path);              // Reads a level from an engine's files, as its pictures are read

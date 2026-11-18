@@ -69,6 +69,77 @@ public sealed partial class Level
     }
 
     /// <summary>
+    /// The level as a binding reads it, TrenchBroom's layers and groups read as the world they
+    /// stand in and a layer omitted from export left out whole.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// TrenchBroom writes a layer and a group as an entity of the class <c>func_group</c> whose
+    /// <c>_tb_type</c> is <c>_tb_layer</c> or <c>_tb_group</c>, its <c>_tb_id</c> naming it, its
+    /// brushes the world's, and an entity in one carries the layer's or the group's id in its
+    /// <c>_tb_layer</c> or <c>_tb_group</c>, a group in a layer or another group as well. The
+    /// view's world holds the <c>worldspawn</c>'s keys and brushes and every layer's and group's
+    /// brushes, and its other entities are the level's but the layers and the groups.
+    /// </para>
+    /// <para>
+    /// A layer whose <c>_tb_layer_omit_from_export</c> is <c>1</c> is left out with every brush,
+    /// group and entity in it, and the <c>worldspawn</c>'s own brushes where it says so of the
+    /// layer it holds. The view shares the level's entities and brushes, and the level is left as
+    /// it was, so a level read with layers writes back with them.
+    /// </para>
+    /// </remarks>
+    public Level Flattened()
+    {
+        static bool Is(LevelEntity entity, string type) => entity.ClassName == "func_group" && entity["_tb_type"] == type;
+        var groups = new Dictionary<string, LevelEntity>(StringComparer.Ordinal);
+        var omitted = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var entity in Entities)
+        {
+            if (!Is(entity, "_tb_layer") && !Is(entity, "_tb_group")) continue;
+            if (entity["_tb_id"] is { } id) groups[(Is(entity, "_tb_layer") ? "layer " : "group ") + id] = entity;
+            if (Is(entity, "_tb_layer") && entity["_tb_layer_omit_from_export"] == "1" && entity["_tb_id"] is { } layer) omitted.Add(layer);
+        }
+
+        // Whether an entity stands in an omitted layer, through the groups it stands in.
+        bool Omitted(LevelEntity entity)
+        {
+            var seen = new HashSet<LevelEntity>();
+            for (var at = entity; at is not null && seen.Add(at);)
+            {
+                if (Is(at, "_tb_layer")) return at["_tb_id"] is { } own && omitted.Contains(own);
+                if (at["_tb_layer"] is { } layer) return omitted.Contains(layer);
+                at = at["_tb_group"] is { } group ? groups.GetValueOrDefault("group " + group) : null;
+            }
+
+            return false;
+        }
+
+        // The world stands where the worldspawn does, or first where a layer's brushes have none.
+        var flat = new Level { Game = Game };
+        var world = new LevelEntity();
+        if (World is { } own)
+        {
+            world.Keys.AddRange(own.Keys);
+            if (own["_tb_layer_omit_from_export"] != "1") world.Brushes.AddRange(own.Brushes);
+        }
+        else
+        {
+            world["classname"] = "worldspawn";
+        }
+
+        foreach (var entity in Entities)
+        {
+            if (entity == World) flat.Entities.Add(world);
+            else if (Omitted(entity)) continue;
+            else if (Is(entity, "_tb_layer") || Is(entity, "_tb_group")) world.Brushes.AddRange(entity.Brushes);
+            else flat.Entities.Add(entity);
+        }
+
+        if (World is null && world.Brushes.Count > 0) flat.Entities.Insert(0, world);
+        return flat;
+    }
+
+    /// <summary>
     /// Hands each entity to the engine in the level's order with its index, a fault the level's
     /// text causes named by the entity it stands in.
     /// </summary>
