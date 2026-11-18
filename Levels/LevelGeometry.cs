@@ -102,6 +102,28 @@ public static class LevelGeometry
         return hulls;
     }
 
+    /// <summary>An entity's meshes as one shape of triangles, for a static body.</summary>
+    /// <param name="meshes">The meshes, as <see cref="Meshes"/> gives them.</param>
+    /// <remarks>
+    /// A level collides as its triangles, the shape drawn, and needs no renderer to be built, so a
+    /// level collides the same with one and without and a headless test walks it. An engine whose
+    /// body takes several shapes may take <see cref="Hulls"/> in its place.
+    /// </remarks>
+    public static LevelTriangles Triangles(IReadOnlyList<LevelMesh> meshes)
+    {
+        ArgumentNullException.ThrowIfNull(meshes);
+        var positions = new List<Vector3>();
+        var indices = new List<uint>();
+        foreach (var mesh in meshes)
+        {
+            var first = (uint)positions.Count;
+            positions.AddRange(mesh.Positions);
+            indices.AddRange(mesh.Indices.Select(index => first + index));
+        }
+
+        return new LevelTriangles([.. positions], [.. indices]);
+    }
+
     /// <summary>
     /// Where a point of a face falls on its material, its texel along each axis, scaled and moved,
     /// over the texels its picture spans each way.

@@ -233,3 +233,13 @@ path and size for an engine to draw. The prototypes' pictures are not written he
 Modeling's prototype colors paint them, so no bytes are pinned. Its tests check the names, the
 order of the search, a header that does not read and a mesh's texels over the pictures found. The
 strict build is clean and the tests pass, 50 where there were 43 (dotnet test Levels.Tests).
+
+The third part in the commit carrying this line. LevelEntity.KeysText gives the keyvalues as the
+level file writes them, a line each in their order, and the writer writes an entity's keys through
+it, so the two lines never differ; LevelEntity.ParseKeys reads them back and refuses a text holding
+a brush. LevelGeometry.Triangles gives an entity's meshes as one LevelTriangles, each mesh's corners
+after the ones before and its indices moved past them, BevyCSharp's Collision as it is. Its tests
+check the order, a key given twice, a value holding a quote, the empty text, the refusal and every
+triangle's corners in the shape; no test of this part or the first two compares a value worked out
+by a sine, a cosine or a root exactly, those being held to 1e-5. The strict build is clean and the
+tests pass, 56 where there were 50 (dotnet test Levels.Tests).

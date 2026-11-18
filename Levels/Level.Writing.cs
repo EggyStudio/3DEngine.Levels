@@ -20,7 +20,7 @@ public sealed partial class Level
         {
             var entity = Entities[e];
             text.Append("// entity ").Append(e).Append("\n{\n");
-            foreach (var (key, value) in entity.Keys) text.Append(Quote(key)).Append(' ').Append(Quote(value)).Append('\n');
+            entity.AppendKeys(text);
             for (var b = 0; b < entity.Brushes.Count; b++)
             {
                 text.Append("// brush ").Append(b).Append("\n{\n");
@@ -44,5 +44,5 @@ public sealed partial class Level
             .Append(N(face.Rotation)).Append(' ').Append(N(face.ScaleU)).Append(' ').Append(N(face.ScaleV)).Append('\n');
     }
 
-    private static string Quote(string text) => "\"" + text.Replace("\"", "\\\"", StringComparison.Ordinal) + "\"";
+    internal static string Quote(string text) => "\"" + text.Replace("\"", "\\\"", StringComparison.Ordinal) + "\"";
 }
