@@ -132,6 +132,160 @@ public static class LevelGeometry
         return nearest;
     }
 
+    /// <summary>
+    /// Whether a point in the file's units lies inside a brush, behind every one of its faces'
+    /// planes.
+    /// </summary>
+    /// <param name="brush">The brush.</param>
+    /// <param name="point">The point, in the file's units with Z up.</param>
+    /// <remarks>
+    /// A point on a face, within a millionth of a unit of its plane, lies inside where the face's
+    /// way out looks toward lesser X, or along no X toward lesser Y, or along neither toward lesser
+    /// Z, the file's axes, and outside where it looks toward greater, so a point on the face two
+    /// touching brushes share lies in exactly one of them, as a half-open box holds its low sides
+    /// and not its high ones.
+    /// </remarks>
+    public static bool Inside(LevelBrush brush, LevelPoint point)
+    {
+        ArgumentNullException.ThrowIfNull(brush);
+        foreach (var face in brush.Faces)
+        {
+            var normal = face.Normal;
+            var outside = LevelPoint.Dot(normal, point) - face.Distance;
+            if (outside > 1e-6) return false;
+            if (outside >= -1e-6 && !TowardLesser(normal)) return false;
+        }
+
+        return brush.Faces.Count > 0;
+    }
+
+    // Whether a way's first part along the file's X, Y and Z that is not none is below none.
+    private static bool TowardLesser(LevelPoint way) =>
+        Math.Abs(way.X) > 1e-9 ? way.X < 0 : Math.Abs(way.Y) > 1e-9 ? way.Y < 0 : way.Z < 0;
+
+    /// <summary>
+    /// The cells of a grid in meters with Y up a brush fills, each where its middle lies inside the
+    /// brush, with the material most of its outer sides are covered by, in order along X, then Y,
+    /// then Z.
+    /// </summary>
+    /// <param name="brush">The brush.</param>
+    /// <param name="cellMeters">A cell's size in meters along each axis, the grid's cells standing
+    /// from the level's origin.</param>
+    /// <param name="unitsPerMeter">How many of the file's units make a meter,
+    /// <see cref="Level.UnitsPerMeter"/>.</param>
+    /// <remarks>
+    /// <para>
+    /// A cell's middle lies inside as <see cref="Inside"/> says. A side of a filled cell is outer
+    /// where the cell it faces is not filled by the brush, and each side is covered by the brush's
+    /// face whose way out is nearest the side's own, the earlier face in the brush's order where
+    /// two are as near.
+    /// </para>
+    /// <para>
+    /// A cell takes the material that covers the most of its outer sides, and of materials that
+    /// cover as many the one of the side met first in the order up, down, plus X, minus X, plus Z,
+    /// minus Z, so a block on a floor's top is the floor's top and one on its edge the edge's. A
+    /// cell with no outer side takes the material of its top side.
+    /// </para>
+    /// </remarks>
+    /// <exception cref="ArgumentOutOfRangeException">The cell's size or the units a meter is not
+    /// above zero.</exception>
+    public static IReadOnlyList<LevelCell> Cells(LevelBrush brush, double cellMeters, double unitsPerMeter)
+    {
+        ArgumentNullException.ThrowIfNull(brush);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(cellMeters);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(unitsPerMeter);
+        var polygons = brush.Polygons();
+        var (low, high) = (new Vector3(float.MaxValue), new Vector3(float.MinValue));
+        foreach (var polygon in polygons)
+        {
+            if (polygon is null) continue;
+            foreach (var corner in polygon)
+            {
+                var meters = corner.Meters(unitsPerMeter);
+                (low, high) = (Vector3.Min(low, meters), Vector3.Max(high, meters));
+            }
+        }
+
+        // The file's point at a place in meters, in double precision.
+        LevelPoint File(double x, double y, double z) => new(x * unitsPerMeter, -z * unitsPerMeter, y * unitsPerMeter);
+
+        var filled = new HashSet<(int, int, int)>();
+        var (from, to) = (Index(low, cellMeters, Math.Floor), Index(high, cellMeters, Math.Ceiling));
+        for (var x = from.X; x < to.X; x++)
+        for (var y = from.Y; y < to.Y; y++)
+        for (var z = from.Z; z < to.Z; z++)
+            if (Inside(brush, File((x + 0.5) * cellMeters, (y + 0.5) * cellMeters, (z + 0.5) * cellMeters)))
+                filled.Add((x, y, z));
+
+        // The cell's six sides in the order a tie is settled by, each by its step to the cell it
+        // faces and its way out in the file's axes.
+        (int, int, int, LevelPoint)[] sides =
+        [
+            (0, 1, 0, new LevelPoint(0, 0, 1)), (0, -1, 0, new LevelPoint(0, 0, -1)),
+            (1, 0, 0, new LevelPoint(1, 0, 0)), (-1, 0, 0, new LevelPoint(-1, 0, 0)),
+            (0, 0, 1, new LevelPoint(0, -1, 0)), (0, 0, -1, new LevelPoint(0, 1, 0)),
+        ];
+        var cover = new string[sides.Length];
+        for (var s = 0; s < sides.Length; s++)
+        {
+            var (best, near) = (0, double.MinValue);
+            for (var f = 0; f < brush.Faces.Count; f++)
+            {
+                var along = LevelPoint.Dot(brush.Faces[f].Normal, sides[s].Item4);
+                if (along > near + 1e-9) (best, near) = (f, along);
+            }
+
+            cover[s] = brush.Faces[best].Material;
+        }
+
+        var cells = new List<LevelCell>(filled.Count);
+        foreach (var (x, y, z) in filled.Order())
+        {
+            string? chosen = null;
+            var most = 0;
+            for (var s = 0; s < sides.Length; s++)
+            {
+                var (dx, dy, dz, _) = sides[s];
+                if (filled.Contains((x + dx, y + dy, z + dz))) continue;
+                var count = 0;
+                for (var t = 0; t < sides.Length; t++)
+                {
+                    var (ex, ey, ez, _) = sides[t];
+                    if (!filled.Contains((x + ex, y + ey, z + ez)) && cover[t] == cover[s]) count++;
+                }
+
+                if (count > most) (chosen, most) = (cover[s], count);
+            }
+
+            cells.Add(new LevelCell(x, y, z, chosen ?? cover[0]));
+        }
+
+        return cells;
+    }
+
+    private static (int X, int Y, int Z) Index(Vector3 meters, double cellMeters, Func<double, double> round) =>
+        ((int)round(meters.X / cellMeters), (int)round(meters.Y / cellMeters), (int)round(meters.Z / cellMeters));
+
+    /// <summary>
+    /// The cells of a grid in meters with Y up an entity's brushes fill, as
+    /// <see cref="Cells(LevelBrush, double, double)"/> gives each brush's, a cell two brushes fill
+    /// taking the first brush's in the entity's order, in order along X, then Y, then Z.
+    /// </summary>
+    /// <param name="source">The entity, the world's brushes or a brush entity's.</param>
+    /// <param name="cellMeters">A cell's size in meters along each axis.</param>
+    /// <param name="unitsPerMeter">How many of the file's units make a meter.</param>
+    /// <exception cref="ArgumentOutOfRangeException">The cell's size or the units a meter is not
+    /// above zero.</exception>
+    public static IReadOnlyList<LevelCell> Cells(LevelEntity source, double cellMeters, double unitsPerMeter)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        var taken = new Dictionary<(int, int, int), LevelCell>();
+        foreach (var brush in source.Brushes)
+        foreach (var cell in Cells(brush, cellMeters, unitsPerMeter))
+            taken.TryAdd((cell.X, cell.Y, cell.Z), cell);
+        return [.. taken.OrderBy(pair => pair.Key).Select(pair => pair.Value)];
+    }
+
     /// <summary>An entity's meshes as one shape of triangles, for a static body.</summary>
     /// <param name="meshes">The meshes, as <see cref="Meshes"/> gives them.</param>
     /// <remarks>

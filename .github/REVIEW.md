@@ -768,3 +768,25 @@ cut at the range with no window, and the README's Light row names the window and
 with another gives more or less light near the range. Five of LevelLightRangeTests' and
 LevelSpotConeTests' cases failed on the squared window once the test's was glTF's. The tests pass,
 182 (dotnet test Levels.Tests).
+
+The cells a brush fills in the commit carrying this line, with Tools' pin moved by its pin.py.
+LevelGeometry.Inside is the planes' own test, a point on a face inside where the face looks toward
+lesser X, else lesser Y, else lesser Z in the file's axes, so a point on the face two touching
+brushes share lies in exactly one. LevelGeometry.Cells gives the cells of a grid of a given size in
+meters with Y up a brush or an entity fills, a cell filled where its middle lies inside, each with
+the material most of its outer sides are covered by, a side covered by the face whose way out is
+nearest its own, a tie to the side met first among up, down, plus X, minus X, plus Z and minus Z, a
+cell of no outer side its top's, and a cell two brushes fill the first brush's, as LevelCell. The
+README gains a Cells row and LevelCell's. LevelCellsTests holds a point inside, outside and on each
+face, a box's four cells, a slab's middle, edge and corner cells, a wedge's eight under its slope,
+two touching brushes, a cell whose middle stands on their shared face, and a cell two brushes fill;
+all seven failed on stubs, and two of my own expectations were wrong and mended before the code, an
+edge cell's tie going up and the shared face needing brushes tall enough to hold the middle. The
+sheet `.github/assets/readings/2026-11-18-cells-from-above.webp` shows the example room's cells of
+half a meter from above, 864 cells in 324 columns, the floor at none, the ramp to the platform at 2
+and the walls at 8. pin.py printed that Tools moved from `75d77f2` to `4e922ea`, 11 commits, that one
+fact changed, The_Cheatsheet_Is_What_The_Built_Library_Writes by `5bf6255` and `460a481`, whose form
+the module's test already has, and that CHEATSHEET.md and DEVLOG.md were written again; the
+cheatsheet's lines that changed are the operators by symbol, the tuples by their names in both
+PictureSize and in Prism's and Slab's outlines, and the new Inside, Cells and LevelCell. The tests
+pass, 189 where there were 182 (dotnet test Levels.Tests).

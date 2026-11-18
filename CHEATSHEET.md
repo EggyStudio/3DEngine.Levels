@@ -12,7 +12,7 @@ byte[] ReadAllBytes(string path);                        // The file's bytes
 Stream OpenRead(string path);                            // The file as a stream, which a level is read through
 
 interface ILevelMaterials                                // What an engine says of a level's materials, the size of the picture each is drawn with, which a face's texture coordinates are worked out over (N 2.1)
-(double, double)? PictureSize(string material);          // How many texels the picture of a material spans each way, or nothing where the engine has none for it, which Meshes then takes as the level's units a meter, so a face at a scale of one repeats its material once a meter
+(double Width, double Height)? PictureSize(string material);  // How many texels the picture of a material spans each way, or nothing where the engine has none for it, which Meshes then takes as the level's units a meter, so a face at a scale of one repeats its material once a meter
 
 class LevelPictures                                      // A level's materials by the module's names for them, a prototype under PrototypeFolder and any other material a picture of its name under PictureFolder, so a face repeats over the texels TrenchBroom draws it with
 string PrototypeFolder = "proto/";                       // The folder of a level's materials a prototype stands in, so a face of proto/floor is drawn as the floor prototype
@@ -23,7 +23,7 @@ IReadOnlyList<string> PictureExtensions { get; }         // The kinds of picture
 bool IsPrototype(string material);                       // Whether a material is a prototype, a name under PrototypeFolder
 string Slot(string material);                            // The slot a material is drawn as, a prototype's name without PrototypeFolder and any other name as it is
 LevelPicture? Find(string material);                     // The material's picture, a prototype's with no path, the first PNG or JPEG of its name whose header reads, or nothing
-(double, double)? PictureSize(string material);          // How many texels the picture of a material spans each way, or nothing where the engine has none for it, which Meshes then takes as the level's units a meter, so a face at a scale of one repeats its material once a meter
+(double Width, double Height)? PictureSize(string material);  // How many texels the picture of a material spans each way, or nothing where the engine has none for it, which Meshes then takes as the level's units a meter, so a face at a scale of one repeats its material once a meter
 
 class Level                                              // A level file, its brushes and entities, in the Valve 220 map format TrenchBroom reads and writes
 double DefaultUnitsPerMeter = 32;                        // How many of a file's units make a meter where its worldspawn says none
@@ -75,8 +75,8 @@ LevelBrush Wedge(LevelPoint low, LevelPoint high, string material, double scale 
 IReadOnlyList<LevelBrush> Arch(LevelPoint center, double radius, double thickness, double depth, string material, int segments = 8, double degrees = 180, double scale = 0.0625);  // An arch standing across X, a half ring or a part of one cut into straight segments, a brush each, every segment spanning an equal share of the arch's angle
 LevelBrush Turned(double degrees, LevelPoint about);     // The brush turned about the vertical line through a point, its faces' mapping taken again from the world, so its material lies on it as on one drawn where it stands
 LevelBrush Moved(LevelPoint by);                         // The brush moved, its faces' mapping taken again from the world, so its material stays where the world puts it rather than going with the brush, as a moved brush's does in TrenchBroom with its texture lock off
-LevelBrush Prism(IReadOnlyList<(double, double)> outline, double from, double to, string material, double scale = 0.0625);  // A brush of a convex outline across Y, its points as (X, Z) in either winding, stretched from one Y to another, each face's three points wound as the file winds them and its axes the world's
-LevelBrush Slab(IReadOnlyList<(double, double)> outline, double from, double to, string material, double scale = 0.0625);  // A brush of a convex outline on the ground, its points as (X, Y) in either winding, stretched up from one height to another, as a floor's, a ceiling's or a platform's slab
+LevelBrush Prism(IReadOnlyList<(double X, double Z)> outline, double from, double to, string material, double scale = 0.0625);  // A brush of a convex outline across Y, its points as (X, Z) in either winding, stretched from one Y to another, each face's three points wound as the file winds them and its axes the world's
+LevelBrush Slab(IReadOnlyList<(double X, double Y)> outline, double from, double to, string material, double scale = 0.0625);  // A brush of a convex outline on the ground, its points as (X, Y) in either winding, stretched up from one height to another, as a floor's, a ceiling's or a platform's slab
 LevelBrush Wall(LevelPoint from, LevelPoint to, double height, double thickness, string material, double scale = 0.0625);  // A wall from one point of the ground to another, centered on the line between them, standing up from the first point's height
 LevelBrush Ramp(LevelPoint from, LevelPoint to, double width, double rise, string material, double scale = 0.0625);  // A ramp from one point of the ground to another, as wide as given and centered on the line between them, rising from the first point's height by its rise at the second
 LevelBrush Along(LevelPoint from, LevelPoint to);        // The brush, made along X from the file's origin, turned to run from one point of the ground toward another and moved to start at the first, its height raised by the first's
@@ -106,9 +106,9 @@ double Length { get; }                                   // How long the way is,
 Vector3 Meters(double unitsPerMeter);                    // The point in meters with Y up, the file's (x, y, z) at (x, z, -y) and divided by its units a meter
 LevelPoint FromMeters(Vector3 meters, double unitsPerMeter);  // The point a place in meters with Y up stands at in a file of the given units a meter
 string ToString();                                       // The three numbers as a level file writes them, apart by spaces
-LevelPoint operator Addition(LevelPoint a, LevelPoint b);  // The sum of two points or ways
-LevelPoint operator Subtraction(LevelPoint a, LevelPoint b);  // The way from the second point to the first
-LevelPoint operator Multiply(LevelPoint a, double s);    // A way scaled
+LevelPoint operator +(LevelPoint a, LevelPoint b);       // The sum of two points or ways
+LevelPoint operator -(LevelPoint a, LevelPoint b);       // The way from the second point to the first
+LevelPoint operator *(LevelPoint a, double s);           // A way scaled
 double Dot(LevelPoint a, LevelPoint b);                  // The dot product of two ways, in the file's units squared
 LevelPoint Cross(LevelPoint a, LevelPoint b);            // The cross product of two ways, right-handed in the file's axes, so X crossed with Y is Z
 
@@ -121,9 +121,12 @@ class LevelGeometry                                      // An entity's brushes 
 IReadOnlyList<LevelMesh> Meshes(LevelEntity source, double unitsPerMeter, Vector3 origin, ILevelMaterials? materials = null);  // An entity's brushes as triangles, a mesh each material in the order the faces first name them
 IReadOnlyList<LevelHull> Hulls(LevelEntity source, double unitsPerMeter, Vector3 origin);  // An entity's brushes as convex hulls, a hull each brush with a solid
 double? Hit(IEnumerable<LevelBrush> brushes, LevelPoint from, LevelPoint way, double reach);  // How far along a ray it first meets any of the brushes, or nothing where it meets none within its reach, as Hit reads each
+bool Inside(LevelBrush brush, LevelPoint point);         // Whether a point in the file's units lies inside a brush, behind every one of its faces' planes
+IReadOnlyList<LevelCell> Cells(LevelBrush brush, double cellMeters, double unitsPerMeter);  // The cells of a grid in meters with Y up a brush fills, each where its middle lies inside the brush, with the material most of its outer sides are covered by, in order along X, then Y, then Z
+IReadOnlyList<LevelCell> Cells(LevelEntity source, double cellMeters, double unitsPerMeter);  // The cells of a grid in meters with Y up an entity's brushes fill, as Cells gives each brush's, a cell two brushes fill taking the first brush's in the entity's order, in order along X, then Y, then Z
 LevelTriangles Triangles(IReadOnlyList<LevelMesh> meshes);  // An entity's meshes as one shape of triangles, for a static body
 Vector2 Texel(LevelFace face, LevelPoint point, double width, double height);  // Where a point of a face falls on its material, its texel along each axis, scaled and moved, over the texels its picture spans each way
-(int, int)? PictureSize(ReadOnlySpan<byte> bytes);       // A PNG's or a JPEG's width and height from its header, or nothing for other bytes
+(int Width, int Height)? PictureSize(ReadOnlySpan<byte> bytes);  // A PNG's or a JPEG's width and height from its header, or nothing for other bytes
 
 record LevelMesh                                         // One material's share of an entity's brushes as triangles, in meters with Y up about a place, which an engine builds a mesh of to draw with the material of the same name
 LevelMesh(string Material, Vector3[] Positions, Vector3[] Normals, Vector2[] Uvs, uint[] Indices);
@@ -179,4 +182,11 @@ string Class = "tree";                                   // The class of a tree
 LevelTree(string? Species, uint Seed);
 string? Species { get; init; }                           // The species' name as the level writes it, or nothing where it names none
 uint Seed { get; init; }                                 // The seed, which picks its variant and turns and sizes it
+
+record struct LevelCell                                  // A cell of a grid in meters with Y up that a level's brushes fill, by its index along each axis from the level's origin, and the material it is laid with, as Cells gives it
+LevelCell(int X, int Y, int Z, string Material);
+int X { get; init; }                                     // Its index along X, the cell spanning X times the cell's size to one more
+int Y { get; init; }                                     // Its index up
+int Z { get; init; }                                     // Its index along Z
+string Material { get; init; }                           // The material of the brush's face most of its outer sides are covered by
 ```

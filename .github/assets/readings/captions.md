@@ -1,0 +1,1 @@
+2026-11-18-cells-from-above.webp | The example room's cells of half a meter seen from above, each column the material of its topmost cell and the number its top in cells over the ground, the floor at none, the ramp rising to the platform at 2 and the walls at 8, the door under the wall above its doorway.

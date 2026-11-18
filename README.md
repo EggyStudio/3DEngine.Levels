@@ -53,7 +53,7 @@ The types a binding reads, each in the namespace `Levels`, are these.
 | `LevelFace` | A face, its plane through three points, its material and its mapping of two axes, offsets, a rotation and two scales |
 | `LevelPoint` | A point or a way in the file's units with Z up, turned into meters by `Meters`, with `Dot`, `Cross` and `Length` |
 | `LevelPlacement` | Where an entity stands in meters and how it is turned, a `Vector3` and a `Quaternion` |
-| `LevelGeometry` | The brushes as meshes (`Meshes`), as convex hulls (`Hulls`) and as one shape of triangles (`Triangles`), how far a ray first meets any of a set of brushes (`Hit`), and a picture's size from its header (`PictureSize`) |
+| `LevelGeometry` | The brushes as meshes (`Meshes`), as convex hulls (`Hulls`) and as one shape of triangles (`Triangles`), how far a ray first meets any of a set of brushes (`Hit`), whether a point lies inside a brush (`Inside`), the cells of a grid a brush or an entity fills (`Cells`), and a picture's size from its header (`PictureSize`) |
 | `LevelMesh` | One material's triangles, their positions, normals, texture coordinates and indices |
 | `LevelHull` | One brush's corners in meters, a convex hull for a body |
 | `LevelTriangles` | An entity's triangles as one shape for a static body |
@@ -61,6 +61,7 @@ The types a binding reads, each in the namespace `Levels`, are these.
 | `LevelLight` | A light in physical units, its kind, place, way, color, strength, range and cones |
 | `LevelLightKind` | A light's kind, `Point`, `Spot` or `Directional` |
 | `LevelTree` | A tree, the name of its species and its seed |
+| `LevelCell` | A cell of a grid a level's brushes fill, its index along each axis and its material |
 
 What the module gives out stands on these conventions.
 
@@ -76,6 +77,7 @@ What the module gives out stands on these conventions.
 | Materials | A name under `proto/` is a prototype's slot over a picture of 512 texels, and any other a PNG or a JPEG of its name under `textures/`, the layout `LevelPictures` reads; an engine that lays its pictures out otherwise implements `ILevelMaterials` |
 | Collision | An entity's brushes as one shape of triangles for a static body (`LevelGeometry.Triangles`), or as a convex hull a brush (`LevelGeometry.Hulls`) |
 | Names | An entity is called by its `targetname`, else its class, else `entity` and its index (`LevelEntity.Name`) |
+| Cells | A grid of cells of a given size in meters from the level's origin, Y up, a cell filled where its middle lies inside a brush, a point on a face inside where the face looks toward lesser X, else lesser Y, else lesser Z in the file's axes, so two touching brushes never fill one cell; a cell's material the one most of its outer sides are covered by, each side by the face whose way out is nearest its own, a tie to the side met first among up, down, plus X, minus X, plus Z and minus Z, a cell with no outer side its top's, and a cell two brushes fill the first brush's (`LevelGeometry.Cells`) |
 | Faults | A key or a brush the reading cannot take is a `FormatException` naming the entity's index and name, through `Level.ReadEntities` |
 
 An engine with Z up or left-handed axes turns the positions, normals and turns it is given, and an

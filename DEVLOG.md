@@ -8,6 +8,11 @@ notes written beside them as Markdown files named the same way. A line under Don
 
 ## 2026-11-18
 
+![](.github/assets/readings/2026-11-18-cells-from-above.webp)
+The example room's cells of half a meter seen from above, each column the material of its topmost
+cell and the number its top in cells over the ground, the floor at none, the ramp rising to the
+platform at 2 and the walls at 8, the door under the wall above its doorway.
+
 A made level through every reader and writer of the module at 100, 10,000 and 100,000 brushes,
 a third each boxes, ramps and boxes turned by 30 degrees, every hundredth a door's, with a light,
 a spot and a tree for each hundred, read back equal at each count. Each time is the best of up to
@@ -210,6 +215,110 @@ of 63.17 million characters and the level. The process's peak working set is 1,2
 1,337, and every brush's Polygons, Meshes and Hulls allocate the most of the steps, the next to
 read.
 
+Commits that day
+
+- `4d9629d` A light fades to its range by glTF's window, the same source its spot's cone stands on.
+- `00124e9` A level is loaded through a stream into a moving window, so a large file is never held
+  as one text and loading allocates what parsing does.
+- `fc1af66` A spot's light off its axis is said and given as a number, full inside its inner cone
+  and falling to nothing at its outer one as glTF's lights extension gives it.
+- `efb443c` An entity's place, light and tree are written back to its keys, only what differs, so a
+  tool saves what it loaded and a level saved unedited is the same text.
+- `a3a266f` A light's range is said and given as a number, its light falling as the inverse square
+  of the distance and brought smoothly to nothing at the range.
+- `bfe7cc5` The module ships an example room of every class it reads, which its tests write and load
+  through the README's binding, and the checks hold the link row and every tracked text to naming no
+  engine.
+- `4566bdb` The README says which way texture coordinates run, the picture's top left at the origin
+  and V growing down it, held by a test, and its links stand above its title.
+- `2298b58` The README states the module's conventions of materials, collision, names and faults
+  beside its units, and a spot's conversion for another way of counting its lumens.
+- `692e95d` A tree's species has no default, the key's text or nothing, for an engine's vegetation
+  to resolve.
+- `919adce` The module names no engine and speaks of none in particular, its documents, summaries,
+  comments and tests said in its own terms, the assembly's name apart.
+- `4a16d8c` The module keeps a cheat sheet of every public type and member, written from the built
+  library and held to it by a test, linked from the README.
+- `6d05415` A brush's polygons, meshes and hulls are built in a few kilobytes a brush where they
+  took some twenty, giving the same shapes.
+- `b29d55b` A level's text is read with its tokens left where they stand, a large level's reading
+  allocating some two bytes a character where it took twenty-five, and the checks print their
+  sentences whole.
+- `bc10f0e` A ray is met against a brush or the nearest of many, how far along it the solid begins,
+  so a test or a game reads it alike in either engine.
+- `3252c8a` A slab of a ground outline, a wall and a ramp between two points of the ground, and any
+  brush made along X put along a line, are made by the module.
+- `b2add4a` A brush of any convex outline is public and refuses one that bends in or has no depth,
+  and the README links the devlog.
+- `3386a62` The module's checks are four tests from Tools' revised form, each failing with a
+  sentence that names what it found and the rule.
+- `ef3b53b` A level hands its entities to an engine one by one, and a fault its text causes is named
+  by the entity it stands in.
+- `39d67de` An entity gives its target name and the name an engine shows it by, its target name,
+  else its class, else its index.
+- `d7941de` A level is read through the engine's files as its pictures are, and the README's binding
+  reads it so.
+- `af7f4d7` The bench takes a made level of up to 100,000 brushes through every reader and writer,
+  holds its round trip equal and prints a sheet of each step's time and memory, which the devlog
+  carries.
+- `46a7f8c` The tests take the checks every module keeps from the Tools submodule in place of their
+  own copies, and a clone without the submodule stops with the command that fetches it.
+- `4e632dc` The shapes are said in their own terms, the arch's segments each spanning an equal share
+  of its angle.
+- `3d6ae0c` The README names every public type of the library in a table of what a binding reads,
+  and a test fails where one is named nowhere.
+- `26a4204` The width test reads every folder and the project files, the workflow and the scripts as
+  well, two comments past 100 columns are rewrapped, and the doorway is said in its own terms.
+- `80bbc12` A test fails where a public type, member or summary of the library names either engine,
+  so the library reads as one any engine takes.
+- `27aea49` A test fails where the library references an engine, a window or a graphics API, read
+  from its assembly and the packages its build resolved.
+- `1835bf5` The agents guide names the bench in its table of areas, with the command that runs it.
+- `2e947c6` The library's assembly and package are named 3DEngine.Levels and its tests'
+  3DEngine.Levels.Tests, while its folders, project files and namespace keep the name Levels.
+- `6dd20f0` The README's smallest binding is the tests' host, run with no engine against a level and
+  a folder of pictures, and a test holds the README's copy of it to the host's code.
+- `460490c` The README says how to bind the module in any engine, the interfaces it declares, the
+  conventions of what it gives out and the smallest binding that works.
+- `2bd5ec2` A brush too far out for its corners to be found is refused with the face, the distance
+  and the bound named, where its message said only that its planes close no solid.
+- `0a79f72` A bench outside the solution reads, writes and builds a level of 10,000 brushes and one
+  brush of many faces, giving each step's time and memory.
+- `4eb35e2` A point's dot product, cross product and length are public, so an engine binding the
+  module reads a face's plane with the module's own arithmetic.
+- `85d43c5` A level holding what map text cannot, a trailing backslash, a material that is not one
+  word, a number of no end or a game of two lines, is refused when written rather than written as
+  text that reads back as another.
+- `67b5dca` A flat brush, two of its planes facing each other in one place, is refused as having no
+  volume, and the reader is held to refusing text cut short or spoiled with a named exception.
+- `58d537f` A test holds the classes TrenchBroom is given to the module's readers, each with the
+  keys they read and the defaults they take.
+- `2f3017a` A level's tree is read as a species' name and a seed, a tree of no species being the
+  black tupelo TrenchBroom shows, and the sun's default strength is said to give way to a sky that
+  places the sun.
+- `d7daca5` A level's point lights, spots and sun are read from their classes in lumens and lux with
+  their color in linear sRGB, and TrenchBroom is given the three classes with their keys and
+  defaults.
+- `86b460e` An entity's keyvalues are given as the lines the level file writes and read back from
+  them, and an entity's meshes as one shape of triangles for a static body.
+- `2c0f964` A level's materials are found by the names both engines read them by, a prototype under
+  proto/ over a picture of 512 texels and any other a PNG or a JPEG of its name under textures/,
+  through the files an engine gives.
+- `b19895a` A level's entity gives the place and the turn an engine stands it at in meters with Y
+  up, read from its origin and angles as both engines place it, and reads a key as numbers with a
+  malformed one refused by name.
+- `a290cdf` Comment lines hold to 100 columns under a test that reads the sources, the long ones
+  rewrapped with no word changed, and the agents guide links the devlog.
+- `1bb027e` The face texel's coordinates are written with the word dot where the middle dot stood,
+  the style guide says the mark is not used, and the devlog lists the code's move.
+
+## 2026-11-17
+
+Commits that day
+
+- `8e16b33` The ignore file's note on the pictures folder names no one, and the guides spell
+  canceled.
+
 ## 2026-10-31
 
 Done that day
@@ -217,3 +326,15 @@ Done that day
 - Item 1 at `751c272`. The documents, one commit.
 - Item 2 at `3ca2ac0`. The skeleton, one commit after item 1.
 - Item 3 at `a01b2df`. The code's move.
+
+Commits that day
+
+- `a01b2df` TrenchBroom's game config and the format's base entity classes move here, which an
+  engine copies and names its own classes beside, held to the format's scale and its units a meter.
+- `01c44b0` A level entity's brushes are given out as triangles a mesh a material and as convex
+  hulls a brush, in meters with Y up, their texels over the pictures an engine says its materials
+  have.
+- `3ca2ac0` The module gains its solution, an empty library whose public members need summaries, a
+  test that it loads, the version at 0.1 and a build workflow on Linux, Windows and macOS.
+- `751c272` The module gains its documents, AGENTS.md, the README, STYLE.md, COMMITS.md and the code
+  of conduct as the engines keep them, with git's ignore and attribute files.
