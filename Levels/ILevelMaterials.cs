@@ -5,8 +5,9 @@ namespace Levels;
 /// face's texture coordinates are worked out over (N 2.1).
 /// </summary>
 /// <remarks>
-/// The module does not know where an engine keeps its pictures or how it names them, so the engine
-/// that binds it answers for a material's picture, by its own folders and its own prototypes.
+/// <see cref="LevelPictures"/> answers by the names both engines read a level's materials by, over
+/// the files an engine gives it, so a level repeats its materials alike in either. An engine that
+/// keeps its pictures otherwise answers by its own folders and its own prototypes.
 /// </remarks>
 public interface ILevelMaterials
 {

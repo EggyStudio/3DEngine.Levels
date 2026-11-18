@@ -223,3 +223,13 @@ pitch above zero looking down, the roll, a brush entity at its origin or its bru
 world at zero and the refusals. Level.cs and Level.Reading.cs say the module where they said this
 engine. The strict build is clean and the tests pass, 43 where there were 24 (dotnet test
 Levels.Tests).
+
+The second part in the commit carrying this line. LevelPictures is the module's ILevelMaterials
+over ILevelFiles, an interface of two members, Exists and ReadAllBytes, by relative paths with
+forward slashes, naming no engine and no asset reader. It holds BevyCSharp's names as they are,
+proto/ and a prototype's slot, the 512 texels of its picture and the search of textures/ for a PNG,
+a JPG and a JPEG of a material's name, the first whose header reads, and Find gives the picture's
+path and size for an engine to draw. The prototypes' pictures are not written here, since
+Modeling's prototype colors paint them, so no bytes are pinned. Its tests check the names, the
+order of the search, a header that does not read and a mesh's texels over the pictures found. The
+strict build is clean and the tests pass, 50 where there were 43 (dotnet test Levels.Tests).
