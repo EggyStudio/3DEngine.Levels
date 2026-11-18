@@ -69,6 +69,14 @@ static void Read(int count, string path)
 
     Time("Level.Write", () => text = level.Write());
     Time("Level.Parse", () => read = Level.Parse(text));
+    // What the level read holds, beside what reading it allocated, so the reading's own cost is
+    // the difference.
+    var held = GC.GetTotalMemory(forceFullCollection: true);
+    var kept = Level.Parse(text);
+    var keeps = GC.GetTotalMemory(forceFullCollection: true) - held;
+    GC.KeepAlive(kept);
+    Console.WriteLine($"| {count:N0} | the level Level.Parse keeps | | {keeps / 1048576.0:F1} |");
+
     Time("Level.Save", () => level.Save(path));
     Time("Level.Load", () => read = Level.Load(path));
     Time("LevelBrush.Polygons, every brush", () =>

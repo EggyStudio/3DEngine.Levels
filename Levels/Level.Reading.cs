@@ -5,7 +5,10 @@ namespace Levels;
 
 // Reading map text, entities in braces holding quoted keyvalues and brushes, brushes in braces
 // holding a face a line, and comments from two slashes to the end of a line, the whole read token
-// by token so a writer that puts two braces on a line is read as one that does not.
+// by token so a writer that puts two braces on a line is read as one that does not. A token is
+// where it stands in the text, a number is read from there, and a string is made only for a key, a
+// value or a material, one string a material however many faces name it, so a large level's
+// reading holds the text and the level and little else.
 public sealed partial class Level
 {
     /// <summary>
@@ -34,7 +37,7 @@ public sealed partial class Level
 
         while (reader.Next() is { } token)
         {
-            if (token.Text != "{") throw reader.Fault(token, $"an entity's opening brace is meant, where it reads {token.Text}");
+            if (!reader.Is(token, '{')) throw reader.Fault(token, $"an entity's opening brace is meant, where it reads {reader.Text(token)}");
             level.Entities.Add(ReadEntity(reader));
         }
 
@@ -47,17 +50,17 @@ public sealed partial class Level
         while (true)
         {
             var token = reader.Next() ?? throw reader.Fault(null, "the file ends inside an entity");
-            if (token.Text == "}" && !token.Quoted) return entity;
-            if (token.Text == "{" && !token.Quoted)
+            if (reader.Is(token, '}')) return entity;
+            if (reader.Is(token, '{'))
             {
                 entity.Brushes.Add(ReadBrush(reader));
                 continue;
             }
 
-            if (!token.Quoted) throw reader.Fault(token, $"a quoted key, a brush or the entity's closing brace is meant, where it reads {token.Text}");
-            var value = reader.Next() ?? throw reader.Fault(null, $"the file ends after the key {token.Text}");
-            if (!value.Quoted) throw reader.Fault(value, $"the key {token.Text} is given {value.Text}, where a quoted value is meant");
-            entity.Keys.Add(new(token.Text, value.Text));
+            if (!token.Quoted) throw reader.Fault(token, $"a quoted key, a brush or the entity's closing brace is meant, where it reads {reader.Text(token)}");
+            var value = reader.Next() ?? throw reader.Fault(null, $"the file ends after the key {reader.Text(token)}");
+            if (!value.Quoted) throw reader.Fault(value, $"the key {reader.Text(token)} is given {reader.Text(value)}, where a quoted value is meant");
+            entity.Keys.Add(new(reader.Text(token), reader.Text(value)));
         }
     }
 
@@ -67,8 +70,8 @@ public sealed partial class Level
         while (true)
         {
             var token = reader.Next() ?? throw reader.Fault(null, "the file ends inside a brush");
-            if (token.Text == "}" && !token.Quoted) return brush;
-            if (token.Text != "(") throw reader.Fault(token, $"a face's first point or the brush's closing brace is meant, where it reads {token.Text}");
+            if (reader.Is(token, '}')) return brush;
+            if (!reader.Is(token, '(')) throw reader.Fault(token, $"a face's first point or the brush's closing brace is meant, where it reads {reader.Text(token)}");
             brush.Faces.Add(ReadFace(reader, token.Line));
         }
     }
@@ -79,27 +82,29 @@ public sealed partial class Level
         var second = ReadPoint(reader, opened: false);
         var third = ReadPoint(reader, opened: false);
         var material = reader.Next() ?? throw reader.Fault(null, "the file ends before a face's material");
-        if (material.Text is "{" or "}" or "(" or "[" || material.Text.Length == 0) throw reader.Fault(material, $"a face's material is meant, where it reads {material.Text}");
+        if (reader.Is(material, '{') || reader.Is(material, '}') || reader.Is(material, '(') || reader.Is(material, '[') || material.Length == 0)
+            throw reader.Fault(material, $"a face's material is meant, where it reads {reader.Text(material)}");
 
         var opening = reader.Next();
-        if (opening?.Text != "[") throw reader.Fault(opening, "a face's two axes in brackets are meant after its material, as the Valve 220 format writes them, so this is Quake's older format, which TrenchBroom converts to the Valve format from its map menu");
+        if (opening is not { } open || !reader.Is(open, '['))
+            throw reader.Fault(opening, "a face's two axes in brackets are meant after its material, as the Valve 220 format writes them, so this is Quake's older format, which TrenchBroom converts to the Valve format from its map menu");
         var (uAxis, uOffset) = ReadAxis(reader);
-        Expect(reader, "[", "a face's second axis");
+        Expect(reader, '[', "a face's second axis");
         var (vAxis, vOffset) = ReadAxis(reader);
         var rotation = reader.Number("a face's rotation");
         var scaleU = reader.Number("a face's first scale");
         var scaleV = reader.Number("a face's second scale");
-        if (reader.Peek() is { Line: var after, Quoted: false, Text: var extra } && after == line && extra is not ("(" or "}"))
-            throw reader.Fault(reader.Peek(), $"a face ends at its two scales, where it goes on with {extra}");
+        if (reader.Peek() is { Quoted: false } extra && extra.Line == line && !reader.Is(extra, '(') && !reader.Is(extra, '}'))
+            throw reader.Fault(extra, $"a face ends at its two scales, where it goes on with {reader.Text(extra)}");
 
-        return new LevelFace(first, second, third, material.Text, uAxis, uOffset, vAxis, vOffset, rotation, scaleU, scaleV);
+        return new LevelFace(first, second, third, reader.Material(material), uAxis, uOffset, vAxis, vOffset, rotation, scaleU, scaleV);
     }
 
     private static LevelPoint ReadPoint(Reader reader, bool opened)
     {
-        if (!opened) Expect(reader, "(", "a face's next point");
+        if (!opened) Expect(reader, '(', "a face's next point");
         var point = new LevelPoint(reader.Number("a point's x"), reader.Number("a point's y"), reader.Number("a point's z"));
-        Expect(reader, ")", "a point's closing parenthesis");
+        Expect(reader, ')', "a point's closing parenthesis");
         return point;
     }
 
@@ -107,24 +112,29 @@ public sealed partial class Level
     {
         var axis = new LevelPoint(reader.Number("an axis's x"), reader.Number("an axis's y"), reader.Number("an axis's z"));
         var offset = reader.Number("an axis's offset");
-        Expect(reader, "]", "an axis's closing bracket");
+        Expect(reader, ']', "an axis's closing bracket");
         return (axis, offset);
     }
 
-    private static void Expect(Reader reader, string text, string what)
+    private static void Expect(Reader reader, char mark, string what)
     {
         var token = reader.Next();
-        if (token?.Text != text || token.Quoted) throw reader.Fault(token, $"{what}, {text}, is meant, where it reads {token?.Text ?? "the file's end"}");
+        if (token is not { } read || !reader.Is(read, mark))
+            throw reader.Fault(token, $"{what}, {mark}, is meant, where it reads {(token is { } t ? reader.Text(t) : "the file's end")}");
     }
 
-    /// <summary>A token of map text, its text, whether it was quoted, and its line.</summary>
-    private sealed record Token(string Text, bool Quoted, int Line);
+    /// <summary>
+    /// A token of map text, where it stands in the text, whether it was quoted, its line, and for a
+    /// quoted text holding an escaped quote its text read out.
+    /// </summary>
+    private readonly record struct Token(int Start, int Length, bool Quoted, int Line, string? Unescaped = null);
 
     /// <summary>Reads map text token by token, keeping the line each began on.</summary>
     private sealed class Reader
     {
         private readonly string _text;
         private readonly string _name;
+        private readonly Dictionary<string, string> _materials = new(StringComparer.Ordinal);
         private int _at;
         private int _line = 1;
         private Token? _peeked;
@@ -135,8 +145,13 @@ public sealed partial class Level
 
             // TrenchBroom's first comment names the game the level was drawn for.
             const string said = "// Game: ";
-            var first = text.TrimStart('﻿');
-            if (first.StartsWith(said, StringComparison.Ordinal)) Game = first[said.Length..].Split('\n')[0].Trim();
+            var first = text.AsSpan().TrimStart('\uFEFF');
+            if (first.StartsWith(said, StringComparison.Ordinal))
+            {
+                var rest = first[said.Length..];
+                var end = rest.IndexOf('\n');
+                Game = (end < 0 ? rest : rest[..end]).Trim().ToString();
+            }
         }
 
         public string? Game { get; }
@@ -150,11 +165,30 @@ public sealed partial class Level
             return token;
         }
 
+        /// <summary>Whether a token is one of the format's marks, unquoted.</summary>
+        public bool Is(Token token, char mark) => !token.Quoted && token.Length == 1 && _text[token.Start] == mark;
+
+        /// <summary>A token's text, made as a string.</summary>
+        public string Text(Token token) => token.Unescaped ?? _text.Substring(token.Start, token.Length);
+
+        /// <summary>A material's name, one string for every face that names it.</summary>
+        public string Material(Token token)
+        {
+            var lookup = _materials.GetAlternateLookup<ReadOnlySpan<char>>();
+            var span = _text.AsSpan(token.Start, token.Length);
+            if (token.Unescaped is null && lookup.TryGetValue(span, out var known)) return known;
+            var name = Text(token);
+            _materials[name] = name;
+            return name;
+        }
+
         public double Number(string what)
         {
             var token = Next();
-            if (token is null || token.Quoted || !double.TryParse(token.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out var value) || !double.IsFinite(value))
-                throw Fault(token, $"{what} is meant as a number, where it reads {token?.Text ?? "the file's end"}");
+            if (token is not { Quoted: false } read
+                || !double.TryParse(_text.AsSpan(read.Start, read.Length), NumberStyles.Float, CultureInfo.InvariantCulture, out var value)
+                || !double.IsFinite(value))
+                throw Fault(token, $"{what} is meant as a number, where it reads {(token is { } t ? Text(t) : "the file's end")}");
             return value;
         }
 
@@ -169,7 +203,7 @@ public sealed partial class Level
             {
                 var c = _text[_at];
                 if (c == '\n') _line++;
-                if (char.IsWhiteSpace(c) || c == '﻿')
+                if (char.IsWhiteSpace(c) || c == '\uFEFF')
                 {
                     _at++;
                     continue;
@@ -182,42 +216,40 @@ public sealed partial class Level
                 }
 
                 if (c is '{' or '}' or '(' or ')' or '[' or ']')
-                {
-                    _at++;
-                    return new Token(c.ToString(), false, _line);
-                }
+                    return new Token(_at++, 1, false, _line);
 
                 if (c == '"') return Quoted();
 
                 var start = _at;
                 while (_at < _text.Length && !char.IsWhiteSpace(_text[_at]) && _text[_at] is not ('"' or '(' or ')' or '[' or ']' or '{' or '}')) _at++;
-                return new Token(_text[start.._at], false, _line);
+                return new Token(start, _at - start, false, _line);
             }
 
             return null;
         }
 
         // A quoted string, a quote inside it written with a backslash before it, as TrenchBroom
-        // writes one.
+        // writes one. A string with no such quote stands in the text as it is.
         private Token Quoted()
         {
             var line = _line;
-            var built = new StringBuilder();
-            _at++;
+            var start = ++_at;
+            StringBuilder? built = null;
             while (true)
             {
                 if (_at >= _text.Length) throw new FormatException($"{_name}, line {line}: A quoted text is never closed.");
                 var c = _text[_at++];
-                if (c == '"') return new Token(built.ToString(), true, line);
+                if (c == '"') return new Token(start, _at - 1 - start, true, line, built?.ToString());
                 if (c == '\\' && _at < _text.Length && _text[_at] == '"')
                 {
+                    built ??= new StringBuilder().Append(_text, start, _at - 1 - start);
                     built.Append('"');
                     _at++;
                     continue;
                 }
 
                 if (c == '\n') _line++;
-                built.Append(c);
+                built?.Append(c);
             }
         }
     }

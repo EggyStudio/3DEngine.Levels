@@ -615,3 +615,17 @@ of many brushes; a way of no length and a reach below zero are refused. LevelHit
 down on a floor at two lengths of its way, misses beside, short and away, a ray along a plane
 outside and inside, a ramp's slope and the nearest of two brushes. The README's rows name both. The
 six are done. The tests pass, 139 where there were 133 (dotnet test Levels.Tests).
+
+The seventh in the commit carrying this line. Level.Parse read each token into a record and a
+string of its own, and the game's name by splitting the whole text into lines; a token is now where
+it stands in the text, a number is read from that span, a string is made only for a key, a value or
+a material, one string a material for every face that names it, and the game's name is taken from
+the first line alone. LevelParseMemoryTests reads a level of 10,000 brushes, 5,994,813 characters,
+and holds its allocated bytes to 4 a character; it failed at 151,666,976 bytes, 25.3 a character,
+and the reading allocates 2.22 after, the level it keeps 2.06 of them. The bench gains a row for the
+level Level.Parse keeps, and its sheet after is `.github/assets/readings/2026-11-18-parse-after.md`,
+where at 100,000 brushes Parse takes 744 ms and 122.5 MiB against 1,369 ms and 1,409 MiB, the level
+115.9 MiB of them. Every brush's Polygons, Meshes and Hulls allocate the most of the steps and are
+the next to read. The same commit moves Tools' pin to `9d8e744` and ModuleTests to its block, each
+fact `Assert.True(fault is null, fault)`, and a fault planted in the README prints its sentence
+whole. The tests pass, 140 where there were 139 (dotnet test Levels.Tests).
