@@ -643,3 +643,12 @@ test map, 18,753,337 characters, is the same before and after. The sheet after i
 MiB where it took 1,681.8, Meshes 443.2 where 1,984.1 and Hulls 194.9 where 1,854.3, some 1.6, 4.5
 and 2.0 KiB a brush, and the peak working set stays at 1,253 MiB, which the level and its text
 hold. The tests pass, 143 where there were 140 (dotnet test Levels.Tests).
+
+The cheat sheet in the commit carrying this line. Tools' pin moves to `3720852`, ModuleTests gains
+its fifth fact, The_Cheatsheet_Is_What_The_Built_Library_Writes, and CHEATSHEET.md is written by
+running the tests with CHEATSHEET_WRITE=1, 176 lines of every public type in the README's order
+with its members, the hand-written lines above the list rewrapped to 100 columns, which a write
+keeps. The fact failed before the page existed with the line and the command named, and turned red
+again when a summary changed and the page was not written again, naming line 172 and both texts.
+The README's top row links it beside the devlog, and AGENTS.md's documents table names it with its
+command. The tests pass, 144 where there were 143 (dotnet test Levels.Tests).
