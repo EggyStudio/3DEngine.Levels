@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <!-- The library both engines reference from their own projects, which knows no engine (N 2.1).
+    <!-- The library an engine references from its own project, which knows no engine (N 2.1).
          Its assembly and package are 3DEngine.Levels, the name it is published under beside the
          other modules, while its types stand in the namespace Levels. -->
     <PropertyGroup>

@@ -3,7 +3,7 @@ using Xunit;
 namespace Levels.Tests;
 
 /// <summary>
-/// A level's materials found by the names both engines read them by, over files an engine gives.
+/// A level's materials found by the module's names for them, over files an engine gives.
 /// </summary>
 public sealed class LevelPicturesTests
 {

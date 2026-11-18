@@ -1,11 +1,10 @@
 # Levels
 
-Levels is a library both engines, 3DEngine and BevyCSharp, take as a git submodule, for the reader
-of the Valve 220 map format, the meshes and collision shapes made from its brushes, and the
-TrenchBroom configuration and FGD file those maps are edited with. It references no engine, no
-engine's package and no engine's bridge (NORM.md, N 2.1). What it needs of a renderer, a world, a
-scheduler or a file system it takes through an interface it declares, which each engine implements
-where it binds the module.
+Levels is a library an engine takes as a git submodule, for the reader of the Valve 220 map format,
+the meshes and collision shapes made from its brushes, and the TrenchBroom configuration and FGD
+file those maps are edited with. It references no engine, no engine's package and no engine's bridge
+(NORM.md, N 2.1). What it needs of a renderer, a world, a scheduler or a file system it takes
+through an interface it declares, which an engine implements where it binds the module.
 
 ## Documents
 

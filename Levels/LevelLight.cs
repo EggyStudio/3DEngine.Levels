@@ -20,7 +20,7 @@ public enum LevelLightKind
 
 /// <summary>
 /// A light of a level in physical units, as <see cref="LevelEntity.Light"/> reads it from a light
-/// class's keys, which both engines make a light of alike.
+/// class's keys, for an engine to make a light of.
 /// </summary>
 /// <param name="Kind">The kind, by the entity's class.</param>
 /// <param name="Position">The place, in meters with Y up.</param>

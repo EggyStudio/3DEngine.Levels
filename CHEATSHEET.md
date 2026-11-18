@@ -13,7 +13,7 @@ byte[] ReadAllBytes(string path);                        // The file's bytes
 interface ILevelMaterials                                // What an engine says of a level's materials, the size of the picture each is drawn with, which a face's texture coordinates are worked out over (N 2.1)
 (double, double)? PictureSize(string material);          // How many texels the picture of a material spans each way, or nothing where the engine has none for it, which Meshes then takes as the level's units a meter, so a face at a scale of one repeats its material once a meter
 
-class LevelPictures                                      // A level's materials by the names both engines read them by, a prototype under PrototypeFolder and any other material a picture of its name under PictureFolder, so a face repeats over the same texels in either engine
+class LevelPictures                                      // A level's materials by the module's names for them, a prototype under PrototypeFolder and any other material a picture of its name under PictureFolder, so a face repeats over the texels TrenchBroom draws it with
 string PrototypeFolder = "proto/";                       // The folder of a level's materials a prototype stands in, so a face of proto/floor is drawn as the floor prototype
 int PrototypePixels = 512;                               // How many texels a side a prototype's picture has, a meter's cell of the grid at a face scale of a sixteenth and 32 units a meter
 string PictureFolder = "textures/";                      // The folder a material's picture is searched for in, relative to the engine's root
@@ -143,7 +143,7 @@ string? Path { get; init; }                              // The picture's path a
 int Width { get; init; }                                 // Its width in texels
 int Height { get; init; }                                // Its height in texels
 
-record LevelLight                                        // A light of a level in physical units, as Light reads it from a light class's keys, which both engines make a light of alike
+record LevelLight                                        // A light of a level in physical units, as Light reads it from a light class's keys, for an engine to make a light of
 string PointClass = "light";                             // The class of a point light
 string SpotClass = "light_spot";                         // The class of a spot
 string DirectionalClass = "light_environment";           // The class of the sun

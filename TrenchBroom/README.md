@@ -11,8 +11,8 @@ units a meter a level takes when its `worldspawn` names none (`_units_per_meter`
 tool's 8, 16 and 32 unit grid ends on a meter's quarters. A level is saved in the Valve map format,
 which is the only one offered.
 
-`Levels.fgd` names the classes both engines read alike, `worldspawn`, `info_player_start`, the
-lights and `tree`, a tree of a species' name and a seed that each engine grows through the species
+`Levels.fgd` names the classes the module reads, `worldspawn`, `info_player_start`, the
+lights and `tree`, a tree of a species' name and a seed that an engine grows through the species
 it has registered. A `light` is a point light, a `light_spot` a spot and a `light_environment` the
 sun, their `_color` in sRGB from 0 to 255 a channel, their `intensity` in lumens for a point or a
 spot and in lux for the sun, and a spot's `_inner_cone` and `_cone` in degrees from its axis. A spot

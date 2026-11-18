@@ -4,7 +4,7 @@ using Xunit;
 namespace Levels.Tests;
 
 /// <summary>
-/// Where a level's entity stands and how it is turned, read from its keys as both engines place it,
+/// Where a level's entity stands and how it is turned, read from its keys as an engine places it,
 /// and the keys read as numbers.
 /// </summary>
 public sealed class LevelPlacementTests

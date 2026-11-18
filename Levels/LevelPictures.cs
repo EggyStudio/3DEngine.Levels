@@ -1,9 +1,9 @@
 namespace Levels;
 
 /// <summary>
-/// A level's materials by the names both engines read them by, a prototype under
+/// A level's materials by the module's names for them, a prototype under
 /// <see cref="PrototypeFolder"/> and any other material a picture of its name under
-/// <see cref="PictureFolder"/>, so a face repeats over the same texels in either engine.
+/// <see cref="PictureFolder"/>, so a face repeats over the texels TrenchBroom draws it with.
 /// </summary>
 /// <remarks>
 /// <para>

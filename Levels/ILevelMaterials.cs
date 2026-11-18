@@ -5,7 +5,7 @@ namespace Levels;
 /// face's texture coordinates are worked out over (N 2.1).
 /// </summary>
 /// <remarks>
-/// <see cref="LevelPictures"/> answers by the names both engines read a level's materials by, over
+/// <see cref="LevelPictures"/> answers by the module's names for a level's materials, over
 /// the files an engine gives it, so a level repeats its materials alike in either. An engine that
 /// keeps its pictures otherwise answers by its own folders and its own prototypes.
 /// </remarks>

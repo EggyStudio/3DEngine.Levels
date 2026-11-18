@@ -652,3 +652,16 @@ keeps. The fact failed before the page existed with the line and the command nam
 again when a summary changed and the page was not written again, naming line 172 and both texts.
 The README's top row links it beside the devlog, and AGENTS.md's documents table names it with its
 command. The tests pass, 144 where there were 143 (dotnet test Levels.Tests).
+
+The owner's rule of today, that the module names and targets no engine, in the commit carrying this
+line. The review's command, `git grep -n -P "BevyCSharp|\bBevy\b|3DEngine(?!\.[A-Z])"` over the
+tree but the submodule, REVIEW.md and NORM.md, found 4 lines and finds 0: the README's and
+AGENTS.md's opening sentences said the module is a library both engines, named, take, and the
+README's binding section named the two as examples with one's binding by its path. Beside the
+command's finds, 20 lines said both engines, the engines, either engine or each engine, in the
+library's summaries, the tests' summaries, the workflow's comments, the props, the project file and
+TrenchBroom's README; each is said in the module's own terms or of an engine in general. The test
+class LevelKeysTests, which bore the name of one engine's component, is LevelKeysAndTrianglesTests,
+named for what it holds. CHEATSHEET.md is written again and DEVLOG.md regenerated. The assembly and
+package name 3DEngine.Levels stands as the one place the word does. The tests pass, 144 (dotnet
+test Levels.Tests).

@@ -6,7 +6,7 @@ namespace Levels.Tests;
 /// An entity's keyvalues as the text an engine keeps them in and back, and an entity's meshes as
 /// one shape of triangles for a body.
 /// </summary>
-public sealed class LevelKeysTests
+public sealed class LevelKeysAndTrianglesTests
 {
     [Fact]
     public void AnEntitysKeysReadBackFromTheirTextInTheirOrder()

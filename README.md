@@ -2,10 +2,10 @@
 
 [Devlog](DEVLOG.md) [Cheat sheet](CHEATSHEET.md)
 
-Levels is a library both engines, 3DEngine and BevyCSharp, take as a git submodule, for the reader
-of the Valve 220 map format, the meshes and collision shapes made from its brushes, and the
-TrenchBroom configuration and FGD file those maps are edited with. It references no engine, and each
-engine implements the interfaces it declares where it binds the module.
+Levels is a library an engine takes as a git submodule, for the reader of the Valve 220 map format,
+the meshes and collision shapes made from its brushes, and the TrenchBroom configuration and FGD
+file those maps are edited with. It references no engine, and an engine implements the interfaces it
+declares where it binds the module.
 
 ## Taking it into an engine
 
@@ -77,9 +77,9 @@ An engine with Z up or left-handed axes turns the positions, normals and turns i
 engine that takes clockwise triangles as their front takes each triangle's corners in the other
 order.
 
-The smallest binding reads a level from a folder through its files, draws each brush entity's meshes and makes them
-one static body, makes each light, and hands every other entity to the engine by its class.
-`IWorld` stands for the engine's own calls.
+The smallest binding reads a level from a folder through its files, draws each brush entity's meshes
+and makes them one static body, makes each light, and hands every other entity to the engine by its
+class. `IWorld` stands for the engine's own calls.
 
 ```csharp
 using System.Numerics;
@@ -143,8 +143,7 @@ public static class LevelBinding
 
 The tests' host, `Levels.Tests/Host/LevelBinding.cs`, is this code, and the tests run it against a
 level and a folder of pictures with no engine, so the build and the suite hold the binding to the
-module. BevyCSharp and 3DEngine take the module as two examples of an engine, and BevyCSharp's
-binding is `BevyCSharp/Levels/LevelSpawner.cs` in its repository.
+module.
 
 ## Building and testing
 

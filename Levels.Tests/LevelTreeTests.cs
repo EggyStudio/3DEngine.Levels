@@ -3,7 +3,7 @@ using Xunit;
 namespace Levels.Tests;
 
 /// <summary>
-/// A tree a level places, read from its keys as plain values both engines grow alike.
+/// A tree a level places, read from its keys as plain values an engine grows it from.
 /// </summary>
 public sealed class LevelTreeTests
 {

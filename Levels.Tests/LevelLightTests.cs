@@ -4,8 +4,8 @@ using Xunit;
 namespace Levels.Tests;
 
 /// <summary>
-/// A level's lights read from their classes' keys in physical units, as both engines make a light
-/// of them.
+/// A level's lights read from their classes' keys in physical units, for an engine to make a light
+/// of.
 /// </summary>
 public sealed class LevelLightTests
 {

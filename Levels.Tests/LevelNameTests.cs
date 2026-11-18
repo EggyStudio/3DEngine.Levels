@@ -2,7 +2,7 @@ using Xunit;
 
 namespace Levels.Tests;
 
-/// <summary>An entity's name, which both engines and their consoles show alike.</summary>
+/// <summary>An entity's name, which an engine and its console show it by.</summary>
 public sealed class LevelNameTests
 {
     [Fact]

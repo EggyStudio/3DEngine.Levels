@@ -3,7 +3,7 @@ using Xunit;
 namespace Levels.Tests;
 
 /// <summary>
-/// A ray against a level's brushes, which a test or a game reads alike in either engine.
+/// A ray against a level's brushes, how far along it a brush's solid begins.
 /// </summary>
 public sealed class LevelHitTests
 {
