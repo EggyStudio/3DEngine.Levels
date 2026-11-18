@@ -845,3 +845,19 @@ with their captions: painter's order that hid the ramp, Pillow's bitmap font tha
 labels that covered their marks or crossed the edge. AGENTS.md gains build/sheet's row, and pin.py
 moved Tools from `1e1ec63` to `1452dbe`, 1 commit, no fact new or changed, the cheatsheet the same.
 The tests pass, 206 (dotnet test Levels.Tests).
+
+The second of the three in the commit carrying this line. Level.Check gives every problem of a
+level at once as LevelProblem, the entity's index, its key or its brush and a sentence, with
+nothing thrown: the world's units a meter, an origin, an angle or angles, a light's color,
+strength, range and cones and a spot's inner cone wider than its outer, a tree's seed and an output
+that do not read, one problem a key with the refusal its reader gives, in the keys' order; a brush
+whose planes close no solid; and, where an ILevelMaterials is given, a material it gives no picture
+for, named once at the first brush that has it. LevelCheckTests holds a level of one of each, nine
+problems named in order, a material named once and unchecked where no pictures are given, the
+example room and the test room with none, the readers refusing each one Check names, and a spot's
+bad color named by its color alone; three of its first four failed on a stub, the fourth holding
+what the readers refused already, and one of my expectations was wrong before the code, the example
+room checked against materials that know no picture. The README names Check and LevelProblem. The
+commit carries NORM.md's reworded N 4.8 and the example room sheet's caption, which says each face
+takes a tone of the sheet's own for its material. CHEATSHEET.md is written again. The tests pass,
+211 where there were 206 (dotnet test Levels.Tests).

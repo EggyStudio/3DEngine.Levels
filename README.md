@@ -47,7 +47,7 @@ The types a binding reads, each in the namespace `Levels`, are these.
 
 | Type | What it is |
 |---|---|
-| `Level` | A level file, read by `Level.Parse`, or by `Level.Load` from a path or through an `ILevelFiles`, and written by `Level.Write` or `Level.Save`, with its entities, handed to the engine one by one by `Level.ReadEntities` with a fault naming the entity, and `Level.UnitsPerMeter`, `Level.Targeted`, the entities a target name names, `Level.Flattened`, the view a binding reads in which TrenchBroom's layers and groups are the world and a layer omitted from export is left out, and `Level.Doorway`, a wall's brushes round a rounded opening |
+| `Level` | A level file, read by `Level.Parse`, or by `Level.Load` from a path or through an `ILevelFiles`, and written by `Level.Write` or `Level.Save`, with its entities, handed to the engine one by one by `Level.ReadEntities` with a fault naming the entity, and `Level.UnitsPerMeter`, `Level.Check`, every problem of the level at once, `Level.Targeted`, the entities a target name names, `Level.Flattened`, the view a binding reads in which TrenchBroom's layers and groups are the world and a layer omitted from export is left out, and `Level.Doorway`, a wall's brushes round a rounded opening |
 | `LevelEntity` | An entity, its keyvalues in order and its brushes, read by `Placement`, `Light`, `Tree`, `Number`, `WholeNumber`, `Point`, `KeysText` and `Outputs`, written back by `Place`, `SetLight` and `SetTree`, each writing only what differs so a level saved unedited is the same text, and called by `Name` |
 | `LevelBrush` | A brush, a convex solid of its faces' planes, its polygons from `Polygons` and its shapes from `Box`, `Wedge`, `Prism` of any convex outline, `Slab` of a ground outline, `Arch`, `Wall` and `Ramp` between two points, `Along`, `Turned` and `Moved`, and how far a ray meets it from `Hit` |
 | `LevelFace` | A face, its plane through three points, its material and its mapping of two axes, offsets, a rotation and two scales |
@@ -62,6 +62,7 @@ The types a binding reads, each in the namespace `Levels`, are these.
 | `LevelLightKind` | A light's kind, `Point`, `Spot` or `Directional` |
 | `LevelTree` | A tree, the name of its species and its seed |
 | `LevelOutput` | An output, an event an entity fires and the input, parameter, delay and times it sends the entities its target names |
+| `LevelProblem` | A problem `Level.Check` names, the entity it stands in, its key or its brush, and a sentence |
 | `LevelCell` | A cell of a grid a level's brushes fill, its index along each axis and its material |
 
 What the module gives out stands on these conventions.

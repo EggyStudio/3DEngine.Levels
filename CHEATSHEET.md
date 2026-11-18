@@ -34,6 +34,7 @@ List<LevelEntity> Entities { get; }                      // The entities, worlds
 LevelEntity? World { get; }                              // The worldspawn entity, which holds the level's own brushes, or nothing where there is none
 double UnitsPerMeter { get; }                            // How many of the file's units make a meter, the worldspawn's UnitsPerMeterKey or DefaultUnitsPerMeter
 string Game { get; set; }                                // The game TrenchBroom's first comment names, which a file written again keeps, or Generic where it names none
+IReadOnlyList<LevelProblem> Check(ILevelMaterials? materials = null);  // Every problem of the level at once, each named by the entity it stands in and its key or its brush, so an editor or a loader shows them all where reading stops at the first
 IReadOnlyList<LevelEntity> Targeted(string targetName);  // The entities whose targetname is a name, as an output's target names them, in the level's order
 Level Flattened();                                       // The level as a binding reads it, TrenchBroom's layers and groups read as the world they stand in and a layer omitted from export left out whole
 void ReadEntities(Action<int, LevelEntity> read);        // Hands each entity to the engine in the level's order with its index, a fault the level's text causes named by the entity it stands in
@@ -195,6 +196,13 @@ string Input { get; init; }                              // The input it sends, 
 string Parameter { get; init; }                          // What it sends with the input, or an empty string
 double Delay { get; init; }                              // How many seconds after the event it is sent
 int Times { get; init; }                                 // How many times it is sent, -1 for every time the event fires
+
+record LevelProblem                                      // A problem of a level, where it stands and what it is, as Check gives it
+LevelProblem(int Entity, string? Key, int? Brush, string Message);
+int Entity { get; init; }                                // The index of the entity it stands in, among the level's
+string? Key { get; init; }                               // The key it stands in, or nothing for a brush or a material
+int? Brush { get; init; }                                // The index of the brush it stands in, among the entity's, or nothing for a key
+string Message { get; init; }                            // What is wrong, as a sentence
 
 record struct LevelCell                                  // A cell of a grid in meters with Y up that a level's brushes fill, by its index along each axis from the level's origin, and the material it is laid with, as Cells gives it
 LevelCell(int X, int Y, int Z, string Material);

@@ -69,6 +69,69 @@ public sealed partial class Level
     }
 
     /// <summary>
+    /// Every problem of the level at once, each named by the entity it stands in and its key or
+    /// its brush, so an editor or a loader shows them all where reading stops at the first.
+    /// </summary>
+    /// <param name="materials">The engine's materials, whose pictures are looked for, or nothing
+    /// to leave the materials unchecked.</param>
+    /// <returns>The problems in the level's order, an entity's keys in their order before its
+    /// brushes, and none for a level its readers read whole.</returns>
+    /// <remarks>
+    /// A problem is what a reader of the module refuses: the world's units a meter, an origin, an
+    /// angle or angles, a light's color, strength, range and cones, a tree's seed and an output
+    /// that do not read, one problem a key, and a brush whose planes close no solid. A material the
+    /// engine gives no picture for is named once, at the first brush that has it, since its faces
+    /// repeat once a meter where the level may have meant a picture.
+    /// </remarks>
+    public IReadOnlyList<LevelProblem> Check(ILevelMaterials? materials = null)
+    {
+        var problems = new List<LevelProblem>();
+        var named = new HashSet<string>(StringComparer.Ordinal);
+        for (var index = 0; index < Entities.Count; index++)
+        {
+            var entity = Entities[index];
+            if (entity == World && entity[UnitsPerMeterKey] is not null)
+            {
+                try
+                {
+                    _ = UnitsPerMeter;
+                }
+                catch (FormatException fault)
+                {
+                    problems.Add(new LevelProblem(index, UnitsPerMeterKey, null, fault.Message));
+                }
+            }
+
+            foreach (var (key, message) in entity.KeyProblems())
+                problems.Add(new LevelProblem(index, key, null, message));
+
+            for (var b = 0; b < entity.Brushes.Count; b++)
+            {
+                var brush = entity.Brushes[b];
+                try
+                {
+                    brush.Polygons();
+                }
+                catch (InvalidOperationException fault)
+                {
+                    problems.Add(new LevelProblem(index, null, b, fault.Message));
+                    continue;
+                }
+
+                if (materials is null) continue;
+                foreach (var face in brush.Faces)
+                {
+                    if (!named.Add(face.Material) || materials.PictureSize(face.Material) is not null) continue;
+                    problems.Add(new LevelProblem(index, null, b,
+                        $"The brush's material {face.Material} has no picture the engine gives, so its faces repeat once a meter."));
+                }
+            }
+        }
+
+        return problems;
+    }
+
+    /// <summary>
     /// The entities whose <c>targetname</c> is a name, as an output's target names them, in the
     /// level's order.
     /// </summary>
