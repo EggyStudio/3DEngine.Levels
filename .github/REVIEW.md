@@ -438,3 +438,14 @@ own name apart, and fails on either engine's name or 3DEngine's API prefix. No n
 summary given BevyCSharp's name turned it red naming the member, and taking the name out turned it
 green. The engines stand in the README alone, as two examples. The strict build is clean and the
 tests pass, 121 where there were 119 (dotnet test Levels.Tests).
+
+The sweep's three findings in the commit carrying this line. SourceTests read the library's and the
+tests' top folders alone and C#'s comments alone; it reads every folder deep, Host and build/bench
+among them, and the comments of the project files, the solution, the workflow and the scripts, and
+it turned red on Levels/Levels.csproj:13 and .github/workflows/build.yml:46 at 103 columns before
+both were rewrapped. Level.Shapes.cs's banner says the doorway in its own terms, convex brushes one
+each side of the opening and straight segments round its top, where it named another product's
+prototyping. Two lines of the same kind may stand, LevelBrush.Shapes.cs's banner making the brushes
+"as Hammer's and TrenchBroom's tools make them" and Arch's remark cutting the ring "as Hammer's
+arch tool cuts one"; the arch's even segments are a rule taken from that tool, so they are left for
+the review's word. The strict build is clean and the tests pass, 121 (dotnet test Levels.Tests).

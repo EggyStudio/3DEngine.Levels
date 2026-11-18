@@ -43,7 +43,8 @@ jobs:
       - run: dotnet test Levels.Tests --no-build --logger trx --results-directory Levels.Tests/TestResults
 
       - uses: actions/upload-artifact@v7
-        # Kept for a job canceled as well as one that failed, since a cut-short run is the one to read.
+        # Kept for a job canceled as well as one that failed, since a cut-short run is the one to
+        # read.
         if: failure() || cancelled()
         with:
           name: test-results-${{ matrix.os }}

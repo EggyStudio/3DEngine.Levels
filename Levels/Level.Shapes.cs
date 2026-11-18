@@ -1,7 +1,8 @@
 namespace Levels;
 
-// A doorway, a wall with a rounded opening, made of the brushes a level editor blocks one out
-// with, each convex, so a level built in code has the rounded doorways of Unreal's prototyping.
+// A doorway, a wall with a rounded opening, made of convex brushes, one each side of the opening
+// and straight segments round its top, so a doorway built in code is drawn and collides as the
+// brushes a level editor would block it out with.
 public sealed partial class Level
 {
     /// <summary>
