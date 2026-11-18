@@ -68,6 +68,39 @@ public sealed partial class Level
         }
     }
 
+    /// <summary>
+    /// Hands each entity to the engine in the level's order with its index, a fault the level's
+    /// text causes named by the entity it stands in.
+    /// </summary>
+    /// <param name="read">What the engine makes of an entity, given its index and the
+    /// entity.</param>
+    /// <remarks>
+    /// A malformed key or a brush that closes no solid is found as the engine reads the entity,
+    /// where the reader knows the class and the key but not the entity's place in the file, so a
+    /// <see cref="FormatException"/> or an <see cref="InvalidOperationException"/> the reading
+    /// throws is given again as a <see cref="FormatException"/> naming the entity's index and
+    /// <see cref="LevelEntity.Name"/>, the first fault inside it. Any other exception is the
+    /// engine's and goes on as it is.
+    /// </remarks>
+    /// <exception cref="FormatException">An entity's keys or brushes are not what the reading
+    /// takes them as.</exception>
+    public void ReadEntities(Action<int, LevelEntity> read)
+    {
+        ArgumentNullException.ThrowIfNull(read);
+        for (var index = 0; index < Entities.Count; index++)
+        {
+            var entity = Entities[index];
+            try
+            {
+                read(index, entity);
+            }
+            catch (Exception fault) when (fault is FormatException or InvalidOperationException)
+            {
+                throw new FormatException($"The level's entity {index}, {entity.Name(index)}, cannot be read. {fault.Message}", fault);
+            }
+        }
+    }
+
     /// <summary>Reads a level from a file.</summary>
     /// <param name="path">The file, found as the file system finds it.</param>
     /// <remarks>

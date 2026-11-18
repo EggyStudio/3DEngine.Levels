@@ -36,7 +36,7 @@ public static class LevelBinding
         var level = Level.Load(files, path);
         var units = level.UnitsPerMeter;
         var pictures = new LevelPictures(files);
-        foreach (var entity in level.Entities)
+        level.ReadEntities((index, entity) =>
         {
             var placed = entity.Placement(units);
             if (entity.Brushes.Count > 0)
@@ -53,7 +53,7 @@ public static class LevelBinding
 
             if (entity.Light(units) is { } light) world.Light(light);
             else world.Spawn(entity, placed);
-        }
+        });
     }
 }
 // The end marker.

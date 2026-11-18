@@ -567,3 +567,11 @@ The second of the six in the commit carrying this line. LevelEntity.TargetName g
 spawner gave, its target name, else its class, else `entity` and its index, so both engines and
 their consoles name an entity alike; the README's row names it. LevelNameTests checks the three and
 an empty target name. The tests pass, 113 where there were 111 (dotnet test Levels.Tests).
+
+The third of the six in the commit carrying this line. Level.ReadEntities hands each entity to the
+engine in order with its index, and gives a FormatException or an InvalidOperationException the
+reading throws again as a FormatException naming the entity's index and name, the first fault inside
+it, as BevyCSharp's spawner wrapped one; an engine's own exception goes on as it is. The README's
+binding and its host read the entities through it, and the README's row names it. LevelReadTests
+checks the order, a malformed origin, a brush that closes no solid and an engine's own fault. The
+tests pass, 117 where there were 113 (dotnet test Levels.Tests).
