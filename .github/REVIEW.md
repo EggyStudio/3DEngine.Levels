@@ -371,3 +371,16 @@ where it said the planes close no solid; a double resolves the hundred-thousandt
 corners are merged at out to 2 to the 35th, and the bound keeps a margin for the plane's products.
 Its test failed on the old message, and a brush at 900 million units is read. The strict build is
 clean and the tests pass, 105 where there were 104 (dotnet test Levels.Tests).
+
+The agnostic direction's first ask in the commit carrying this line. The README gains Binding it in
+your engine, the two interfaces, ILevelFiles and ILevelMaterials, with LevelPictures over them, the
+conventions of length, axes, triangles, angles, color and light, what an engine of other axes or
+winding turns, and the smallest binding, which the next commit makes the tests' host. The public
+shapes that fit our two engines more than a stranger's, said before any is changed, are three.
+LevelPictures' proto/ folder and its 512 texels are the prototype grid our engines paint; a
+stranger's engine gets a slot name it may ignore, and the README says that one naming its pictures
+otherwise implements ILevelMaterials itself. An entity facing minus Z with Y up is BevyCSharp's
+frame and OpenGL's camera's, and an engine of Z up or left-handed axes turns it, as the README says.
+LevelTree's default species, black-tupelo, is a name of the species both engines register through
+Vegetation, and a stranger's engine with no such species refuses it as the README's binding leaves
+to it; I propose keeping all three as they are.
