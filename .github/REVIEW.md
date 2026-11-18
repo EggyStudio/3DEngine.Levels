@@ -457,3 +457,52 @@ LevelGeometry, LevelHull, LevelLight, LevelLightKind, LevelMesh, LevelPicture, L
 LevelPoint, LevelTree and LevelTriangles. The section gains a table of the types a binding reads,
 a row a type with the members it calls by, Level.Doorway among them. The tests pass, 122 where
 there were 121 (dotnet test Levels.Tests).
+
+The third item, a read of both engines' level code as it stands, BevyCSharp at `8e7fa0f5` and
+3DEngine at `ee7ac712`, read and not changed. Each row is a thing an engine's level code does,
+whether the module holds it at `3d6ae0c`, and where it belongs; the rows marked for the module are
+the list the bindings of part 4 are judged against, and the rest stay the engine's or another
+module's.
+
+| Engine | File | What it does | The module | Belongs |
+|---|---|---|---|---|
+| BevyCSharp | `BevyCSharp/Levels/LevelSpawner.cs` Load | Reads a level's text through the engine's asset files, refusing a missing file | Parse alone; ILevelFiles reads pictures, not the level | Module, a Level.Load over ILevelFiles, so both engines read a level as they read its pictures |
+| BevyCSharp | LevelSpawner.Spawn | A root under a given place, named for the level, every entity under it | No | Engine |
+| BevyCSharp | LevelSpawner.Spawn | Names an entity by its targetname, else its class, else `entity` and its index | No | Module, an entity's name, so both engines and their consoles name one alike |
+| BevyCSharp | LevelSpawner.Spawn | Wraps a fault as a FormatException naming the entity's index and class | Faults name the class and key, not the index | Module, a fault naming the entity's index, read where the level is read |
+| BevyCSharp | LevelSpawner Place, Turn, Middle | An entity's place and turn | Placement (`b19895a`) | Module, held |
+| BevyCSharp | LevelSpawner Number, Three, Point | A key read as numbers, refused by name | Number, WholeNumber, Point | Module, held |
+| BevyCSharp | LevelSpawner KeysText, KeysOf | Every key kept as text and read back | KeysText, ParseKeys | Module, held |
+| BevyCSharp | LevelSpawner Register, ClassNames | A registry of what each class spawns, on the engine's world | No | Engine, its signature is the world's; the classes both read are Levels.fgd's |
+| BevyCSharp | LevelSpawner.Build, Drawn | A part a material under the entity, its mesh made from a LevelMesh, where a renderer runs | Meshes | Engine |
+| BevyCSharp | LevelSpawner.Build, Collision | A static body of the meshes' triangles | Triangles | Module for the shape, held; engine for the body |
+| BevyCSharp | LevelSpawner MaterialOf, Picture, SlotOf, Pictures, PrototypeFolder, PrototypePixels | A material by name, a prototype or a picture under textures/ | LevelPictures | Module, held; the drawing the engine's |
+| BevyCSharp | LevelSpawner.WritePrototypePictures, `BevyCSharp/Levels/TrenchBroom/textures/proto` | The prototypes' pictures TrenchBroom shows, from the prototype colors | No | Modeling, which paints the prototypes; then this module's TrenchBroom folder ships the pictures |
+| BevyCSharp | LevelSpawner.PlantTree | A tree of the species and seed keys, named by them | Tree reads the keys | Module for the reading, held; engine for the growing and its name |
+| BevyCSharp | `BevyCSharp/Levels/LevelKeys.cs` | The component an entity's class, name and keys stand in | KeysText | Engine |
+| BevyCSharp | `BevyCSharp/Levels/ConsoleLevelCommands.cs` | `level.load` and `level.textures` from the console | No | Engine |
+| BevyCSharp | `BevyCSharp/Levels/TrenchBroom/GameConfig.cfg` | The module's config named BevyCSharp with its own fgd | Its own config | Engine, as TrenchBroom's README says |
+| BevyCSharp | `BevyCSharp/Levels/TrenchBroom/BevyCSharp.fgd` | The tree class | tree in Levels.fgd (`2f3017a`) | Module; BevyCSharp drops it in part 4 |
+| BevyCSharp | `docs/levels.md` | Registers `light` reading the key `light` in lumens | light reads `intensity` | Module's class stands; BevyCSharp's page and any level writing `light` follow it in part 4 |
+| BevyCSharp | `BevyCSharp.Tests/Levels/FeatureTestLevelTests.cs` Slab | A prism from an outline across Y | Prism, internal | Module, Prism public |
+| BevyCSharp | FeatureTestLevelTests Wall, Walls | A wall between two points with rounded openings, turned and moved into place | Doorway along X alone | Module, a wall between two points with openings |
+| BevyCSharp | FeatureTestLevelTests Ramp | A ramp between two points, as wide and as high as given | Wedge along X alone | Module, a ramp between two points |
+| BevyCSharp | FeatureTestLevelTests At, Block | Meters to the file's units, a box in meters | FromMeters, Box | Module, held |
+| BevyCSharp | FeatureTestLevelTests Hit | How far along a ray it first meets a brush | No | Module, a ray against a brush's planes, which a test or a game reads alike in either engine |
+| BevyCSharp | FeatureTestLevelTests Dot, Length | A point's arithmetic | Dot, Length (`4eb35e2`) | Module, held |
+| BevyCSharp | `games/FeatureTest/Behaviors/Packs.cs`, `SceneFloor.cs` | info_scene and func_scene_floor, read from LevelKeys | No | Game, its own classes in its own fgd |
+| BevyCSharp | `BevyCSharp.Tests/Levels/LevelTests.cs` | Spawning by class, the console, the shipped pictures held to the drawn ones | Their reading | Engine |
+| BevyCSharp | `BevyCSharp.Editor/Framework/LevelCameras.cs` | The cameras of a scene file edited and saved | No | Engine, its scene format and not map text |
+| BevyCSharp | `games/Courtyard/build-level.sh`, `courtyard.scene.json` | A level built in the editor and saved as a scene | No | Engine, its scene format |
+| BevyCSharp, 3DEngine | `games/Blockout/*/levels/blockout.model` | A level cut from one block by a modeling recipe | No | Modeling |
+| 3DEngine | none | Reads no map text and binds no level | Everything above marked the module's | Engine's binding of part 4 |
+| 3DEngine | `3DEngine/Api/E3D.Prototypes.cs` | The prototypes' colors by the same seven names, over a grid of 1024 pixels a meter | proto/ and 512 texels | Engine; the texture coordinates are fractions of a picture, so a grid of 1024 a meter and TrenchBroom's 512 repeat once a meter alike |
+| 3DEngine | `3DEngine/Api/E3D.Meshes.cs` UploadMesh | A mesh from vertices and indices | LevelMesh | Engine |
+| 3DEngine | `3DEngine/Physics/Bepu/PhysicsWorld.Creation.cs` | A static mesh and a convex hull body, internal, with no public call | Triangles, Hulls | Engine, to make public for its binding |
+| 3DEngine | `3DEngine/Api/E3D.Lights.cs` | A light's lumens and lux | LevelLight in lumens and lux | Engine; the units agree |
+| 3DEngine | `games/FirstGame`, `games/Summit` level.json, `3DEngine.Examples/Scenes/ScenesLevel.cs`, `games/Manor/Level.cs` | Levels as the engine's scene files and as code | No | Engine and games, not map text |
+
+So the module lacks six things both engines' bindings stand on, each proposed as a commit of its
+own in this order: Level.Load over ILevelFiles; an entity's name; a fault naming the entity's
+index; Prism public; a wall and a ramp between two points; and a ray against brushes. The
+prototypes' pictures wait on Modeling.
