@@ -512,3 +512,26 @@ the brushes by their outline and their mapping alone, and Arch's summary says it
 segment spanning an equal share of the arch's angle. LevelBrush.cs's remark that a brush is kept as
 its planes "as Quake's tools, Hammer and TrenchBroom keep one" names where the format's rule comes
 from and stands unless the review says otherwise. The tests pass, 122 (dotnet test Levels.Tests).
+
+The trial of the modules' checks in the commit carrying this line. Tools is a submodule at
+`modules/Tools`, pinned at `ebdd08e`, referenced from the tests' project alone with the target that
+stops a build where it is not fetched, and ModuleTests holds the four facts of Tools' README, its
+Library 3DEngine.Levels and its Host `Levels.Tests/Host/LevelBinding.cs`. ReferenceTests,
+EngineNameTests, the public-surface test and the README's block test go, and the host stays, its
+two marks become Tools' `// The README's block from here` and `// The end marker.`. Each fact
+turned red once, a reference to a scratch project named Vortice.Fake, a summary given BevyCSharp's
+name, LevelHull's row taken out of the README and a comment added to the README's copy of the
+binding alone, and each turned green when undone. AGENTS.md gains the `modules` row N 1.5 asks
+for, and the README's Building and testing says a clone fetches the submodule.
+
+| Asked | Found |
+|---|---|
+| What the README left unsaid | The block's two marks, which only ModuleChecks.BindingBlock's remarks give, so a host with marks of its own fails with the sentence that names them; that the four facts in one test stop at the first, so a second fault shows only once the first is mended, as the engine's name showed only after the reference went; that each Assert.Empty prints a bare list with no rule named; that an engine taking the module needs no nested submodule, since the library builds without Tools; that a module's sweep walking its whole tree reads the submodule's files unless it skips `modules` |
+| What the workflow needed | `submodules: true` on `actions/checkout`, and nothing more |
+| The build's time | A full rebuild, `dotnet build Levels.slnx --no-incremental -warnaserror` three times under the shared lock, took 8.5 to 9.8 s before at a load of 10.7 and 12.9 to 13.4 s after at a load of 12.6, Tools' project some 3.5 to 4 s of it |
+| A clone without the submodule | `Levels.Tests/Levels.Tests.csproj(21,9): error : The Tools submodule is not fetched. Run git submodule update --init modules/Tools.`, and `dotnet build Levels/Levels.csproj` alone builds clean, as an engine builds it |
+| A clone after `git submodule update --init` | Tools fetched from GitHub at `ebdd08e`, the strict build clean and 107 tests passing |
+
+What went badly, plainly. One test of four facts hides every fault after the first, and its
+failures name no rule; one fact a test, or a message a fact, would serve the modules that follow.
+The tests pass, 107 where there were 122, the sixteen replaced by one (dotnet test Levels.Tests).

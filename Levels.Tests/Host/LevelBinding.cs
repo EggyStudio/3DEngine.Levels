@@ -1,4 +1,4 @@
-// README begin
+// The README's block from here
 using System.Numerics;
 using Levels;
 
@@ -55,4 +55,4 @@ public static class LevelBinding
         }
     }
 }
-// README end
+// The end marker.

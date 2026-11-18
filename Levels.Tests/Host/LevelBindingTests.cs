@@ -83,44 +83,4 @@ public sealed class LevelBindingTests : IDisposable
             kept.Spawned.Select(spawned => spawned.Entity.ClassName));
         Assert.Equal(new LevelTree("weeping-willow", 3), kept.Spawned[3].Entity.Tree());
     }
-
-    [Fact]
-    public void TheReadmesBindingIsTheHostsCode()
-    {
-        var at = new DirectoryInfo(AppContext.BaseDirectory);
-        while (at is not null && !File.Exists(Path.Combine(at.FullName, "Levels.slnx"))) at = at.Parent;
-        var readme = File.ReadAllText(Path.Combine(at!.FullName, "README.md")).ReplaceLineEndings("\n");
-        var host = File.ReadAllText(Path.Combine(at.FullName, "Levels.Tests", "Host", "LevelBinding.cs"))
-            .ReplaceLineEndings("\n");
-
-        var code = host.Split("// README begin\n")[1].Split("// README end\n")[0];
-        Assert.Contains("```csharp\n" + code + "```\n", readme);
-    }
-
-    [Fact]
-    public void EveryPublicTypeIsInTheBindingSectionOrARowOfAReadmeTable()
-    {
-        // A stranger finds every type the library offers from the README alone, by its name in
-        // code, whole, as `Level` or `Level.Parse`, and not as the start of `LevelEntity`.
-        var at = new DirectoryInfo(AppContext.BaseDirectory);
-        while (at is not null && !File.Exists(Path.Combine(at.FullName, "Levels.slnx"))) at = at.Parent;
-        var readme = File.ReadAllText(Path.Combine(at!.FullName, "README.md")).ReplaceLineEndings("\n");
-        var start = readme.IndexOf("## Binding it in your engine", StringComparison.Ordinal);
-        Assert.True(start >= 0, "the README has no section Binding it in your engine");
-        var end = readme.IndexOf("\n## ", start + 1, StringComparison.Ordinal);
-        var section = readme[start..(end < 0 ? readme.Length : end)];
-        var rows = string.Join("\n", readme.Split('\n').Where(line => line.StartsWith('|')));
-
-        var missing = typeof(Level).Assembly.GetExportedTypes()
-            .Select(type => type.Name)
-            .Where(name => !Named(section, name) && !Named(rows, name))
-            .Order(StringComparer.Ordinal)
-            .ToList();
-
-        Assert.True(missing.Count == 0,
-            $"the README names {string.Join(", ", missing)} neither in Binding it in your engine nor in a table");
-    }
-
-    private static bool Named(string text, string name) =>
-        System.Text.RegularExpressions.Regex.IsMatch(text, $@"`{name}([`.(<\[ ])");
 }
