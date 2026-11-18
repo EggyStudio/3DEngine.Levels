@@ -85,6 +85,39 @@ public sealed record LevelLight(
     public const double DefaultOuterCone = 30;
 
     /// <summary>
+    /// The lux the light gives a surface facing it at a distance, along a spot's axis, which says
+    /// what the light's range means.
+    /// </summary>
+    /// <param name="meters">The distance from the light in meters, from a sun read as any.</param>
+    /// <remarks>
+    /// <para>
+    /// A point light's lumens over the whole sphere are its candelas times 4 pi, and a spot's over
+    /// its outer cone its candelas times 2 pi times 1 minus the cone's cosine. Its light falls as
+    /// the inverse square of the distance, a distance under a centimeter taken as one, and is
+    /// brought to nothing at the range by the window (1 minus (d over the range) to the fourth),
+    /// squared, so it fades with no edge and gives nothing at the range or past it. The sun gives
+    /// its lux at any distance.
+    /// </para>
+    /// <para>
+    /// The window leaves 88 parts in a hundred of the inverse square at half the range and 12 at
+    /// nine tenths of it, so an engine whose light is cut at its range with no window gives some
+    /// eight times as much just inside the range, and one with no range gives the inverse square
+    /// alone.
+    /// </para>
+    /// </remarks>
+    public double IlluminanceAt(double meters)
+    {
+        if (Kind == LevelLightKind.Directional) return Intensity;
+        var near = Math.Max(meters, 0.01);
+        if (!(near < Range) || (Kind == LevelLightKind.Spot && !(OuterCone > 0))) return 0;
+        var candelas = Kind == LevelLightKind.Point
+            ? Intensity / (4 * Math.PI)
+            : Intensity / (2 * Math.PI * (1 - Math.Cos(OuterCone * Math.PI / 180)));
+        var window = 1 - Math.Pow(near / Range, 4);
+        return candelas / (near * near) * window * window;
+    }
+
+    /// <summary>
     /// A color of 0 to 255 a channel in sRGB, as TrenchBroom's color picker writes it, in linear
     /// sRGB from 0 to 1, decoded by sRGB's own curve.
     /// </summary>

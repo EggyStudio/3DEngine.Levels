@@ -161,6 +161,7 @@ double Intensity { get; init; }                          // The strength, the lu
 double Range { get; init; }                              // How far in meters a point or a spot reaches, zero for the sun
 double InnerCone { get; init; }                          // A spot's full strength out to this angle in degrees from its axis
 double OuterCone { get; init; }                          // A spot's light out to this angle in degrees from its axis, fading from the inner one
+double IlluminanceAt(double meters);                     // The lux the light gives a surface facing it at a distance, along a spot's axis, which says what the light's range means
 Vector3 Linear(double red, double green, double blue);   // A color of 0 to 255 a channel in sRGB, as TrenchBroom's color picker writes it, in linear sRGB from 0 to 1, decoded by sRGB's own curve
 
 enum LevelLightKind                                      // The kind of a level's light, by its class

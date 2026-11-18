@@ -703,3 +703,16 @@ ModuleTests gains Tools' two facts, The_Readme_Opens_With_Its_Link_Row and
 No_Tracked_Text_Names_An_Engine, the link row reads Cheatsheet, and the page's title says
 cheatsheet, so `git grep -n -i "cheat sheet"` finds none. CHEATSHEET.md is written again. The tests
 pass, 150 where there were 146 (dotnet test Levels.Tests).
+
+The third of the three in the commit carrying this line. A light's range means the light falls as
+the inverse square of the distance, a distance under a centimeter taken as one, times the window
+(1 minus (d over the range) to the fourth) squared, and gives nothing at the range and past it;
+LevelLight.IlluminanceAt gives the lux at a distance, a point's lumens over 4 pi and a spot's over
+2 pi times 1 minus its outer cone's cosine as candelas, the sun's lux at any distance, and nothing
+for a spot of no cone. Its remarks give the window's 88 parts in a hundred at half the range and 12
+at nine tenths, so a light cut at its range with no window gives some eight times as much just
+inside it. LevelLightRangeTests holds it on LevelLight's own defaults, 800 lumens and 10 meters, at
+four distances, at and past the range for a point and a spot, a spot's 30 degree cone on its axis,
+the sun and the nearest centimeter, and eight of its nine cases failed on a stub that gave no
+number. The README's Light row says it, and CHEATSHEET.md is written again. The tests pass, 159
+where there were 150 (dotnet test Levels.Tests).
