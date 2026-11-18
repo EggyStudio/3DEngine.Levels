@@ -110,4 +110,43 @@ public sealed partial class LevelEntity
     private FormatException Refused(string key, string text, string meant) =>
         new($"The {(ClassName.Length > 0 ? ClassName : "entity of no class")} has the {key} {text}, "
             + $"where {meant} is meant.");
+
+    /// <summary>
+    /// How far and which way a door moves from shut to open, in meters with Y up, or nothing where
+    /// the entity is no <c>func_door</c>.
+    /// </summary>
+    /// <param name="unitsPerMeter">How many of the file's units make a meter,
+    /// <see cref="Level.UnitsPerMeter"/>.</param>
+    /// <remarks>
+    /// The keys are Levels.fgd's for <c>func_door</c>: <c>angle</c>, the way it opens in degrees
+    /// about the vertical from the file's X, -1 for up and -2 for down, 0 where it is missing, and
+    /// <c>lip</c>, the units it stays short of its full travel, 8 where it is missing. It moves the
+    /// way it opens by the size of the box round its brushes that way, the box's sides each taken
+    /// by how much of the way runs along it, less the lip, and stays shut where that is less than
+    /// none, as a level editor's doors have it.
+    /// </remarks>
+    /// <exception cref="FormatException">The angle or the lip is not a number.</exception>
+    /// <exception cref="InvalidOperationException">A brush closes no solid.</exception>
+    public Vector3? DoorTravel(double unitsPerMeter)
+    {
+        if (ClassName != "func_door") return null;
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(unitsPerMeter);
+        var angle = Number("angle") ?? 0;
+        var lip = Number("lip") ?? 8;
+        var way = angle switch
+        {
+            -1 => new LevelPoint(0, 0, 1),
+            -2 => new LevelPoint(0, 0, -1),
+            _ => new LevelPoint(Math.Cos(angle * Math.PI / 180), Math.Sin(angle * Math.PI / 180), 0),
+        };
+
+        var corners = Brushes.SelectMany(brush => brush.Polygons()).OfType<LevelPoint[]>().SelectMany(polygon => polygon).ToList();
+        if (corners.Count == 0) return Vector3.Zero;
+        var size = new LevelPoint(
+            corners.Max(p => p.X) - corners.Min(p => p.X),
+            corners.Max(p => p.Y) - corners.Min(p => p.Y),
+            corners.Max(p => p.Z) - corners.Min(p => p.Z));
+        var span = Math.Abs(way.X) * size.X + Math.Abs(way.Y) * size.Y + Math.Abs(way.Z) * size.Z - lip;
+        return span > 0 ? (way * span).Meters(unitsPerMeter) : Vector3.Zero;
+    }
 }

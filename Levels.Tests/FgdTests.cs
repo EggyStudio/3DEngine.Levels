@@ -21,6 +21,7 @@ public sealed partial class FgdTests
         [LevelLight.SpotClass] = ["angles", "_color", "intensity", "range", "_inner_cone", "_cone"],
         [LevelLight.DirectionalClass] = ["angles", "_color", "intensity"],
         [LevelTree.Class] = ["species", "seed"],
+        ["func_door"] = ["angle", "lip"],
     };
 
     [GeneratedRegex(@"@\w+Class[^=]*=\s*(?<name>\w+)\s*:[^\[]*\[(?<keys>[^\]]*)\]")]
@@ -68,6 +69,9 @@ public sealed partial class FgdTests
         Assert.Equal(Units(bare), Units(given));
         Near(bare.Placement(32), given.Placement(32));
         Assert.Equal(bare.Tree(), given.Tree());
+        foreach (var entity in new[] { bare, given })
+            entity.Brushes.Add(LevelBrush.Box(new LevelPoint(0, 0, 0), new LevelPoint(64, 8, 96), "door"));
+        Assert.Equal(bare.DoorTravel(32), given.DoorTravel(32));
         if (bare.Light(32) is { } light)
         {
             var other = given.Light(32)!;

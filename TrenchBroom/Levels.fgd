@@ -41,3 +41,9 @@
 	species(string) : "Species" : : "A species' name, which the engine's vegetation resolves"
 	seed(integer) : "Seed" : 0 : "The seed, which picks its variant and turns and sizes it"
 ]
+
+@SolidClass = func_door : "A door, its brushes moving the way it opens by their size that way less its lip"
+[
+	angle(integer) : "Opens toward" : 0 : "The way it opens in degrees about the vertical, -1 up and -2 down"
+	lip(float) : "Lip" : 8 : "How many units of it stay short of its full travel"
+]

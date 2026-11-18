@@ -861,3 +861,15 @@ room checked against materials that know no picture. The README names Check and 
 commit carries NORM.md's reworded N 4.8 and the example room sheet's caption, which says each face
 takes a tone of the sheet's own for its material. CHEATSHEET.md is written again. The tests pass,
 211 where there were 206 (dotnet test Levels.Tests).
+
+The third of the three in the commit carrying this line. Levels.fgd gains `func_door` with the two
+keys its travel reads, `angle`, the way it opens about the vertical, -1 up and -2 down, and `lip`, 8
+units where none is given, and LevelEntity.DoorTravel gives a door's move from shut to open in
+meters with Y up, the way it opens by the size of the box round its brushes that way, each side by
+how much of the way runs along it, less the lip, and none where that is less than none or the
+entity no door. LevelDoorTests holds a door along X each way and of no lip, up and down, across its
+depth shut by its lip, on a diagonal, a wall with no travel, and a lip or an angle that does not
+read; FgdTests reads the class with its keys and defaults, a bare door travelling as one given the
+fgd's defaults. Thirteen of the fourteen cases failed on a stub. The README gains a Doors row and
+names DoorTravel, TrenchBroom's README names the class, and CHEATSHEET.md is written again. The tests
+pass, 218 where there were 211 (dotnet test Levels.Tests).

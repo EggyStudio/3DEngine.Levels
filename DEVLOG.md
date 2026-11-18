@@ -225,6 +225,8 @@ read.
 
 Commits that day
 
+- `1e5ecff` A level gives every problem it holds at once, each named by its entity and its key or
+  brush, where reading stops at the first.
 - `669fd24` The example room has a sheet drawn from the module alone, its meshes from above and from
   an oblique eye and the lux its lights give the floor, with the script that makes it.
 - `dc958c9` Cells are made back into boxes of one material by a stated greedy order, so a level

@@ -63,6 +63,7 @@ double? Number(string key);                              // A key's value as a n
 uint? WholeNumber(string key);                           // A key's value as a whole number of zero or more, or nothing where the entity has no such key
 LevelPoint? Point(string key);                           // A key's value as three numbers, a point in the file's units, or nothing where the entity has no such key
 LevelPlacement Placement(double unitsPerMeter);          // Where the entity stands in meters with Y up and how it is turned, as an engine places what it spawns for it
+Vector3? DoorTravel(double unitsPerMeter);               // How far and which way a door moves from shut to open, in meters with Y up, or nothing where the entity is no func_door
 LevelTree? Tree();                                       // The tree the entity places, read from its keys, or nothing where its class is not tree
 void Place(LevelPlacement placement, double unitsPerMeter);  // Writes where the entity stands and how it is turned to its origin and its angle or angles, as Placement reads them
 void SetLight(LevelLight light, double unitsPerMeter);   // Writes a light to the entity's keys, its class, place, way, color, strength, range and cones, as Light reads them
