@@ -364,3 +364,10 @@ scratch copy of the same program and 29 at 17:16 for this one.
 
 The peak working set is 147 MiB in both. AGENTS.md's row for `build` names the version alone, and
 the bench beside it waits on the owner's word for the row's text (N 7.4).
+
+The too-far brush's message in the commit carrying this line. Polygons refuses a face with a point
+more than a billion units out along an axis, naming the face, the point's distance and the bound,
+where it said the planes close no solid; a double resolves the hundred-thousandth of a unit its
+corners are merged at out to 2 to the 35th, and the bound keeps a margin for the plane's products.
+Its test failed on the old message, and a brush at 900 million units is read. The strict build is
+clean and the tests pass, 105 where there were 104 (dotnet test Levels.Tests).

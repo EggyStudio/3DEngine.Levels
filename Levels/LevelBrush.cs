@@ -17,6 +17,12 @@ public sealed partial class LevelBrush
     private const double Within = 1e-6;
     private const double Same = 1e-5;
 
+    // How far out along an axis a face's point may stand. A double resolves a hundred-thousandth
+    // of a unit out to 2 to the 35th, some 34 billion units, and a plane's arithmetic multiplies
+    // coordinates together and loses more, so past this a corner is not found where its planes
+    // meet.
+    private const double Reach = 1e9;
+
     /// <summary>The faces.</summary>
     public List<LevelFace> Faces { get; } = [];
 
@@ -25,8 +31,9 @@ public sealed partial class LevelBrush
     /// in the file's units, or nothing for a face whose plane only touches the solid.
     /// </summary>
     /// <returns>A polygon a face, in the order of <see cref="Faces"/>.</returns>
-    /// <exception cref="InvalidOperationException">A face's three points lie on one line, the
-    /// planes close nothing, or the brush is flat and has no volume.</exception>
+    /// <exception cref="InvalidOperationException">A face's point stands more than a billion units
+    /// out along an axis, a face's three points lie on one line, the planes close nothing, or the
+    /// brush is flat and has no volume.</exception>
     /// <remarks>
     /// The corners are the points where three planes meet that stand behind every other plane, each
     /// found once and shared by the faces whose planes it lies on, so the faces of a brush meet
@@ -41,6 +48,12 @@ public sealed partial class LevelBrush
         var distances = new double[count];
         for (var face = 0; face < count; face++)
         {
+            var points = Faces[face];
+            var far = new[] { points.First, points.Second, points.Third }
+                .SelectMany(point => new[] { point.X, point.Y, point.Z })
+                .Select(Math.Abs).Max();
+            if (!(far <= Reach))
+                throw new InvalidOperationException($"The brush's face {face} has a point {LevelPoint.Number(far)} units out along an axis, past the {LevelPoint.Number(Reach)} within which its corners are found.");
             normals[face] = Faces[face].Normal;
             if (normals[face] == default) throw new InvalidOperationException($"The brush's face {face} has three points on one line, which make no plane.");
             distances[face] = Faces[face].Distance;

@@ -82,7 +82,19 @@ public sealed class LevelInputTests
     {
         var far = LevelBrush.Box(new LevelPoint(1e200, 1e200, 1e200), new LevelPoint(2e200, 2e200, 2e200), "floor");
 
-        Assert.Throws<InvalidOperationException>(() => far.Polygons());
+        // The cause, the point's distance and the bound past which a corner is not found.
+        var fault = Assert.Throws<InvalidOperationException>(() => far.Polygons());
+        Assert.Contains("face 0", fault.Message);
+        Assert.Contains("2E+200 units", fault.Message);
+        Assert.Contains("1000000000", fault.Message);
+    }
+
+    [Fact]
+    public void ABrushWithinABillionUnitsIsRead()
+    {
+        var near = LevelBrush.Box(new LevelPoint(9e8, 9e8, 0), new LevelPoint(9e8 + 64, 9e8 + 64, 32), "floor");
+
+        Assert.All(near.Polygons(), polygon => Assert.Equal(4, polygon!.Length));
     }
 
     [Fact]
