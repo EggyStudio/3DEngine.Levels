@@ -38,6 +38,7 @@ runs the tests on Linux, Windows and macOS on every push (NORM.md, N 6.1 and N 6
 | `TrenchBroom` | The game config and the base entity classes TrenchBroom edits a level with, which an engine copies and adds its own classes to |
 | `build` | The version, `version.txt`'s major and minor set by hand and `version.sh`, which prints it with the patch counted from the history |
 | `build/bench` | A console program, outside `Levels.slnx`, that takes a made level of 100, 10,000 and 100,000 brushes through every reader and writer, holds its round trip equal and prints each step's time and memory as a table, run with `dotnet run -c Release --project build/bench` |
+| `build/sheet` | The example room's sheet from the module alone, a console program outside `Levels.slnx` that writes the room's meshes, lights, entities and floor's lux as JSON, `draw.py` that shades them, and `room.sh` that lays them out by Tools' sheet.py, run as `build/sheet/room.sh <folder> <sheet.png>` |
 | `modules` | The Tools module as a git submodule, `modules/Tools`, whose checks of a module the tests take and the library does not |
 
 ## Conventions

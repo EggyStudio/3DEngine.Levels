@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <!-- The example room as the module gives it, its meshes, lights and entities written as JSON
+         for draw.py to shade, run by hand and outside Levels.slnx. -->
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Levels\Levels.csproj" />
+    </ItemGroup>
+
+</Project>

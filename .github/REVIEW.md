@@ -829,3 +829,19 @@ half a meter as five boxes and a staircase of five steps as five, each giving it
 materials as two boxes with a cell given twice, and no cells as no brushes; all five failed on a
 stub. The README's Cells row states the order and its rows name Brushes. CHEATSHEET.md is written
 again. The three are done. The tests pass, 206 where there were 201 (dotnet test Levels.Tests).
+
+The first of the three in the commit carrying this line, the example room's sheet from the module
+alone, `.github/assets/readings/2026-11-18-example-room-sheet.webp`. `build/sheet/` holds a console
+program that reads the room as a binding does, through Flattened and ReadEntities, and writes its
+meshes in meters, its lights, its entities and the lux its point light and spot give the floor by
+LevelLight.IlluminanceAt as JSON; `draw.py`, which shades the triangles flat by one sun through a
+depth buffer from above, north up and each face lighter the higher it stands, and from an oblique
+eye to the south-east, and draws the lux on a scale of its own; and `room.sh`, which lays the three
+out by Tools' sheet.py under the title, the sheet's largest line, as
+`build/sheet/room.sh <folder> <sheet.png>`. The lights' ranges, 12 and 10 meters, are wider than the
+room, so their reach is the lux on the floor rather than a circle; the most is 52.2 under the spot,
+its 704 candelas at 3.75 meters giving 49 and the point light the rest. Six drafts stand in the dump
+with their captions: painter's order that hid the ramp, Pillow's bitmap font that ignored a size, and
+labels that covered their marks or crossed the edge. AGENTS.md gains build/sheet's row, and pin.py
+moved Tools from `1e1ec63` to `1452dbe`, 1 commit, no fact new or changed, the cheatsheet the same.
+The tests pass, 206 (dotnet test Levels.Tests).

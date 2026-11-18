@@ -13,6 +13,13 @@ The example room's cells of half a meter seen from above, each column the materi
 cell and the number its top in cells over the ground, the floor at none, the ramp rising to the
 platform at 2 and the walls at 8, the door under the wall above its doorway.
 
+![](.github/assets/readings/2026-11-18-example-room-sheet.webp)
+The example room as the module alone gives it, from build/sheet/room.sh: its meshes from above,
+north up, each face lighter the higher it stands, with its lights, the spot's way, the sun's and its
+entities marked; from an oblique eye to the south-east, the ramp, the platform and the door in its
+doorway; and the lux its point light and its spot give the floor by LevelLight.IlluminanceAt, 52 at
+the most under the spot.
+
 A made level through every reader and writer of the module at 100, 10,000 and 100,000 brushes,
 a third each boxes, ramps and boxes turned by 30 degrees, every hundredth a door's, with a light,
 a spot and a tree for each hundred, read back equal at each count. Each time is the best of up to
@@ -217,6 +224,8 @@ read.
 
 Commits that day
 
+- `dc958c9` Cells are made back into boxes of one material by a stated greedy order, so a level
+  built of blocks is saved as brushes that give the same cells.
 - `ff5a531` An entity's outputs are read as the event, target, input, parameter, delay and times
   they hold, and a level finds the entities a target name names.
 - `7ddc1e2` A binding reads a level through a view in which TrenchBroom's layers and groups are the
