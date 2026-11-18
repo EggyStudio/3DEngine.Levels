@@ -243,3 +243,37 @@ check the order, a key given twice, a value holding a quote, the empty text, the
 triangle's corners in the shape; no test of this part or the first two compares a value worked out
 by a sine, a cosine or a root exactly, those being held to 1e-5. The strict build is clean and the
 tests pass, 56 where there were 50 (dotnet test Levels.Tests).
+
+Parts 1 to 3 are pushed, and both engines' coders have part 4 in a message. What comes next in the
+module, weighed by what both engines must agree on for one level to look and play alike. Neither
+the module nor BevyCSharp's binding reads a light, and the module's fgd names two classes,
+worldspawn and info_player_start, beside BevyCSharp's tree. The order proposed, one commit each
+with its tests.
+
+1. The level's lights. Levels.fgd gains light, light_spot and light_environment, and
+   LevelEntity.Light reads one into a LevelLight of the module's, its kind, its place and the way
+   it faces from LevelEntity.Placement, its color from `_color` as TrenchBroom's color picker
+   writes it, sRGB from 0 to 255, decoded to linear by sRGB's own curve, its strength in lumens for
+   a point or a spot and in lux for the sun, as both engines take a physical light, a point's and a
+   spot's range in meters, and a spot's inner and outer cone in degrees from its axis, as Source's
+   `_inner_cone` and `_cone` name them. A key missing takes the default the fgd shows, a 60 watt
+   bulb's 800 lumens and a clear noon's 100,000 lux among them.
+2. The classes both engines read. info_player_start and the lights are the module's, read and
+   documented here; tree moves from BevyCSharp's fgd into the module's with a LevelTree of its
+   species and seed, since both engines grow it through Vegetation, and a game's classes stay in
+   the game's fgd.
+3. A test that Levels.fgd and the readers agree, every class the module reads named in the fgd
+   with each key it reads and the same default, so the editor and the reader never drift.
+
+The first is begun.
+
+The first in the commit carrying this line. LevelEntity.Light reads a light, light_spot or
+light_environment into a LevelLight, its place and its way from Placement, its `_color` decoded
+from sRGB by the curve's own formula, its intensity in lumens over the whole sphere for a point and
+over the outer cone for a spot, as 3DEngine's SetLightLuminousFlux takes it, and in lux for the
+sun, a range in meters and a spot's two cones in degrees, a missing key taking LevelLight's default
+and a negative one or an inner cone wider than the outer refused. The remarks give the conversion
+for an engine whose spot takes the lumens of a point light of the same candelas. Levels.fgd gains
+the three classes with those keys and defaults, and TrenchBroom's README names them. Its tests hold
+every value worked out by a power, a sine or a cosine to 1e-5. The strict build is clean and the
+tests pass, 67 where there were 56 (dotnet test Levels.Tests).
