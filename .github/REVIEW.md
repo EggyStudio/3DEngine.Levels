@@ -596,3 +596,14 @@ standing across Y, does not make, so a slab of a ground outline goes with the wa
 the next commit. The README's top row links DEVLOG.md, and AGENTS.md's devlog row names its command,
 `python3 modules/Tools/scripts/devlog.py . Levels`, the rule the review gave today. The tests pass,
 126 where there were 120 (dotnet test Levels.Tests).
+
+The fifth of the six in the commit carrying this line. Prism's body is a builder of a convex
+outline stretched along an axis, which Prism takes across Y and LevelBrush.Slab across Z, a ground
+outline stretched up, as the feature test's slab is. LevelBrush.Along turns a brush made along X at
+the origin to run between two points of the ground and moves it to the first, so a doorway or an
+arch between two points is Level.Doorway or Arch with each brush put along the line, and
+LevelBrush.Wall and LevelBrush.Ramp are a box and a wedge put so, centered on the line, standing up
+from the first point's height. LevelPlacedShapesTests holds a slab to a box, a wall north to a box,
+a diagonal wall's corners within its thickness of the line, a ramp each way, a doorway put along a
+line and the refusals; the earlier shapes' tests pass unchanged on the builder. The README's row
+names the four. The tests pass, 133 where there were 126 (dotnet test Levels.Tests).

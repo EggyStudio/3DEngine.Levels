@@ -149,23 +149,106 @@ public sealed partial class LevelBrush
     /// <exception cref="ArgumentException">The outline has fewer than three corners, its corners
     /// lie on one line or it is not convex, the two ends are one, or the material holds a
     /// space.</exception>
-    public static LevelBrush Prism(IReadOnlyList<(double X, double Z)> outline, double from, double to, string material, double scale = DefaultScale)
+    public static LevelBrush Prism(IReadOnlyList<(double X, double Z)> outline, double from, double to, string material, double scale = DefaultScale) =>
+        Extruded(outline, from, to, (corner, y) => new LevelPoint(corner.X, y, corner.Y), "Y", material, scale);
+
+    /// <summary>
+    /// A brush of a convex outline on the ground, its points as (X, Y) in either winding, stretched
+    /// up from one height to another, as a floor's, a ceiling's or a platform's slab.
+    /// </summary>
+    /// <param name="outline">The outline's corners as (X, Y) in the file's units, three or more,
+    /// round it either way.</param>
+    /// <param name="from">One height along Z, the file's up.</param>
+    /// <param name="to">The other, above or below the first.</param>
+    /// <param name="material">What every face is drawn with.</param>
+    /// <param name="scale">The faces' scale, <see cref="DefaultScale"/> unless given.</param>
+    /// <exception cref="ArgumentException">The outline has fewer than three corners, its corners
+    /// lie on one line or it is not convex, the two heights are one, or the material holds a
+    /// space.</exception>
+    public static LevelBrush Slab(IReadOnlyList<(double X, double Y)> outline, double from, double to, string material, double scale = DefaultScale) =>
+        Extruded(outline, from, to, (corner, z) => new LevelPoint(corner.X, corner.Y, z), "Z", material, scale);
+
+    /// <summary>
+    /// A wall from one point of the ground to another, centered on the line between them, standing
+    /// up from the first point's height.
+    /// </summary>
+    /// <param name="from">Where it starts, its height the wall's foot, in the file's units.</param>
+    /// <param name="to">Where it ends, whose height is not read.</param>
+    /// <param name="height">How high it stands.</param>
+    /// <param name="thickness">How thick it is across the line.</param>
+    /// <param name="material">What every face is drawn with.</param>
+    /// <param name="scale">The faces' scale, <see cref="DefaultScale"/> unless given.</param>
+    /// <exception cref="ArgumentException">The two points are one on the ground, or the height or
+    /// the thickness is not above zero.</exception>
+    public static LevelBrush Wall(LevelPoint from, LevelPoint to, double height, double thickness, string material, double scale = DefaultScale)
+    {
+        var length = GroundLength(from, to);
+        return Box(new LevelPoint(0, -thickness / 2, 0), new LevelPoint(length, thickness / 2, height), material, scale).Along(from, to);
+    }
+
+    /// <summary>
+    /// A ramp from one point of the ground to another, as wide as given and centered on the line
+    /// between them, rising from the first point's height by its rise at the second.
+    /// </summary>
+    /// <param name="from">Its foot, in the file's units.</param>
+    /// <param name="to">Its top's end, whose height is not read.</param>
+    /// <param name="width">How wide it is across the line.</param>
+    /// <param name="rise">How far it rises from its foot to its top.</param>
+    /// <param name="material">What every face is drawn with.</param>
+    /// <param name="scale">The faces' scale, <see cref="DefaultScale"/> unless given.</param>
+    /// <exception cref="ArgumentException">The two points are one on the ground, or the width or
+    /// the rise is not above zero.</exception>
+    public static LevelBrush Ramp(LevelPoint from, LevelPoint to, double width, double rise, string material, double scale = DefaultScale)
+    {
+        var length = GroundLength(from, to);
+        return Wedge(new LevelPoint(0, -width / 2, 0), new LevelPoint(length, width / 2, rise), material, scale).Along(from, to);
+    }
+
+    /// <summary>
+    /// The brush, made along X from the file's origin, turned to run from one point of the ground
+    /// toward another and moved to start at the first, its height raised by the first's.
+    /// </summary>
+    /// <param name="from">Where the brush's origin goes.</param>
+    /// <param name="to">The way its X runs, whose height is not read.</param>
+    /// <remarks>
+    /// A doorway or an arch between two points is <see cref="Level.Doorway"/> or <see cref="Arch"/>
+    /// made along X with each brush put along the line. The faces take their mapping from the
+    /// world again, as <see cref="Turned"/> and <see cref="Moved"/> give it.
+    /// </remarks>
+    /// <exception cref="ArgumentException">The two points are one on the ground.</exception>
+    public LevelBrush Along(LevelPoint from, LevelPoint to)
+    {
+        GroundLength(from, to);
+        var degrees = Math.Atan2(to.Y - from.Y, to.X - from.X) * 180 / Math.PI;
+        return Turned(degrees, default).Moved(from);
+    }
+
+    // How far apart two points stand on the ground, refusing two that are one.
+    private static double GroundLength(LevelPoint from, LevelPoint to)
+    {
+        var length = Math.Sqrt((to.X - from.X) * (to.X - from.X) + (to.Y - from.Y) * (to.Y - from.Y));
+        return length > 0 ? length : throw new ArgumentException($"A shape from {from} to {to} has no length on the ground.", nameof(to));
+    }
+
+    // A convex outline stretched along an axis between two ends, each corner placed by where it
+    // stands on the outline and how far along the axis.
+    private static LevelBrush Extruded(IReadOnlyList<(double X, double Y)> outline, double from, double to, Func<(double X, double Y), double, LevelPoint> place, string axis, string material, double scale)
     {
         ArgumentException.ThrowIfNullOrEmpty(material);
         if (material.Any(char.IsWhiteSpace)) throw new ArgumentException("A material is a name with no spaces.", nameof(material));
 
         // Points a hair apart are one, so an arch's first segment, whose inside and outside meet at
         // the ring's foot, is the triangle it is.
-        var points = new List<(double X, double Z)>();
+        var points = new List<(double X, double Y)>();
         foreach (var raw in outline)
         {
-            (double X, double Z) point = (Kept(raw.X), Kept(raw.Z));
-            if (points.Count == 0 || Math.Abs(points[^1].X - point.X) + Math.Abs(points[^1].Z - point.Z) > 1e-9) points.Add(point);
+            (double X, double Y) point = (Kept(raw.X), Kept(raw.Y));
+            if (points.Count == 0 || Math.Abs(points[^1].X - point.X) + Math.Abs(points[^1].Y - point.Y) > 1e-9) points.Add(point);
         }
 
-        if (points.Count > 1 && Math.Abs(points[0].X - points[^1].X) + Math.Abs(points[0].Z - points[^1].Z) <= 1e-9) points.RemoveAt(points.Count - 1);
+        if (points.Count > 1 && Math.Abs(points[0].X - points[^1].X) + Math.Abs(points[0].Y - points[^1].Y) <= 1e-9) points.RemoveAt(points.Count - 1);
         if (points.Count < 3) throw new ArgumentException("A brush's outline has three points or more.", nameof(outline));
-        if (!(Math.Abs(to - from) > 0)) throw new ArgumentException($"A prism from {from} to {to} along Y has no depth.", nameof(to));
+        if (!(Math.Abs(to - from) > 0)) throw new ArgumentException($"A brush from {from} to {to} along {axis} has no depth.", nameof(to));
 
         // Each corner turns the outline the same way, or not at all, round a convex outline, and
         // one that turns both ways bends in, which no brush's planes can hold.
@@ -173,7 +256,7 @@ public sealed partial class LevelBrush
         for (var i = 0; i < points.Count; i++)
         {
             var (a, b, c) = (points[i], points[(i + 1) % points.Count], points[(i + 2) % points.Count]);
-            var turn = (b.X - a.X) * (c.Z - b.Z) - (b.Z - a.Z) * (c.X - b.X);
+            var turn = (b.X - a.X) * (c.Y - b.Y) - (b.Y - a.Y) * (c.X - b.X);
             if (turn > 1e-9) left = true;
             if (turn < -1e-9) right = true;
         }
@@ -182,17 +265,17 @@ public sealed partial class LevelBrush
             throw new ArgumentException(left ? "A brush's outline is convex, where this one bends in." : "A brush's outline has corners off one line.", nameof(outline));
 
         var (low, high) = (Math.Min(from, to), Math.Max(from, to));
-        var inside = new LevelPoint(points.Average(p => p.X), (low + high) / 2, points.Average(p => p.Z));
+        var inside = place((points.Average(p => p.X), points.Average(p => p.Y)), (low + high) / 2);
         var brush = new LevelBrush();
         for (var i = 0; i < points.Count; i++)
         {
             var (a, b) = (points[i], points[(i + 1) % points.Count]);
-            brush.Faces.Add(Face(new(a.X, low, a.Z), new(b.X, low, b.Z), new(a.X, high, a.Z), inside, material, scale));
+            brush.Faces.Add(Face(place(a, low), place(b, low), place(a, high), inside, material, scale));
         }
 
         var (p0, p1, p2) = (points[0], points[1], points[2]);
-        brush.Faces.Add(Face(new(p0.X, low, p0.Z), new(p1.X, low, p1.Z), new(p2.X, low, p2.Z), inside, material, scale));
-        brush.Faces.Add(Face(new(p0.X, high, p0.Z), new(p1.X, high, p1.Z), new(p2.X, high, p2.Z), inside, material, scale));
+        brush.Faces.Add(Face(place(p0, low), place(p1, low), place(p2, low), inside, material, scale));
+        brush.Faces.Add(Face(place(p0, high), place(p1, high), place(p2, high), inside, material, scale));
         return brush;
     }
 
