@@ -38,6 +38,6 @@
 
 @PointClass size(-16 -16 0, 16 16 96) color(80 160 60) = tree : "A tree grown from a species and a seed"
 [
-	species(string) : "Species" : "black-tupelo" : "A species' name the engine has registered, which an engine refuses where it has none"
+	species(string) : "Species" : : "A species' name, which the engine's vegetation resolves"
 	seed(integer) : "Seed" : 0 : "The seed, which picks its variant and turns and sizes it"
 ]

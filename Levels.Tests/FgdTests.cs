@@ -26,7 +26,7 @@ public sealed partial class FgdTests
     [GeneratedRegex(@"@\w+Class[^=]*=\s*(?<name>\w+)\s*:[^\[]*\[(?<keys>[^\]]*)\]")]
     private static partial Regex ClassPattern();
 
-    [GeneratedRegex(@"^\s*(?<key>\w+)\(\w+\)\s*:\s*""[^""]*""\s*:\s*(?:""(?<text>[^""]*)""|(?<number>[^\s:]+))\s*:", RegexOptions.Multiline)]
+    [GeneratedRegex(@"^\s*(?<key>\w+)\(\w+\)\s*:\s*""[^""]*""\s*:\s*(?:""(?<text>[^""]*)""|(?<number>[^\s:]+))?\s*:", RegexOptions.Multiline)]
     private static partial Regex KeyPattern();
 
     private static Dictionary<string, Dictionary<string, string>> Classes()

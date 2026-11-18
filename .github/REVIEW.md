@@ -665,3 +665,11 @@ class LevelKeysTests, which bore the name of one engine's component, is LevelKey
 named for what it holds. CHEATSHEET.md is written again and DEVLOG.md regenerated. The assembly and
 package name 3DEngine.Levels stands as the one place the word does. The tests pass, 144 (dotnet
 test Levels.Tests).
+
+The tree's species in the commit carrying this line. LevelTree.Species is the key's text, or
+nothing where the key is missing or empty, and DefaultSpecies goes, so the module names no species;
+an engine's vegetation resolves the name and says what a tree of none becomes. Levels.fgd's `tree`
+keeps its `species` key with no default, described as a name the engine's vegetation resolves, and
+FgdTests reads a key of no default. LevelTreeTests' case of no species failed before the mend.
+CHEATSHEET.md is written again and DEVLOG.md regenerated. The tests pass, 144 (dotnet test
+Levels.Tests).

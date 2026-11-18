@@ -22,11 +22,10 @@ public sealed class LevelTreeTests
     }
 
     [Fact]
-    public void ATreeOfNoKeysIsTheSpeciesTrenchBroomShowsAtSeedZero()
+    public void ATreeOfNoSpeciesHasNoneForTheEngineToResolve()
     {
-        Assert.Equal(new LevelTree("black-tupelo", 0), Entity(("classname", "tree")).Tree());
-        Assert.Equal(new LevelTree("black-tupelo", 3),
-            Entity(("classname", "tree"), ("species", ""), ("seed", "3")).Tree());
+        Assert.Equal(new LevelTree(null, 0), Entity(("classname", "tree")).Tree());
+        Assert.Equal(new LevelTree(null, 3), Entity(("classname", "tree"), ("species", ""), ("seed", "3")).Tree());
     }
 
     [Fact]

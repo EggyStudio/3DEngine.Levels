@@ -170,8 +170,7 @@ Directional = 2,                                         // A light_environment,
 
 record struct LevelTree                                  // A tree a level places, by the name of its species and its seed, as Tree reads it from a tree entity's keys
 string Class = "tree";                                   // The class of a tree
-string DefaultSpecies = "black-tupelo";                  // The species of a tree with no species, the one TrenchBroom shows a new tree with
-LevelTree(string Species, uint Seed);
-string Species { get; init; }                            // The species' name, as black-tupelo
+LevelTree(string? Species, uint Seed);
+string? Species { get; init; }                           // The species' name as the level writes it, or nothing where it names none
 uint Seed { get; init; }                                 // The seed, which picks its variant and turns and sizes it
 ```
