@@ -575,3 +575,14 @@ it, as BevyCSharp's spawner wrapped one; an engine's own exception goes on as it
 binding and its host read the entities through it, and the README's row names it. LevelReadTests
 checks the order, a malformed origin, a brush that closes no solid and an engine's own fault. The
 tests pass, 117 where there were 113 (dotnet test Levels.Tests).
+
+Tools' revised checks in the commit carrying this line, the pin moved from `ebdd08e` to `f92df1c`
+and ModuleTests rewritten on its README's block, four facts a test each, Library, Root and Host kept.
+With all four faults planted at once, a reference to Vortice.Fake, a summary given BevyCSharp's
+name, LevelHull's row taken out and a comment in the README's copy of the binding, all four tests
+turned red together, and each sentence names what was found, the rule and what to do. Two things
+read badly. xunit's Assert.Null shows a string cut at some fifty characters and an ellipsis, so the
+runner prints "The library references Vortice.Fake, an engine, a " and the rule and the remedy are
+never seen; `Assert.True(fault is null, fault)` would print the sentence whole. And the engine-name
+sentence says "F:Levels.LevelTree.Class name an engine" for one member. Both go to Tools in a
+message. The tests pass, 120 where there were 117 (dotnet test Levels.Tests).
