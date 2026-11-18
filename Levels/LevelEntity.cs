@@ -32,6 +32,25 @@ public sealed partial class LevelEntity
     /// </summary>
     public string ClassName => this["classname"] ?? "";
 
+    /// <summary>
+    /// The value of its <c>targetname</c> key, by which another entity's output names it, or an
+    /// empty string where it has none.
+    /// </summary>
+    public string TargetName => this["targetname"] ?? "";
+
+    /// <summary>
+    /// What the entity is called where an engine shows it, its <see cref="TargetName"/>, else its
+    /// <see cref="ClassName"/>, else <c>entity</c> and its index in the level.
+    /// </summary>
+    /// <param name="index">Its index among the level's entities, which names one of no name and no
+    /// class.</param>
+    /// <remarks>
+    /// Two entities may share a name, as two lights of one class do, so a name is for a reader and
+    /// a console, and the index tells them apart.
+    /// </remarks>
+    public string Name(int index) =>
+        TargetName.Length > 0 ? TargetName : ClassName.Length > 0 ? ClassName : $"entity {index}";
+
     /// <summary>The first value of a key, or nothing where the entity has no such key.</summary>
     /// <param name="key">The key, as the file writes it, its case kept.</param>
     /// <remarks>

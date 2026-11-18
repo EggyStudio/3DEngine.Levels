@@ -561,3 +561,9 @@ bad text with a FormatException at the path and line. The README's binding and i
 level through FolderFiles, and the README's rows say so. LevelLoadTests checks the read, the mark,
 the missing path and the bad text. The tests pass, 111 where there were 107 (dotnet test
 Levels.Tests).
+
+The second of the six in the commit carrying this line. LevelEntity.TargetName gives the
+`targetname` or an empty string, and LevelEntity.Name of its index gives the name BevyCSharp's
+spawner gave, its target name, else its class, else `entity` and its index, so both engines and
+their consoles name an entity alike; the README's row names it. LevelNameTests checks the three and
+an empty target name. The tests pass, 113 where there were 111 (dotnet test Levels.Tests).
