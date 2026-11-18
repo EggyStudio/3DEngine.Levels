@@ -75,6 +75,36 @@ public sealed partial class LevelEntity
         }
     }
 
+    /// <summary>
+    /// The entity's outputs, each keyvalue whose value is five fields, in the file's order.
+    /// </summary>
+    /// <remarks>
+    /// An output is the entity I/O form a level editor writes for an event: the key names the
+    /// event, and the value holds the target name, the input, its parameter, the delay in seconds
+    /// and how many times it is sent, -1 for every time, split by commas or by the escape
+    /// character U+001B, which a newer map writes so a parameter may hold a comma. A value of
+    /// other than five fields is no output, so a keyvalue of a number, a color or a sentence is
+    /// read as none.
+    /// </remarks>
+    /// <exception cref="FormatException">An output's delay is not a number or its times not a
+    /// whole number.</exception>
+    public IReadOnlyList<LevelOutput> Outputs()
+    {
+        var outputs = new List<LevelOutput>();
+        foreach (var (key, value) in Keys)
+        {
+            var fields = value.Split(value.Contains('\u001b') ? '\u001b' : ',');
+            if (fields.Length != 5) continue;
+            if (!double.TryParse(fields[3], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var delay) || !double.IsFinite(delay))
+                throw Refused(key, value, "an output whose delay is a number of seconds");
+            if (!int.TryParse(fields[4], System.Globalization.NumberStyles.AllowLeadingSign, System.Globalization.CultureInfo.InvariantCulture, out var times))
+                throw Refused(key, value, "an output whose times are a whole number");
+            outputs.Add(new LevelOutput(key, fields[0], fields[1], fields[2], delay, times));
+        }
+
+        return outputs;
+    }
+
     /// <summary>Every value of a key, in the file's order.</summary>
     /// <param name="key">The key.</param>
     public IEnumerable<string> All(string key) => Keys.Where(pair => pair.Key == key).Select(pair => pair.Value);

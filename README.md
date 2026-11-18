@@ -47,8 +47,8 @@ The types a binding reads, each in the namespace `Levels`, are these.
 
 | Type | What it is |
 |---|---|
-| `Level` | A level file, read by `Level.Parse`, or by `Level.Load` from a path or through an `ILevelFiles`, and written by `Level.Write` or `Level.Save`, with its entities, handed to the engine one by one by `Level.ReadEntities` with a fault naming the entity, and `Level.UnitsPerMeter`, `Level.Flattened`, the view a binding reads in which TrenchBroom's layers and groups are the world and a layer omitted from export is left out, and `Level.Doorway`, a wall's brushes round a rounded opening |
-| `LevelEntity` | An entity, its keyvalues in order and its brushes, read by `Placement`, `Light`, `Tree`, `Number`, `WholeNumber`, `Point` and `KeysText`, written back by `Place`, `SetLight` and `SetTree`, each writing only what differs so a level saved unedited is the same text, and called by `Name` |
+| `Level` | A level file, read by `Level.Parse`, or by `Level.Load` from a path or through an `ILevelFiles`, and written by `Level.Write` or `Level.Save`, with its entities, handed to the engine one by one by `Level.ReadEntities` with a fault naming the entity, and `Level.UnitsPerMeter`, `Level.Targeted`, the entities a target name names, `Level.Flattened`, the view a binding reads in which TrenchBroom's layers and groups are the world and a layer omitted from export is left out, and `Level.Doorway`, a wall's brushes round a rounded opening |
+| `LevelEntity` | An entity, its keyvalues in order and its brushes, read by `Placement`, `Light`, `Tree`, `Number`, `WholeNumber`, `Point`, `KeysText` and `Outputs`, written back by `Place`, `SetLight` and `SetTree`, each writing only what differs so a level saved unedited is the same text, and called by `Name` |
 | `LevelBrush` | A brush, a convex solid of its faces' planes, its polygons from `Polygons` and its shapes from `Box`, `Wedge`, `Prism` of any convex outline, `Slab` of a ground outline, `Arch`, `Wall` and `Ramp` between two points, `Along`, `Turned` and `Moved`, and how far a ray meets it from `Hit` |
 | `LevelFace` | A face, its plane through three points, its material and its mapping of two axes, offsets, a rotation and two scales |
 | `LevelPoint` | A point or a way in the file's units with Z up, turned into meters by `Meters`, with `Dot`, `Cross` and `Length` |
@@ -61,6 +61,7 @@ The types a binding reads, each in the namespace `Levels`, are these.
 | `LevelLight` | A light in physical units, its kind, place, way, color, strength, range and cones |
 | `LevelLightKind` | A light's kind, `Point`, `Spot` or `Directional` |
 | `LevelTree` | A tree, the name of its species and its seed |
+| `LevelOutput` | An output, an event an entity fires and the input, parameter, delay and times it sends the entities its target names |
 | `LevelCell` | A cell of a grid a level's brushes fill, its index along each axis and its material |
 
 What the module gives out stands on these conventions.
@@ -78,6 +79,7 @@ What the module gives out stands on these conventions.
 | Collision | An entity's brushes as one shape of triangles for a static body (`LevelGeometry.Triangles`), or as a convex hull a brush (`LevelGeometry.Hulls`) |
 | Names | An entity is called by its `targetname`, else its class, else `entity` and its index (`LevelEntity.Name`) |
 | Cells | A grid of cells of a given size in meters from the level's origin, Y up, a cell filled where its middle lies inside a brush, a point on a face inside where the face looks toward lesser X, else lesser Y, else lesser Z in the file's axes, so two touching brushes never fill one cell; a cell's material the one most of its outer sides are covered by, each side by the face whose way out is nearest its own, a tie to the side met first among up, down, plus X, minus X, plus Z and minus Z, a cell with no outer side its top's, and a cell two brushes fill the first brush's (`LevelGeometry.Cells`) |
+| Outputs | The entity I/O form a level editor writes, a keyvalue whose key is the event and whose value is the target name, the input, its parameter, the delay in seconds and the times it fires, -1 for every time, five fields split by commas or by U+001B; a value of other than five fields is no output, and a target name beginning with `!` is the engine's to resolve |
 | Faults | A key or a brush the reading cannot take is a `FormatException` naming the entity's index and name, through `Level.ReadEntities` |
 
 An engine with Z up or left-handed axes turns the positions, normals and turns it is given, and an

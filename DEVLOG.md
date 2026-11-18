@@ -217,6 +217,8 @@ read.
 
 Commits that day
 
+- `7ddc1e2` A binding reads a level through a view in which TrenchBroom's layers and groups are the
+  world and a layer omitted from export is left out, while the level writes back as it was read.
 - `5b63d28` The cells of a grid a brush fills are given with their materials by stated rules, so two
   block readers lay the same blocks, beside a test of a point inside a brush.
 - `4d9629d` A light fades to its range by glTF's window, the same source its spot's cone stands on.

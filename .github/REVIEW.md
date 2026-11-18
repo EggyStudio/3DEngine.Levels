@@ -805,3 +805,16 @@ written back with its layers, a level of no layers its own text, a world omitted
 the world's place; its first five failed on a stub. pin.py printed that Tools moved from `4e922ea`
 to `1e1ec63`, 2 commits, no fact new or changed, and wrote CHEATSHEET.md and DEVLOG.md again. The
 tests pass, 195 where there were 189 (dotnet test Levels.Tests).
+
+The second of the three in the commit carrying this line. LevelEntity.Outputs reads the entity I/O
+form a level editor writes, a keyvalue whose key is the event and whose value is five fields, the
+target name, the input, its parameter, the delay in seconds and the times it is sent, -1 for every
+time, split by commas or by U+001B, as LevelOutput in the file's order; a value of other than five
+fields is no output, and a five-field value whose delay or times do not read is refused by its key.
+Level.Targeted gives the entities a target name names, whole and with its case, in the level's
+order, and none for an empty name or one beginning with `!`, which names an entity by its part in an
+event for the engine to resolve. The README gains an Outputs row and LevelOutput's, and its rows
+name both. LevelOutputsTests holds the test room's door's two outputs, a value split by U+001B,
+keyvalues that are no output, the two refusals and a target name's entities; all six failed on
+stubs. CHEATSHEET.md is written again. The tests pass, 201 where there were 195 (dotnet test
+Levels.Tests).

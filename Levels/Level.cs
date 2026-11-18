@@ -69,6 +69,23 @@ public sealed partial class Level
     }
 
     /// <summary>
+    /// The entities whose <c>targetname</c> is a name, as an output's target names them, in the
+    /// level's order.
+    /// </summary>
+    /// <param name="targetName">The name, matched whole and with its case.</param>
+    /// <remarks>
+    /// A name beginning with <c>!</c>, as <c>!self</c> or <c>!activator</c>, names an entity by
+    /// its part in an event rather than by its name, which the engine resolves, so it names none
+    /// here, nor does an empty one.
+    /// </remarks>
+    public IReadOnlyList<LevelEntity> Targeted(string targetName)
+    {
+        ArgumentNullException.ThrowIfNull(targetName);
+        if (targetName.Length == 0 || targetName[0] == '!') return [];
+        return [.. Entities.Where(entity => entity.TargetName == targetName)];
+    }
+
+    /// <summary>
     /// The level as a binding reads it, TrenchBroom's layers and groups read as the world they
     /// stand in and a layer omitted from export left out whole.
     /// </summary>

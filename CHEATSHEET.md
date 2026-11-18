@@ -34,6 +34,7 @@ List<LevelEntity> Entities { get; }                      // The entities, worlds
 LevelEntity? World { get; }                              // The worldspawn entity, which holds the level's own brushes, or nothing where there is none
 double UnitsPerMeter { get; }                            // How many of the file's units make a meter, the worldspawn's UnitsPerMeterKey or DefaultUnitsPerMeter
 string Game { get; set; }                                // The game TrenchBroom's first comment names, which a file written again keeps, or Generic where it names none
+IReadOnlyList<LevelEntity> Targeted(string targetName);  // The entities whose targetname is a name, as an output's target names them, in the level's order
 Level Flattened();                                       // The level as a binding reads it, TrenchBroom's layers and groups read as the world they stand in and a layer omitted from export left out whole
 void ReadEntities(Action<int, LevelEntity> read);        // Hands each entity to the engine in the level's order with its index, a fault the level's text causes named by the entity it stands in
 Level Load(string path);                                 // Reads a level from a file
@@ -52,6 +53,7 @@ string ClassName { get; }                                // The value of its cla
 string TargetName { get; }                               // The value of its targetname key, by which another entity's output names it, or an empty string where it has none
 string? this[string key] { get; set; }                   // The first value of a key, or nothing where the entity has no such key
 string Name(int index);                                  // What the entity is called where an engine shows it, its TargetName, else its ClassName, else entity and its index in the level
+IReadOnlyList<LevelOutput> Outputs();                    // The entity's outputs, each keyvalue whose value is five fields, in the file's order
 IEnumerable<string> All(string key);                     // Every value of a key, in the file's order
 string KeysText();                                       // The keyvalues as the level file writes them, a line each in their order, which an engine keeps on what it spawns for the entity and ParseKeys reads back
 List<KeyValuePair<string, string>> ParseKeys(string text);  // The keyvalues of KeysText's text, in their order
@@ -183,6 +185,15 @@ string Class = "tree";                                   // The class of a tree
 LevelTree(string? Species, uint Seed);
 string? Species { get; init; }                           // The species' name as the level writes it, or nothing where it names none
 uint Seed { get; init; }                                 // The seed, which picks its variant and turns and sizes it
+
+record LevelOutput                                       // An output of a level's entity, an event it fires and the input it sends another entity, as Outputs reads it from a keyvalue
+LevelOutput(string Name, string Target, string Input, string Parameter, double Delay, int Times);
+string Name { get; init; }                               // The event, the keyvalue's key, as OnOpen
+string Target { get; init; }                             // The target name of the entities it sends to, which Targeted finds
+string Input { get; init; }                              // The input it sends, as TurnOn
+string Parameter { get; init; }                          // What it sends with the input, or an empty string
+double Delay { get; init; }                              // How many seconds after the event it is sent
+int Times { get; init; }                                 // How many times it is sent, -1 for every time the event fires
 
 record struct LevelCell                                  // A cell of a grid in meters with Y up that a level's brushes fill, by its index along each axis from the level's origin, and the material it is laid with, as Cells gives it
 LevelCell(int X, int Y, int Z, string Material);
