@@ -112,27 +112,28 @@ public sealed partial class LevelEntity
             + $"where {meant} is meant.");
 
     /// <summary>
-    /// How far and which way a door moves from shut to open, in meters with Y up, or nothing where
-    /// the entity is no <c>func_door</c>.
+    /// How far and which way a door or a button moves from shut to open or from out to in, in
+    /// meters with Y up, or nothing where the entity is no <c>func_door</c> or <c>func_button</c>.
     /// </summary>
     /// <param name="unitsPerMeter">How many of the file's units make a meter,
     /// <see cref="Level.UnitsPerMeter"/>.</param>
     /// <remarks>
-    /// The keys are Levels.fgd's for <c>func_door</c>: <c>angle</c>, the way it opens in degrees
-    /// about the vertical from the file's X, -1 for up and -2 for down, 0 where it is missing, and
-    /// <c>lip</c>, the units it stays short of its full travel, 8 where it is missing. It moves the
+    /// The keys are Levels.fgd's for <c>func_door</c> and <c>func_button</c>: <c>angle</c>, the way
+    /// it moves in degrees about the vertical from the file's X, -1 for up and -2 for down, 0 where
+    /// it is missing, and <c>lip</c>, the units it stays short of its full travel, 8 for a door and
+    /// 4 for a button where it is missing. It moves the
     /// way it opens by the size of the box round its brushes that way, the box's sides each taken
     /// by how much of the way runs along it, less the lip, and stays shut where that is less than
     /// none, as a level editor's doors have it.
     /// </remarks>
     /// <exception cref="FormatException">The angle or the lip is not a number.</exception>
     /// <exception cref="InvalidOperationException">A brush closes no solid.</exception>
-    public Vector3? DoorTravel(double unitsPerMeter)
+    public Vector3? Travel(double unitsPerMeter)
     {
-        if (ClassName != "func_door") return null;
+        if (ClassName is not ("func_door" or "func_button")) return null;
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(unitsPerMeter);
         var angle = Number("angle") ?? 0;
-        var lip = Number("lip") ?? 8;
+        var lip = Number("lip") ?? (ClassName == "func_door" ? 8 : 4);
         var way = angle switch
         {
             -1 => new LevelPoint(0, 0, 1),
@@ -148,5 +149,28 @@ public sealed partial class LevelEntity
             corners.Max(p => p.Z) - corners.Min(p => p.Z));
         var span = Math.Abs(way.X) * size.X + Math.Abs(way.Y) * size.Y + Math.Abs(way.Z) * size.Z - lip;
         return span > 0 ? (way * span).Meters(unitsPerMeter) : Vector3.Zero;
+    }
+
+    /// <summary>
+    /// How a <c>func_rotating</c> turns about an axis through its <see cref="Placement"/>, or
+    /// nothing for another class.
+    /// </summary>
+    /// <param name="unitsPerMeter">How many of the file's units make a meter.</param>
+    /// <remarks>
+    /// The keys are Levels.fgd's: <c>speed</c>, degrees a second, 100 where it is missing, and
+    /// <c>spawnflags</c>, the level-editor convention's flags, 4 for the file's X axis, 8 for its Y
+    /// and neither for the vertical, and 2 to turn the other way. The axis is given in meters with
+    /// Y up.
+    /// </remarks>
+    /// <exception cref="FormatException">The speed is not a number or the flags not a whole
+    /// number.</exception>
+    public LevelSpin? Spin(double unitsPerMeter)
+    {
+        if (ClassName != "func_rotating") return null;
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(unitsPerMeter);
+        var speed = Number("speed") ?? 100;
+        var flags = WholeNumber("spawnflags") ?? 0;
+        var axis = (flags & 4) != 0 ? new LevelPoint(1, 0, 0) : (flags & 8) != 0 ? new LevelPoint(0, 1, 0) : new LevelPoint(0, 0, 1);
+        return new LevelSpin(axis.Meters(1), (flags & 2) != 0 ? -speed : speed);
     }
 }

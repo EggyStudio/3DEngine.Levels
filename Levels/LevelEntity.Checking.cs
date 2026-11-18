@@ -53,6 +53,12 @@ public sealed partial class LevelEntity
         }
 
         if (ClassName == LevelTree.Class) Try("seed", () => WholeNumber("seed"));
+        if (ClassName is "func_door" or "func_button") Try("lip", () => Number("lip"));
+        if (ClassName == "func_rotating")
+        {
+            Try("speed", () => Number("speed"));
+            Try("spawnflags", () => WholeNumber("spawnflags"));
+        }
         for (var at = 0; at < Keys.Count; at++)
         {
             var (key, value) = Keys[at];

@@ -63,7 +63,8 @@ double? Number(string key);                              // A key's value as a n
 uint? WholeNumber(string key);                           // A key's value as a whole number of zero or more, or nothing where the entity has no such key
 LevelPoint? Point(string key);                           // A key's value as three numbers, a point in the file's units, or nothing where the entity has no such key
 LevelPlacement Placement(double unitsPerMeter);          // Where the entity stands in meters with Y up and how it is turned, as an engine places what it spawns for it
-Vector3? DoorTravel(double unitsPerMeter);               // How far and which way a door moves from shut to open, in meters with Y up, or nothing where the entity is no func_door
+Vector3? Travel(double unitsPerMeter);                   // How far and which way a door or a button moves from shut to open or from out to in, in meters with Y up, or nothing where the entity is no func_door or func_button
+LevelSpin? Spin(double unitsPerMeter);                   // How a func_rotating turns about an axis through its Placement, or nothing for another class
 LevelTree? Tree();                                       // The tree the entity places, read from its keys, or nothing where its class is not tree
 void Place(LevelPlacement placement, double unitsPerMeter);  // Writes where the entity stands and how it is turned to its origin and its angle or angles, as Placement reads them
 void SetLight(LevelLight light, double unitsPerMeter);   // Writes a light to the entity's keys, its class, place, way, color, strength, range and cones, as Light reads them
@@ -216,6 +217,11 @@ string Nodraw = "tools/nodraw";                          // A face that collides
 string Skip = "tools/skip";                              // A face left out of every mesh and shape
 bool Drawn(string material);                             // Whether a face of a material is drawn
 bool Collides(string material);                          // Whether a face of a material collides
+
+record struct LevelSpin                                  // How a rotating part of a level turns, about an axis through its place, as Spin reads it
+LevelSpin(Vector3 Axis, double DegreesPerSecond);
+Vector3 Axis { get; init; }                              // The axis in meters with Y up, a length of one
+double DegreesPerSecond { get; init; }                   // How fast it turns about the axis, counterclockwise seen from the axis's tip, below none the other way
 
 record struct LevelCell                                  // A cell of a grid in meters with Y up that a level's brushes fill, by its index along each axis from the level's origin, and the material it is laid with, as Cells gives it
 LevelCell(int X, int Y, int Z, string Material);

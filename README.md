@@ -48,7 +48,7 @@ The types a binding reads, each in the namespace `Levels`, are these.
 | Type | What it is |
 |---|---|
 | `Level` | A level file, read by `Level.Parse`, or by `Level.Load` from a path or through an `ILevelFiles`, and written by `Level.Write` or `Level.Save`, with its entities, handed to the engine one by one by `Level.ReadEntities` with a fault naming the entity, and `Level.UnitsPerMeter`, `Level.Check`, every problem of the level at once, `Level.Targeted`, the entities a target name names, `Level.Flattened`, the view a binding reads in which TrenchBroom's layers and groups are the world and a layer omitted from export is left out, and `Level.Doorway`, a wall's brushes round a rounded opening |
-| `LevelEntity` | An entity, its keyvalues in order and its brushes, read by `Placement`, `Light`, `Tree`, `Number`, `WholeNumber`, `Point`, `KeysText`, `Outputs` and `DoorTravel`, written back by `Place`, `SetLight` and `SetTree`, each writing only what differs so a level saved unedited is the same text, and called by `Name` |
+| `LevelEntity` | An entity, its keyvalues in order and its brushes, read by `Placement`, `Light`, `Tree`, `Number`, `WholeNumber`, `Point`, `KeysText`, `Outputs`, `Travel` and `Spin`, written back by `Place`, `SetLight` and `SetTree`, each writing only what differs so a level saved unedited is the same text, and called by `Name` |
 | `LevelBrush` | A brush, a convex solid of its faces' planes, its polygons from `Polygons` and its shapes from `Box`, `Wedge`, `Prism` of any convex outline, `Slab` of a ground outline, `Arch`, `Wall` and `Ramp` between two points, `Along`, `Turned` and `Moved`, and how far a ray meets it from `Hit` |
 | `LevelFace` | A face, its plane through three points, its material and its mapping of two axes, offsets, a rotation and two scales |
 | `LevelPoint` | A point or a way in the file's units with Z up, turned into meters by `Meters`, with `Dot`, `Cross` and `Length` |
@@ -64,6 +64,7 @@ The types a binding reads, each in the namespace `Levels`, are these.
 | `LevelOutput` | An output, an event an entity fires and the input, parameter, delay and times it sends the entities its target names |
 | `LevelProblem` | A problem `Level.Check` names, the entity it stands in, its key or its brush, and a sentence |
 | `LevelTools` | The tool materials' names and whether a face of a material is drawn and collides |
+| `LevelSpin` | How a rotating part turns, its axis in meters and its degrees a second |
 | `LevelCell` | A cell of a grid a level's brushes fill, its index along each axis and its material |
 
 What the module gives out stands on these conventions.
@@ -84,7 +85,8 @@ What the module gives out stands on these conventions.
 | Names | An entity is called by its `targetname`, else its class, else `entity` and its index (`LevelEntity.Name`) |
 | Cells | A grid of cells of a given size in meters from the level's origin, Y up, a cell filled where its middle lies inside a brush, a point on a face inside where the face looks toward lesser X, else lesser Y, else lesser Z in the file's axes, so two touching brushes never fill one cell; a cell's material the one most of its outer sides are covered by, each side by the face whose way out is nearest its own, a tie to the side met first among up, down, plus X, minus X, plus Z and minus Z, a cell with no outer side its top's, and a cell two brushes fill the first brush's (`LevelGeometry.Cells`); cells made back into boxes (`LevelGeometry.Brushes`) taken in order of material, then up, then Z, then X, each box grown along X, then Z by whole rows, then up by whole layers, so the boxes give the cells back |
 | Outputs | The entity I/O form a level editor writes, a keyvalue whose key is the event and whose value is the target name, the input, its parameter, the delay in seconds and the times it fires, -1 for every time, five fields split by commas or by U+001B; a value of other than five fields is no output, and a target name beginning with `!` is the engine's to resolve |
-| Doors | A `func_door` moves the way its `angle` gives, in degrees about the vertical, -1 up and -2 down, by the size of the box round its brushes that way less its `lip`, 8 units where none is given, the keys Levels.fgd names (`LevelEntity.DoorTravel`) |
+| Rotating parts | A `func_rotating` turns at its `speed`, 100 degrees a second where none is given, about an axis through its place, the file's X where its `spawnflags` hold 4, its Y where they hold 8, else the vertical, the other way where they hold 2 (`LevelEntity.Spin`) |
+| Doors | A `func_door` or a `func_button` moves the way its `angle` gives, in degrees about the vertical, -1 up and -2 down, by the size of the box round its brushes that way less its `lip`, 8 units for a door and 4 for a button where none is given, the keys Levels.fgd names (`LevelEntity.Travel`) |
 | Faults | A key or a brush the reading cannot take is a `FormatException` naming the entity's index and name, through `Level.ReadEntities` |
 
 An engine with Z up or left-handed axes turns the positions, normals and turns it is given, and an

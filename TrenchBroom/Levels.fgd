@@ -53,3 +53,15 @@
 	angle(integer) : "Opens toward" : 0 : "The way it opens in degrees about the vertical, -1 up and -2 down"
 	lip(float) : "Lip" : 8 : "How many units of it stay short of its full travel"
 ]
+
+@SolidClass = func_button : "A button, its brushes moving the way it is pressed by their size that way less its lip"
+[
+	angle(integer) : "Pressed toward" : 0 : "The way it moves in degrees about the vertical, -1 up and -2 down"
+	lip(float) : "Lip" : 4 : "How many units of it stay short of its full travel"
+]
+
+@SolidClass = func_rotating : "A part that turns about an axis through its origin or its brushes' middle"
+[
+	speed(float) : "Degrees a second" : 100 : "How fast it turns"
+	spawnflags(integer) : "Flags" : 0 : "2 turns it the other way, 4 about the file's X axis, 8 about its Y, else about the vertical"
+]

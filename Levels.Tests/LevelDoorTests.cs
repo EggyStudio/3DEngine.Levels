@@ -27,22 +27,22 @@ public sealed class LevelDoorTests
     [Fact]
     public void ADoorOpensAlongItsAngleByItsSizeThatWayLessItsLip()
     {
-        Near(new Vector3(56f / 32, 0, 0), Door().DoorTravel(32));
-        Near(new Vector3(-56f / 32, 0, 0), Door(("angle", "180")).DoorTravel(32));
-        Near(new Vector3(2, 0, 0), Door(("lip", "0")).DoorTravel(32));
+        Near(new Vector3(56f / 32, 0, 0), Door().Travel(32));
+        Near(new Vector3(-56f / 32, 0, 0), Door(("angle", "180")).Travel(32));
+        Near(new Vector3(2, 0, 0), Door(("lip", "0")).Travel(32));
     }
 
     [Fact]
     public void AnAngleOfMinusOneOpensUpAndMinusTwoDown()
     {
-        Near(new Vector3(0, 88f / 32, 0), Door(("angle", "-1")).DoorTravel(32));
-        Near(new Vector3(0, -88f / 32, 0), Door(("angle", "-2")).DoorTravel(32));
+        Near(new Vector3(0, 88f / 32, 0), Door(("angle", "-1")).Travel(32));
+        Near(new Vector3(0, -88f / 32, 0), Door(("angle", "-2")).Travel(32));
     }
 
     [Fact]
     public void ADoorOpeningAcrossItsDepthLessThanItsLipStaysShut()
     {
-        Near(Vector3.Zero, Door(("angle", "90")).DoorTravel(32));
+        Near(Vector3.Zero, Door(("angle", "90")).Travel(32));
     }
 
     [Fact]
@@ -53,7 +53,7 @@ public sealed class LevelDoorTests
         var span = (64 + 8) / Math.Sqrt(2) - 8;
         var way = new Vector3(1, 0, -1) / MathF.Sqrt(2);
 
-        Near(way * (float)(span / 32), Door(("angle", "45")).DoorTravel(32));
+        Near(way * (float)(span / 32), Door(("angle", "45")).Travel(32));
     }
 
     [Fact]
@@ -62,13 +62,13 @@ public sealed class LevelDoorTests
         var wall = Door();
         wall["classname"] = "func_wall";
 
-        Assert.Null(wall.DoorTravel(32));
+        Assert.Null(wall.Travel(32));
     }
 
     [Fact]
     public void ALipOrAnAngleThatDoesNotReadIsRefused()
     {
-        Assert.Throws<FormatException>(() => Door(("lip", "some")).DoorTravel(32));
-        Assert.Throws<FormatException>(() => Door(("angle", "east")).DoorTravel(32));
+        Assert.Throws<FormatException>(() => Door(("lip", "some")).Travel(32));
+        Assert.Throws<FormatException>(() => Door(("angle", "east")).Travel(32));
     }
 }

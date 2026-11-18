@@ -916,3 +916,14 @@ pattern in place of the style, Levels.fgd gives the three light classes the two 
 gains a Light styles row. LevelLightStyleTests' eight cases failed on stubs, and FgdTests caught an
 empty pattern read as a fault before it was read as none. CHEATSHEET.md is written again. The tests
 pass, 234 where there were 226 (dotnet test Levels.Tests).
+
+The hour's step in the commit carrying this line, the button and the rotating part. LevelEntity's
+DoorTravel is Travel, which reads a func_button as it reads a func_door, its lip 4 units where none
+is given where a door's is 8, and LevelEntity.Spin reads a func_rotating's speed, 100 degrees a
+second where none is given, and its spawnflags, 4 for the file's X axis, 8 for its Y, else the
+vertical, and 2 the other way, as a LevelSpin of its axis in meters and its degrees a second, about
+the place Placement gives it. Levels.fgd gains both classes, their flags an integer key whose
+description names the values, since an fgd's bracketed flags would not read as one key; Check names
+a bad lip, speed or flags; and the README gains a Rotating parts row. LevelMoversTests' ten cases
+failed on stubs. CHEATSHEET.md is written again. The tests pass, 246 where there were 234 (dotnet
+test Levels.Tests).

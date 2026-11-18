@@ -10,8 +10,8 @@ notes written beside them as Markdown files named the same way. A line under Don
 
 Commits that day
 
-- `7ecce4e` A light's style is read as the letter pattern its brightness follows, ten letters a
-  second, from its pattern or the preset its style numbers.
+- `1040b27` A light's style is read as the letter pattern its brightness follows, ten letters a
+  second, from its pattern or the conventional preset its style numbers.
 
 ## 2026-11-18
 
