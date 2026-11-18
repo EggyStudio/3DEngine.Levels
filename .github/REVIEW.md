@@ -318,3 +318,30 @@ doorway and a turned box, with a quoted value, a backslash, a key given twice an
 lines, read back with each key and face equal and written again to the byte, and 10,000 numbers
 written as the shortest text reading back the same. The strict build is clean and the tests pass,
 101 where there were 89 (dotnet test Levels.Tests).
+
+The read as a stranger, its three things. One, a level's reading under bad input holds, the two
+faults it found mended at `67b5dca` and `85d43c5`; no input read without end or refused by other
+than a FormatException or an InvalidOperationException. Two, a made level of 10,000 brushes, a third
+each boxes, ramps and boxes turned by 30 degrees in one world, 56,667 faces and 6.06 million
+characters of text, read at its best of five on a machine under a load of 10 to 12. Level.Parse is
+the worst, 119 to 206 ms and 139 MiB allocated over runs, a token's record and its text a token;
+Level.Write takes 76 to 137 ms and 83 MiB, every brush's Polygons 46 to 65 ms and 142 MiB, about 14
+KiB a brush, Meshes and Hulls some 60 ms each over Polygons, Triangles 4 ms, and the process's peak
+working set 147 MiB. A brush's Polygons grows as its faces' count to the fourth, and one of 130
+faces takes 4 ms, so no brush TrenchBroom draws is slow. None of it is a fault. Parse could read its
+numbers from spans of the text with no string a token, unmeasured until it is tried, if a level ten
+times larger is ever loaded at a game's start. The numbers come from a console program of the
+module's API kept in the session's scratch space, which N 3.6 asks to be checked in; I propose it at
+`build/bench/` as a project outside Levels.slnx, run as `dotnet run -c Release --project
+build/bench`, with the numbers saved as a reading under `.github/assets/readings/`. Three, a level
+written by Level.Write reads back equal, every key and face of a level of every shape, and writes
+again to the byte, once Write refuses what map text cannot hold (`85d43c5`).
+
+Beside the three, a stranger finds LevelPoint.Dot and Cross internal though LevelFace.Normal is
+public, so an engine's binding writes its own dot product for a face; and the message for a brush
+too far out for its planes to meet says its planes close no solid, true and not the reason. Both
+are small and wait on the review's word.
+
+LevelPoint.Dot, Cross and Length are public in the commit carrying this line, each with its
+summary, Cross right-handed in the file's axes as LevelFace.Normal reads it, with LevelPointTests
+on the three and on a face's normal as its points' cross product.

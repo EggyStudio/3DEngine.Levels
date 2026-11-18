@@ -49,11 +49,24 @@ public readonly record struct LevelPoint(double X, double Y, double Z)
     /// <summary>A way scaled.</summary>
     public static LevelPoint operator *(LevelPoint a, double s) => new(a.X * s, a.Y * s, a.Z * s);
 
-    internal static double Dot(LevelPoint a, LevelPoint b) => a.X * b.X + a.Y * b.Y + a.Z * b.Z;
+    /// <summary>The dot product of two ways, in the file's units squared.</summary>
+    /// <param name="a">The first way.</param>
+    /// <param name="b">The second way.</param>
+    public static double Dot(LevelPoint a, LevelPoint b) => a.X * b.X + a.Y * b.Y + a.Z * b.Z;
 
-    internal static LevelPoint Cross(LevelPoint a, LevelPoint b) => new(a.Y * b.Z - a.Z * b.Y, a.Z * b.X - a.X * b.Z, a.X * b.Y - a.Y * b.X);
+    /// <summary>
+    /// The cross product of two ways, right-handed in the file's axes, so X crossed with Y is Z.
+    /// </summary>
+    /// <param name="a">The first way.</param>
+    /// <param name="b">The second way.</param>
+    /// <remarks>
+    /// A face's normal is the second point's way to the first crossed with its way to the third
+    /// (<see cref="LevelFace.Normal"/>), which a binding reads beside the face's plane.
+    /// </remarks>
+    public static LevelPoint Cross(LevelPoint a, LevelPoint b) => new(a.Y * b.Z - a.Z * b.Y, a.Z * b.X - a.X * b.Z, a.X * b.Y - a.Y * b.X);
 
-    internal double Length => Math.Sqrt(Dot(this, this));
+    /// <summary>How long the way is, in the file's units.</summary>
+    public double Length => Math.Sqrt(Dot(this, this));
 
     /// <summary>
     /// A number as a level file writes it, the shortest text that reads back as the same double.
