@@ -32,9 +32,10 @@ public static class LevelBinding
     // Reads a level from a folder of the engine's files and makes it in the world.
     public static void Load(string root, string path, IWorld world)
     {
-        var level = Level.Load(Path.Combine(root, path));
+        var files = new FolderFiles(root);
+        var level = Level.Load(files, path);
         var units = level.UnitsPerMeter;
-        var pictures = new LevelPictures(new FolderFiles(root));
+        var pictures = new LevelPictures(files);
         foreach (var entity in level.Entities)
         {
             var placed = entity.Placement(units);

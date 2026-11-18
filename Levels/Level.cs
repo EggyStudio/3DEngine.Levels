@@ -71,8 +71,8 @@ public sealed partial class Level
     /// <summary>Reads a level from a file.</summary>
     /// <param name="path">The file, found as the file system finds it.</param>
     /// <remarks>
-    /// An engine that reads its levels from its own assets reads the text there and gives it to
-    /// <see cref="Parse"/>.
+    /// An engine that reads its levels from its own assets reads them through
+    /// <see cref="Load(ILevelFiles, string)"/>, as it gives a level's pictures.
     /// </remarks>
     /// <exception cref="FileNotFoundException">There is no such file.</exception>
     /// <exception cref="FormatException">The file is not map text, the line it fails on
@@ -84,7 +84,28 @@ public sealed partial class Level
         return Parse(File.ReadAllText(path), path);
     }
 
-    /// <summary>Writes the level to a file, which <see cref="Load"/> reads back the same.</summary>
+    /// <summary>Reads a level from an engine's files, as its pictures are read.</summary>
+    /// <param name="files">The engine's files.</param>
+    /// <param name="path">The level's path among them, relative and with forward slashes, which
+    /// a fault names.</param>
+    /// <remarks>
+    /// The bytes are read as UTF-8, as TrenchBroom writes a map, a byte order mark before them
+    /// skipped.
+    /// </remarks>
+    /// <exception cref="FileNotFoundException">The engine has no file at the path.</exception>
+    /// <exception cref="FormatException">The file is not map text, the line it fails on
+    /// named.</exception>
+    public static Level Load(ILevelFiles files, string path)
+    {
+        ArgumentNullException.ThrowIfNull(files);
+        ArgumentException.ThrowIfNullOrEmpty(path);
+        if (!files.Exists(path)) throw new FileNotFoundException($"There is no level at {path}.", path);
+        return Parse(System.Text.Encoding.UTF8.GetString(files.ReadAllBytes(path)), path);
+    }
+
+    /// <summary>
+    /// Writes the level to a file, which <see cref="Load(string)"/> reads back the same.
+    /// </summary>
     /// <param name="path">The file, found as the file system finds it.</param>
     /// <returns>The file's full path.</returns>
     /// <remarks>

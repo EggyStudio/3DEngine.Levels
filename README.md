@@ -33,7 +33,7 @@ interface, and declares two interfaces for what it needs of an engine.
 
 | Interface | What the engine answers |
 |---|---|
-| `ILevelFiles` | Whether a file stands at a relative path with forward slashes, and its bytes |
+| `ILevelFiles` | Whether a file stands at a relative path with forward slashes, and its bytes, which a level and its pictures are read through |
 | `ILevelMaterials` | How many texels a material's picture spans each way, or nothing where it has none |
 
 `LevelPictures` is an `ILevelMaterials` over an `ILevelFiles`. It finds a material's picture as a
@@ -45,7 +45,7 @@ The types a binding reads, each in the namespace `Levels`, are these.
 
 | Type | What it is |
 |---|---|
-| `Level` | A level file, read by `Level.Parse` or `Level.Load` and written by `Level.Write` or `Level.Save`, with its entities and `Level.UnitsPerMeter`, and `Level.Doorway`, a wall's brushes round a rounded opening |
+| `Level` | A level file, read by `Level.Parse`, or by `Level.Load` from a path or through an `ILevelFiles`, and written by `Level.Write` or `Level.Save`, with its entities and `Level.UnitsPerMeter`, and `Level.Doorway`, a wall's brushes round a rounded opening |
 | `LevelEntity` | An entity, its keyvalues in order and its brushes, read by `Placement`, `Light`, `Tree`, `Number`, `WholeNumber`, `Point` and `KeysText` |
 | `LevelBrush` | A brush, a convex solid of its faces' planes, its polygons from `Polygons` and its shapes from `Box`, `Wedge`, `Arch`, `Turned` and `Moved` |
 | `LevelFace` | A face, its plane through three points, its material and its mapping of two axes, offsets, a rotation and two scales |
@@ -75,7 +75,7 @@ An engine with Z up or left-handed axes turns the positions, normals and turns i
 engine that takes clockwise triangles as their front takes each triangle's corners in the other
 order.
 
-The smallest binding reads a level from a folder, draws each brush entity's meshes and makes them
+The smallest binding reads a level from a folder through its files, draws each brush entity's meshes and makes them
 one static body, makes each light, and hands every other entity to the engine by its class.
 `IWorld` stands for the engine's own calls.
 
@@ -113,9 +113,10 @@ public static class LevelBinding
     // Reads a level from a folder of the engine's files and makes it in the world.
     public static void Load(string root, string path, IWorld world)
     {
-        var level = Level.Load(Path.Combine(root, path));
+        var files = new FolderFiles(root);
+        var level = Level.Load(files, path);
         var units = level.UnitsPerMeter;
-        var pictures = new LevelPictures(new FolderFiles(root));
+        var pictures = new LevelPictures(files);
         foreach (var entity in level.Entities)
         {
             var placed = entity.Placement(units);

@@ -553,3 +553,11 @@ the key `light` holding lumens, reads as a light of LevelLight.DefaultLumens, 80
 kept among its keys and read by nothing; such a map needs each `light` key renamed `intensity`, the
 number unchanged, since both are lumens over the whole sphere. No map in BevyCSharp's games writes
 the key.
+
+The first of the six in the commit carrying this line. Level.Load of an ILevelFiles and a path
+reads a level through the engine's files as LevelPictures reads its pictures, the bytes as UTF-8
+with a byte order mark skipped, refusing a missing path with a FileNotFoundException naming it and
+bad text with a FormatException at the path and line. The README's binding and its host read the
+level through FolderFiles, and the README's rows say so. LevelLoadTests checks the read, the mark,
+the missing path and the bad text. The tests pass, 111 where there were 107 (dotnet test
+Levels.Tests).
