@@ -25,11 +25,17 @@ namespace Levels;
 /// </remarks>
 public static class LevelGeometry
 {
-    /// <summary>An entity's brushes as triangles, a mesh each material in the order the faces first name them.</summary>
+    /// <summary>
+    /// An entity's brushes as triangles, a mesh each material in the order the faces first name
+    /// them.
+    /// </summary>
     /// <param name="source">The entity, the world's brushes or a brush entity's.</param>
-    /// <param name="unitsPerMeter">How many of the file's units make a meter, <see cref="Level.UnitsPerMeter"/>.</param>
-    /// <param name="origin">The place in meters the corners are given about, the entity's own place for a brush entity.</param>
-    /// <param name="materials">The engine's pictures, each material's size in texels, the level's units a meter where none is given.</param>
+    /// <param name="unitsPerMeter">How many of the file's units make a meter,
+    /// <see cref="Level.UnitsPerMeter"/>.</param>
+    /// <param name="origin">The place in meters the corners are given about, the entity's own place
+    /// for a brush entity.</param>
+    /// <param name="materials">The engine's pictures, each material's size in texels, the level's
+    /// units a meter where none is given.</param>
     /// <returns>The meshes, none for an entity with no brushes.</returns>
     public static IReadOnlyList<LevelMesh> Meshes(LevelEntity source, double unitsPerMeter, Vector3 origin, ILevelMaterials? materials = null)
     {
@@ -111,9 +117,14 @@ public static class LevelGeometry
             (float)((LevelPoint.Dot(point, face.VAxis) / face.ScaleV + face.VOffset) / height));
     }
 
-    /// <summary>A PNG's or a JPEG's width and height from its header, or nothing for other bytes.</summary>
+    /// <summary>
+    /// A PNG's or a JPEG's width and height from its header, or nothing for other bytes.
+    /// </summary>
     /// <param name="bytes">The file's bytes, its header at least.</param>
-    /// <remarks>Read from the header alone, so an engine sizing its pictures for a level's texels reads no picture whole.</remarks>
+    /// <remarks>
+    /// Read from the header alone, so an engine sizing its pictures for a level's texels reads no
+    /// picture whole.
+    /// </remarks>
     public static (int Width, int Height)? PictureSize(ReadOnlySpan<byte> bytes)
     {
         // A PNG's header chunk holds its width and height as big-endian four byte numbers.
@@ -121,7 +132,8 @@ public static class LevelGeometry
         if (bytes.Length >= 24 && bytes[..8].SequenceEqual(png))
             return (BinaryPrimitives.ReadInt32BigEndian(bytes[16..]), BinaryPrimitives.ReadInt32BigEndian(bytes[20..]));
 
-        // A JPEG's size is in its start of frame, after the segments before it, each a marker and a length.
+        // A JPEG's size is in its start of frame, after the segments before it, each a marker and a
+        // length.
         if (bytes.Length < 4 || bytes[0] != 0xFF || bytes[1] != 0xD8) return null;
         for (var at = 2; at + 9 < bytes.Length;)
         {

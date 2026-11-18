@@ -8,7 +8,9 @@ namespace Levels;
 // writes back byte for byte.
 public sealed partial class Level
 {
-    /// <summary>The level as map text in the Valve 220 format, as TrenchBroom lays it out.</summary>
+    /// <summary>
+    /// The level as map text in the Valve 220 format, as TrenchBroom lays it out.
+    /// </summary>
     public string Write()
     {
         var text = new StringBuilder();

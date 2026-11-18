@@ -1,17 +1,19 @@
 namespace Levels;
 
-/// <summary>A brush of a level file, a convex solid, what lies behind every one of its faces' planes.</summary>
+/// <summary>
+/// A brush of a level file, a convex solid, what lies behind every one of its faces' planes.
+/// </summary>
 /// <remarks>
-/// A brush is kept as its planes, as Quake's tools, Hammer and TrenchBroom keep one, and its corners
-/// are found where three planes meet within the rest (<see cref="Polygons"/>), so a brush stays
-/// convex whatever moves its planes and two of them never share a corner by accident.
+/// A brush is kept as its planes, as Quake's tools, Hammer and TrenchBroom keep one, and its
+/// corners are found where three planes meet within the rest (<see cref="Polygons"/>), so a brush
+/// stays convex whatever moves its planes and two of them never share a corner by accident.
 /// </remarks>
 public sealed partial class LevelBrush
 {
     // How far, in the file's units, a corner may stand outside a plane and still be within it, and
-    // how near two corners may be and be one. Planes through integer points meet at corners exact in
-    // double precision, and a millionth of a unit is far below a texel and far above the rounding
-    // where planes through points TrenchBroom writes to seventeen digits meet.
+    // how near two corners may be and be one. Planes through integer points meet at corners exact
+    // in double precision, and a millionth of a unit is far below a texel and far above the
+    // rounding where planes through points TrenchBroom writes to seventeen digits meet.
     private const double Within = 1e-6;
     private const double Same = 1e-5;
 
@@ -23,12 +25,14 @@ public sealed partial class LevelBrush
     /// in the file's units, or nothing for a face whose plane only touches the solid.
     /// </summary>
     /// <returns>A polygon a face, in the order of <see cref="Faces"/>.</returns>
-    /// <exception cref="InvalidOperationException">A face's three points lie on one line, or the planes close nothing.</exception>
+    /// <exception cref="InvalidOperationException">A face's three points lie on one line, or the
+    /// planes close nothing.</exception>
     /// <remarks>
     /// The corners are the points where three planes meet that stand behind every other plane, each
-    /// found once and shared by the faces whose planes it lies on, so the faces of a brush meet edge
-    /// to edge with no gap a ray could pass. Each face's corners are ordered round their middle.
-    /// A brush with several faces in one plane keeps the polygon for the first and none for the rest.
+    /// found once and shared by the faces whose planes it lies on, so the faces of a brush meet
+    /// edge to edge with no gap a ray could pass. Each face's corners are ordered round their
+    /// middle. A brush with several faces in one plane keeps the polygon for the first and none for
+    /// the rest.
     /// </remarks>
     public LevelPoint[]?[] Polygons()
     {

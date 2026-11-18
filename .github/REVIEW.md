@@ -187,3 +187,10 @@ commit carrying this line. Second the comment lines held to 100 columns, a test 
 source file of the library and its tests and fails on a comment line past 100 columns, then the
 lines rewrapped with no word changed. Third what 3DEngine's binding asks of the module, in the order
 its coder asks.
+
+N 4.11 in the commit carrying this line. SourceTests reads every source file of the library and its
+tests and fails on a comment line past 100 columns, a line holding an address alone apart; it failed
+on 66 lines before the rewrap and passes after it. The 16 files are rewrapped with no word changed,
+a summary, a remark or a return that does not fit one line opening onto lines of its own. STYLE.md's
+Comments names the width and the rule, and AGENTS.md's devlog row gains its link. The strict build
+is clean and the 24 tests pass (dotnet test Levels.Tests).

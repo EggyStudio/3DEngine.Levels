@@ -9,8 +9,10 @@ namespace Levels;
 /// <param name="Material">The faces' material, as the level file names it.</param>
 /// <param name="Positions">A corner of a face each, a face's corners its own.</param>
 /// <param name="Normals">The way out of the face each corner belongs to.</param>
-/// <param name="Uvs">Where each corner falls on the material's picture, its texels along the face's axes over the picture's size.</param>
-/// <param name="Indices">Three corners a triangle, counter-clockwise seen from outside the brush.</param>
+/// <param name="Uvs">Where each corner falls on the material's picture, its texels along the face's
+/// axes over the picture's size.</param>
+/// <param name="Indices">Three corners a triangle, counter-clockwise seen from outside the
+/// brush.</param>
 /// <remarks>
 /// A face's corners are its own and not shared with the faces beside it, so each corner carries
 /// its face's normal and its face's texture coordinates, as a brush's flat faces are drawn. A

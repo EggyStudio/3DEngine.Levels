@@ -9,15 +9,22 @@ public sealed partial class Level
     /// and the wall above it cut into straight segments round the opening's top, as a level
     /// editor's arch tool cuts one.
     /// </summary>
-    /// <param name="low">The wall's corner with the least of each axis, in the file's units.</param>
-    /// <param name="high">Its corner with the most of each, the wall running along X and as thick as its Y.</param>
+    /// <param name="low">The wall's corner with the least of each axis, in the file's
+    /// units.</param>
+    /// <param name="high">Its corner with the most of each, the wall running along X and as thick
+    /// as its Y.</param>
     /// <param name="width">How wide the opening is, its top a half circle as wide.</param>
     /// <param name="height">How high the opening's top stands above the wall's foot.</param>
     /// <param name="material">What the wall's sides are drawn with.</param>
-    /// <param name="arch">What the segments above the opening are drawn with, the wall's material where none is given.</param>
-    /// <param name="segments">How many straight pieces round the opening's top, three or more.</param>
-    /// <param name="scale">The faces' scale, <see cref="LevelBrush.DefaultScale"/> unless given.</param>
-    /// <returns>The brushes, the two sides first and then the segments from the right round to the left.</returns>
+    /// <param name="arch">What the segments above the opening are drawn with, the wall's material
+    /// where none is given.</param>
+    /// <param name="segments">How many straight pieces round the opening's top, three or
+    /// more.</param>
+    /// <param name="scale">The faces' scale, <see cref="LevelBrush.DefaultScale"/> unless
+    /// given.</param>
+    /// <returns>
+    /// The brushes, the two sides first and then the segments from the right round to the left.
+    /// </returns>
     /// <remarks>
     /// <para>
     /// The opening's sides rise straight from the wall's foot to where its top begins, half its
@@ -30,7 +37,8 @@ public sealed partial class Level
     /// A wall another way is this one turned (<see cref="LevelBrush.Turned"/>).
     /// </para>
     /// </remarks>
-    /// <exception cref="ArgumentException">The wall has no size along an axis, or the opening does not fit it.</exception>
+    /// <exception cref="ArgumentException">The wall has no size along an axis, or the opening does
+    /// not fit it.</exception>
     public static IReadOnlyList<LevelBrush> Doorway(
         LevelPoint low, LevelPoint high, double width, double height, string material, string? arch = null, int segments = 8, double scale = LevelBrush.DefaultScale)
     {

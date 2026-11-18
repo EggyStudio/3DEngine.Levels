@@ -4,7 +4,8 @@ using System.Text;
 namespace Levels;
 
 /// <summary>
-/// A level file, its brushes and entities, in the Valve 220 map format TrenchBroom reads and writes.
+/// A level file, its brushes and entities, in the Valve 220 map format TrenchBroom reads and
+/// writes.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -22,17 +23,21 @@ namespace Levels;
 /// </para>
 /// <para>
 /// <see cref="Write"/> writes the canonical text, as TrenchBroom lays it out, so a file this engine
-/// wrote reads and writes back byte for byte, and one TrenchBroom wrote reads back the same brushes,
-/// entities and keyvalues in the same order, its numbers written as the shortest text that reads back
-/// as the same value.
+/// wrote reads and writes back byte for byte, and one TrenchBroom wrote reads back the same
+/// brushes, entities and keyvalues in the same order, its numbers written as the shortest text that
+/// reads back as the same value.
 /// </para>
 /// </remarks>
 public sealed partial class Level
 {
-    /// <summary>How many of a file's units make a meter where its <c>worldspawn</c> says none.</summary>
+    /// <summary>
+    /// How many of a file's units make a meter where its <c>worldspawn</c> says none.
+    /// </summary>
     public const double DefaultUnitsPerMeter = 32;
 
-    /// <summary>The <c>worldspawn</c> key saying how many of the file's units make a meter.</summary>
+    /// <summary>
+    /// The <c>worldspawn</c> key saying how many of the file's units make a meter.
+    /// </summary>
     public const string UnitsPerMeterKey = "_units_per_meter";
 
     /// <summary>The extension a level file is named with.</summary>
@@ -41,10 +46,16 @@ public sealed partial class Level
     /// <summary>The entities, <c>worldspawn</c> first where the file has one.</summary>
     public List<LevelEntity> Entities { get; } = [];
 
-    /// <summary>The <c>worldspawn</c> entity, which holds the level's own brushes, or nothing where there is none.</summary>
+    /// <summary>
+    /// The <c>worldspawn</c> entity, which holds the level's own brushes, or nothing where there is
+    /// none.
+    /// </summary>
     public LevelEntity? World => Entities.FirstOrDefault(entity => entity.ClassName == "worldspawn");
 
-    /// <summary>How many of the file's units make a meter, the <c>worldspawn</c>'s <see cref="UnitsPerMeterKey"/> or <see cref="DefaultUnitsPerMeter"/>.</summary>
+    /// <summary>
+    /// How many of the file's units make a meter, the <c>worldspawn</c>'s
+    /// <see cref="UnitsPerMeterKey"/> or <see cref="DefaultUnitsPerMeter"/>.
+    /// </summary>
     /// <exception cref="FormatException">The key is not a number above zero.</exception>
     public double UnitsPerMeter
     {
@@ -59,9 +70,13 @@ public sealed partial class Level
 
     /// <summary>Reads a level from a file.</summary>
     /// <param name="path">The file, found as the file system finds it.</param>
-    /// <remarks>An engine that reads its levels from its own assets reads the text there and gives it to <see cref="Parse"/>.</remarks>
+    /// <remarks>
+    /// An engine that reads its levels from its own assets reads the text there and gives it to
+    /// <see cref="Parse"/>.
+    /// </remarks>
     /// <exception cref="FileNotFoundException">There is no such file.</exception>
-    /// <exception cref="FormatException">The file is not map text, the line it fails on named.</exception>
+    /// <exception cref="FormatException">The file is not map text, the line it fails on
+    /// named.</exception>
     public static Level Load(string path)
     {
         ArgumentException.ThrowIfNullOrEmpty(path);
@@ -72,7 +87,10 @@ public sealed partial class Level
     /// <summary>Writes the level to a file, which <see cref="Load"/> reads back the same.</summary>
     /// <param name="path">The file, found as the file system finds it.</param>
     /// <returns>The file's full path.</returns>
-    /// <remarks>Written under a name of its own and moved into place, so a game or an editor reading it while it is written reads the old file or the new one whole.</remarks>
+    /// <remarks>
+    /// Written under a name of its own and moved into place, so a game or an editor reading it
+    /// while it is written reads the old file or the new one whole.
+    /// </remarks>
     public string Save(string path)
     {
         ArgumentException.ThrowIfNullOrEmpty(path);

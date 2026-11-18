@@ -1,8 +1,8 @@
 namespace Levels;
 
-// The brushes a level is blocked out with, made as Hammer's and TrenchBroom's tools make them, each a
-// convex outline across Y stretched from one Y to another, its faces given the world-aligned mapping
-// a new face takes, so a level built in code reads in TrenchBroom as one drawn there does.
+// The brushes a level is blocked out with, made as Hammer's and TrenchBroom's tools make them, each
+// a convex outline across Y stretched from one Y to another, its faces given the world-aligned
+// mapping a new face takes, so a level built in code reads in TrenchBroom as one drawn there does.
 public sealed partial class LevelBrush
 {
     /// <summary>
@@ -24,7 +24,10 @@ public sealed partial class LevelBrush
         return Prism([(low.X, low.Z), (high.X, low.Z), (high.X, high.Z), (low.X, high.Z)], low.Y, high.Y, material, scale);
     }
 
-    /// <summary>A ramp between two corners, its slope rising along X from the low corner's height at its low X to the high corner's at its high X.</summary>
+    /// <summary>
+    /// A ramp between two corners, its slope rising along X from the low corner's height at its low
+    /// X to the high corner's at its high X.
+    /// </summary>
     /// <param name="low">The corner with the least of each axis, in the file's units.</param>
     /// <param name="high">The corner with the most of each.</param>
     /// <param name="material">What every face is drawn with.</param>
@@ -41,16 +44,19 @@ public sealed partial class LevelBrush
     /// An arch standing across X, a half ring or a part of one cut into straight segments, a brush
     /// each, as Hammer's arch tool cuts one.
     /// </summary>
-    /// <param name="center">The middle of the ring, the arch standing on its X axis and its Y the middle of its depth.</param>
+    /// <param name="center">The middle of the ring, the arch standing on its X axis and its Y the
+    /// middle of its depth.</param>
     /// <param name="radius">The radius of the ring's inside, the opening the arch spans.</param>
     /// <param name="thickness">How far its outside stands out from its inside.</param>
     /// <param name="depth">How deep it is along Y.</param>
     /// <param name="material">What every face is drawn with.</param>
     /// <param name="segments">How many straight pieces the ring is cut into, three or more.</param>
-    /// <param name="degrees">How much of the ring it is, from its right side up and over, 180 for a half ring.</param>
+    /// <param name="degrees">How much of the ring it is, from its right side up and over, 180 for a
+    /// half ring.</param>
     /// <param name="scale">The faces' scale, <see cref="DefaultScale"/> unless given.</param>
     /// <returns>The segments, from the right to the left.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">A measure is not above zero, the segments are fewer than three, or the arch is more than a whole ring.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">A measure is not above zero, the segments are
+    /// fewer than three, or the arch is more than a whole ring.</exception>
     public static IReadOnlyList<LevelBrush> Arch(LevelPoint center, double radius, double thickness, double depth, string material, int segments = 8, double degrees = 180, double scale = DefaultScale)
     {
         if (!(radius > 0)) throw new ArgumentOutOfRangeException(nameof(radius), radius, "An arch's radius is above zero.");
@@ -77,7 +83,10 @@ public sealed partial class LevelBrush
     /// </summary>
     /// <param name="degrees">The turn, counter-clockwise seen from above.</param>
     /// <param name="about">A point of the line it turns about.</param>
-    /// <remarks>The faces' offsets, rotations and scales are kept, and their axes are the ones a face facing its new way takes.</remarks>
+    /// <remarks>
+    /// The faces' offsets, rotations and scales are kept, and their axes are the ones a face facing
+    /// its new way takes.
+    /// </remarks>
     public LevelBrush Turned(double degrees, LevelPoint about)
     {
         // A quarter turn's sine and cosine taken whole, where the library's give six parts in a
@@ -159,7 +168,10 @@ public sealed partial class LevelBrush
         return brush;
     }
 
-    /// <summary>A face through three points, wound so its normal looks away from a point inside the brush, mapped as a new face is.</summary>
+    /// <summary>
+    /// A face through three points, wound so its normal looks away from a point inside the brush,
+    /// mapped as a new face is.
+    /// </summary>
     private static LevelFace Face(LevelPoint a, LevelPoint b, LevelPoint c, LevelPoint inside, string material, double scale)
     {
         var face = new LevelFace(a, b, c, material, default, 0, default, 0, 0, scale, scale);
@@ -181,9 +193,9 @@ public sealed partial class LevelBrush
     }
 
     /// <summary>
-    /// A coordinate kept to a millionth of a unit, so a point a turn or an arch works out is written
-    /// as a few digits rather than seventeen and the dust of a sine, and reads the same on a system
-    /// whose sine differs in its last digit. A millionth of a unit is far below a texel.
+    /// A coordinate kept to a millionth of a unit, so a point a turn or an arch works out is
+    /// written as a few digits rather than seventeen and the dust of a sine, and reads the same on
+    /// a system whose sine differs in its last digit. A millionth of a unit is far below a texel.
     /// </summary>
     internal static double Kept(double value)
     {

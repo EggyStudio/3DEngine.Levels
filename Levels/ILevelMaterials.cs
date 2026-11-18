@@ -12,8 +12,8 @@ public interface ILevelMaterials
 {
     /// <summary>
     /// How many texels the picture of a material spans each way, or nothing where the engine has
-    /// none for it, which <see cref="LevelGeometry.Meshes"/> then takes as the level's units a meter,
-    /// so a face at a scale of one repeats its material once a meter.
+    /// none for it, which <see cref="LevelGeometry.Meshes"/> then takes as the level's units a
+    /// meter, so a face at a scale of one repeats its material once a meter.
     /// </summary>
     /// <param name="material">The material's name, as the level file writes it.</param>
     (double Width, double Height)? PictureSize(string material);

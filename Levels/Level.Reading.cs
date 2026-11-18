@@ -17,7 +17,8 @@ public sealed partial class Level
     /// <summary>Reads a level from map text.</summary>
     /// <param name="text">The text, in the Valve 220 format.</param>
     /// <param name="name">What the text is called in an error, as its file's path.</param>
-    /// <exception cref="FormatException">The text is not map text, the line it fails on named.</exception>
+    /// <exception cref="FormatException">The text is not map text, the line it fails on
+    /// named.</exception>
     /// <remarks>
     /// A face is read as Valve 220 writes it, three points in parentheses, a material, two axes in
     /// brackets, each with its offset, a rotation and two scales. A face in Quake's older format,

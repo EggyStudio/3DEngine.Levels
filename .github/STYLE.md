@@ -65,6 +65,9 @@ reproducible across edits.
 
 ## Comments
 
+A comment line holds to 100 columns, and a test of the module's fails on a longer one
+(NORM.md, N 4.11).
+
 A comment that restates the code is a maintenance liability, because it has to be kept true as
 the code changes. Remove it.
 

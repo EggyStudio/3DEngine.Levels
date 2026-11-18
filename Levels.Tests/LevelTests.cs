@@ -182,7 +182,8 @@ public sealed class LevelTests
     [Fact]
     public void ALevelsUnitsAreTurnedIntoMetersWithYUp()
     {
-        // The file's (x, y, z) at (x, z, -y) over its units a meter, a turn keeping a face's winding.
+        // The file's (x, y, z) at (x, z, -y) over its units a meter, a turn keeping a face's
+        // winding.
         Assert.Equal(new Vector3(2f, 3f, -1f), new LevelPoint(64, 32, 96).Meters(32));
         Assert.Equal(new LevelPoint(64, 32, 96), LevelPoint.FromMeters(new Vector3(2f, 3f, -1f), 32));
     }

@@ -7,12 +7,14 @@ namespace Levels;
 /// <param name="First">The plane's first point.</param>
 /// <param name="Second">Its second point.</param>
 /// <param name="Third">Its third point.</param>
-/// <param name="Material">The material, a name with no spaces, which the face is drawn with as a material slot of that name.</param>
+/// <param name="Material">The material, a name with no spaces, which the face is drawn with as a
+/// material slot of that name.</param>
 /// <param name="UAxis">The way across the world the material's width runs.</param>
 /// <param name="UOffset">How many texels the material is moved along its width.</param>
 /// <param name="VAxis">The way its height runs.</param>
 /// <param name="VOffset">How many texels it is moved along its height.</param>
-/// <param name="Rotation">The turn in degrees the axes were given, which an editor shows and the axes hold turned.</param>
+/// <param name="Rotation">The turn in degrees the axes were given, which an editor shows and the
+/// axes hold turned.</param>
 /// <param name="ScaleU">How many of the file's units a texel spans along the width.</param>
 /// <param name="ScaleV">How many it spans along the height.</param>
 /// <remarks>
@@ -41,7 +43,9 @@ public sealed record LevelFace(
     double ScaleU,
     double ScaleV)
 {
-    /// <summary>The way out of the brush, a length of one, or zero where the three points lie on one line.</summary>
+    /// <summary>
+    /// The way out of the brush, a length of one, or zero where the three points lie on one line.
+    /// </summary>
     public LevelPoint Normal
     {
         get

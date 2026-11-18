@@ -4,9 +4,9 @@ using Xunit;
 namespace Levels.Tests;
 
 /// <summary>
-/// A level entity's brushes as triangles a material a mesh and as convex hulls, in meters with Y up,
-/// their texture coordinates over the pictures an engine says the materials have, and a picture's
-/// size read from its header.
+/// A level entity's brushes as triangles a material a mesh and as convex hulls, in meters with Y
+/// up, their texture coordinates over the pictures an engine says the materials have, and a
+/// picture's size read from its header.
 /// </summary>
 public sealed class LevelGeometryTests
 {
@@ -22,17 +22,20 @@ public sealed class LevelGeometryTests
         var world = Level.Parse(LevelTests.Room).World!;
         var meshes = LevelGeometry.Meshes(world, 32, Vector3.Zero);
 
-        // The floor from four meters each side at Y zero down to half a meter, the wall three meters
-        // up on the side minus Z, which the file's plus Y is, and the ramp of the floor's material.
+        // The floor from four meters each side at Y zero down to half a meter, the wall three
+        // meters up on the side minus Z, which the file's plus Y is, and the ramp of the floor's
+        // material.
         Assert.Equal(["floor", "wall"], meshes.Select(mesh => mesh.Material));
         var all = meshes.SelectMany(mesh => mesh.Positions).ToArray();
         Assert.Equal(new Vector3(-4f, -0.5f, -4f), all.Aggregate(Vector3.Min));
         Assert.Equal(new Vector3(4f, 3f, 4f), all.Aggregate(Vector3.Max));
 
-        // Two boxes of six quads and a wedge of two triangles and three quads, two triangles a quad.
+        // Two boxes of six quads and a wedge of two triangles and three quads, two triangles a
+        // quad.
         Assert.Equal((12 + 12 + 8) * 3, meshes.Sum(mesh => mesh.Indices.Length));
 
-        // Every triangle runs counter-clockwise seen from outside, its corners' turn along its normal.
+        // Every triangle runs counter-clockwise seen from outside, its corners' turn along its
+        // normal.
         foreach (var mesh in meshes)
         {
             for (var t = 0; t < mesh.Indices.Length; t += 3)

@@ -21,7 +21,8 @@ public sealed class LevelShapesTests
         Assert.Equal((-64.0, 64.0, -32.0, 32.0, 0.0, 96.0), (corners.Min(p => p.X), corners.Max(p => p.X), corners.Min(p => p.Y), corners.Max(p => p.Y), corners.Min(p => p.Z), corners.Max(p => p.Z)));
         Assert.Equal(128.0 * 64 * 96, Volume(box), 6);
 
-        // A floor's material along X and minus Y, a wall's along X or Y and down, a sixteenth's scale.
+        // A floor's material along X and minus Y, a wall's along X or Y and down, a sixteenth's
+        // scale.
         var top = box.Faces.Single(face => face.Normal.Z > 0.99);
         Assert.Equal((new LevelPoint(1, 0, 0), new LevelPoint(0, -1, 0), LevelBrush.DefaultScale), (top.UAxis, top.VAxis, top.ScaleU));
         var east = box.Faces.Single(face => face.Normal.X > 0.99);
@@ -57,7 +58,8 @@ public sealed class LevelShapesTests
             Assert.All(corners, corner =>
             {
                 var reach = Math.Sqrt((corner.X - center.X) * (corner.X - center.X) + (corner.Z - center.Z) * (corner.Z - center.Z));
-                // On the ring's inside or its outside, within the millionth of a unit a point is kept to.
+                // On the ring's inside or its outside, within the millionth of a unit a point is
+                // kept to.
                 Assert.True(Math.Abs(reach - 48) < 1e-5 || Math.Abs(reach - 64) < 1e-5, $"a corner {reach} from the ring's middle");
             });
         }
@@ -83,8 +85,8 @@ public sealed class LevelShapesTests
         var wall = 256.0 * 16 * 160 - 64 * 96 * 16;
         Assert.InRange(doorway.Sum(Volume), wall - Math.PI * 32 * 32 / 2 * 16, wall - 0.5 * 32 * 32 * 8 * Math.Sin(Math.PI / 8) * 16);
 
-        // Nothing stands in the opening's middle or under its top, and the wall stands beside it and
-        // over the half circle.
+        // Nothing stands in the opening's middle or under its top, and the wall stands beside it
+        // and over the half circle.
         bool Solid(LevelPoint point) => doorway.Any(brush => brush.Faces.All(face => LevelPoint.Dot(face.Normal, point) - face.Distance <= 1e-6));
         Assert.False(Solid(new LevelPoint(0, 0, 8)));
         Assert.False(Solid(new LevelPoint(0, 0, 127)));

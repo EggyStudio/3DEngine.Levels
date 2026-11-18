@@ -3,7 +3,9 @@ using System.Numerics;
 
 namespace Levels;
 
-/// <summary>A point or a way of a level file, in the file's units with Z up, as the file writes it.</summary>
+/// <summary>
+/// A point or a way of a level file, in the file's units with Z up, as the file writes it.
+/// </summary>
 /// <param name="X">Along the file's X.</param>
 /// <param name="Y">Along the file's Y.</param>
 /// <param name="Z">Along the file's Z, which is up.</param>
@@ -15,15 +17,21 @@ namespace Levels;
 /// </remarks>
 public readonly record struct LevelPoint(double X, double Y, double Z)
 {
-    /// <summary>The point in meters with Y up, the file's (x, y, z) at (x, z, -y) and divided by its units a meter.</summary>
-    /// <param name="unitsPerMeter">How many of the file's units make a meter, <see cref="Level.UnitsPerMeter"/>.</param>
+    /// <summary>
+    /// The point in meters with Y up, the file's (x, y, z) at (x, z, -y) and divided by its units a
+    /// meter.
+    /// </summary>
+    /// <param name="unitsPerMeter">How many of the file's units make a meter,
+    /// <see cref="Level.UnitsPerMeter"/>.</param>
     /// <remarks>
-    /// A turn of a quarter about X, which keeps the file's right-handed axes right-handed, so a face
-    /// wound one way in the file is wound the same way in meters.
+    /// A turn of a quarter about X, which keeps the file's right-handed axes right-handed, so a
+    /// face wound one way in the file is wound the same way in meters.
     /// </remarks>
     public Vector3 Meters(double unitsPerMeter) => new((float)(X / unitsPerMeter), (float)(Z / unitsPerMeter), (float)(-Y / unitsPerMeter));
 
-    /// <summary>The point a place in meters with Y up stands at in a file of the given units a meter.</summary>
+    /// <summary>
+    /// The point a place in meters with Y up stands at in a file of the given units a meter.
+    /// </summary>
     /// <param name="meters">The place, Y up.</param>
     /// <param name="unitsPerMeter">How many of the file's units make a meter.</param>
     public static LevelPoint FromMeters(Vector3 meters, double unitsPerMeter) =>
@@ -47,6 +55,8 @@ public readonly record struct LevelPoint(double X, double Y, double Z)
 
     internal double Length => Math.Sqrt(Dot(this, this));
 
-    /// <summary>A number as a level file writes it, the shortest text that reads back as the same double.</summary>
+    /// <summary>
+    /// A number as a level file writes it, the shortest text that reads back as the same double.
+    /// </summary>
     internal static string Number(double value) => value == 0 ? "0" : value.ToString("R", CultureInfo.InvariantCulture);
 }

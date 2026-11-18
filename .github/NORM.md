@@ -100,6 +100,11 @@ experiment's frames are deleted at once. A session takes its shots there directl
 copying them after. Every picture a session reads or compares is also shown to the owner in the
 session as it is made, with its sentence. By review.
 
+**N 4.11 A comment line holds to 100 columns.** A comment is read in a diff and beside its code, and
+one running past the width is cut there or scrolled. A summary, a parameter or a remark too long for
+one line opens onto lines of its own. A line holding an address alone is free of it. By a test that
+reads the sources and fails on a longer comment line.
+
 ## 6 Build and package
 
 **N 6.1 A build has no warnings, and a warning fails the workflow.** A warning left standing hides
@@ -154,7 +159,7 @@ window alone shows.** The owner's word of 2026-10-30. By review.
 
 **N 7.9 The machine has one GPU, and a session takes its lock for what it runs there.** A program
 run on the GPU is started through `flock` on `/run/user/1000/gpu.lock`, shared (`flock -s`) for a
-suite, a capture, a recording or a drive and exclusive (`flock -x`) for a timing or a traced
+suite, a capture, a recording or a scripted run and exclusive (`flock -x`) for a timing or a traced
 reference, so a timing waits for the others' programs to end and none starts under it. The lock is
 held until the program has ended, so a launcher that returns while its program keeps running, as
 `e3d open` does, is wrapped together with the script that stops the program. A build under the lock
@@ -217,6 +222,7 @@ writes into nor clears a folder it did not make. By review.
 | N 4.8 | by review |
 | N 4.9 | by review |
 | N 4.10 | by review |
+| N 4.11 | to check, a test in each module |
 | N 6.1 | to check at the first push |
 | N 6.2 | to check at the first push |
 | N 6.6 | to check at the first commit |
