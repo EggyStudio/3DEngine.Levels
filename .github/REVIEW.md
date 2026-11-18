@@ -277,3 +277,12 @@ for an engine whose spot takes the lumens of a point light of the same candelas.
 the three classes with those keys and defaults, and TrenchBroom's README names them. Its tests hold
 every value worked out by a power, a sine or a cosine to 1e-5. The strict build is clean and the
 tests pass, 67 where there were 56 (dotnet test Levels.Tests).
+
+The second in the commit carrying this line. LevelEntity.Tree reads a tree entity into a LevelTree
+of plain values, the species' name as text and the seed, referencing no module, an unknown name
+read as it is for the engine to refuse. A missing or empty species is black-tupelo, the default
+TrenchBroom shows and does not write, where BevyCSharp's binding read it as an empty name, and a
+missing seed is zero. Levels.fgd gains tree with those keys, and TrenchBroom's README names it;
+BevyCSharp's fgd drops its tree with its part 4. LevelLight's remarks say an engine whose sky places
+the sun by its clock may leave light_environment's intensity unread. The strict build is clean and
+the tests pass, 73 where there were 67 (dotnet test Levels.Tests).

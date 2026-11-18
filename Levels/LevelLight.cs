@@ -35,9 +35,16 @@ public enum LevelLightKind
 /// <param name="OuterCone">A spot's light out to this angle in degrees from its axis, fading
 /// from the inner one.</param>
 /// <remarks>
+/// <para>
 /// A spot's lumens are those it sends over its outer cone, so a spot keeps its lumens as its cone
 /// narrows and grows brighter along its axis. An engine whose spot takes the lumens of a point
 /// light of the same candelas gives it the lumens times 2 over (1 minus the outer cone's cosine).
+/// </para>
+/// <para>
+/// The sun's <see cref="DefaultLux"/> is a default alone. An engine whose level has a sky that
+/// places the sun by its clock takes the sun's strength from there and may leave a
+/// <c>light_environment</c>'s intensity unread.
+/// </para>
 /// </remarks>
 public sealed record LevelLight(
     LevelLightKind Kind,
