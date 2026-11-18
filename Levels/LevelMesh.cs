@@ -10,7 +10,7 @@ namespace Levels;
 /// <param name="Positions">A corner of a face each, a face's corners its own.</param>
 /// <param name="Normals">The way out of the face each corner belongs to.</param>
 /// <param name="Uvs">Where each corner falls on the material's picture, its texels along the face's
-/// axes over the picture's size.</param>
+/// axes over the picture's size, the picture's top left at (0, 0) and V growing down it.</param>
 /// <param name="Indices">Three corners a triangle, counter-clockwise seen from outside the
 /// brush.</param>
 /// <remarks>

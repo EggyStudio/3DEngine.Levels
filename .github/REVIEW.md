@@ -681,3 +681,12 @@ point light's lumens. The table gains Materials, the proto/ and textures/ layout
 and ILevelMaterials for another, Collision, triangles beside hulls, Names, an entity's target name,
 class or index, and Faults, a FormatException naming the entity through Level.ReadEntities. The
 tests pass, 144 (dotnet test Levels.Tests).
+
+The first of the three in the commit carrying this line. The README's conventions gain Texture
+coordinates, a texel over the picture's size with the top left at (0, 0) and V growing down it, as
+TrenchBroom draws a material upright on a wall, and 1 minus V for an engine that samples from the
+bottom left; LevelMesh's Uvs say the same. LevelTexelTests pins it on a wall, U along X and V down
+the wall, and on a floor seen from above, north the picture's top. The two tests hold what the
+module already gave, so neither failed first. The README's link row is its first line, above the
+title, its links the repository's on GitHub, as the owner gave the form. CHEATSHEET.md is written
+again. The tests pass, 146 where there were 144 (dotnet test Levels.Tests).

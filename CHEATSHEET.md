@@ -125,7 +125,7 @@ LevelMesh(string Material, Vector3[] Positions, Vector3[] Normals, Vector2[] Uvs
 string Material { get; init; }                           // The faces' material, as the level file names it
 Vector3[] Positions { get; init; }                       // A corner of a face each, a face's corners its own
 Vector3[] Normals { get; init; }                         // The way out of the face each corner belongs to
-Vector2[] Uvs { get; init; }                             // Where each corner falls on the material's picture, its texels along the face's axes over the picture's size
+Vector2[] Uvs { get; init; }                             // Where each corner falls on the material's picture, its texels along the face's axes over the picture's size, the picture's top left at (0, 0) and V growing down it
 uint[] Indices { get; init; }                            // Three corners a triangle, counter-clockwise seen from outside the brush
 
 record LevelHull                                         // A brush's solid as its corners, in meters with Y up about a place, which an engine makes a convex collision shape of

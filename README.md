@@ -1,6 +1,6 @@
-# Levels
+[Devlog](https://github.com/EggyStudio/Levels/blob/main/DEVLOG.md) [Cheat sheet](https://github.com/EggyStudio/Levels/blob/main/CHEATSHEET.md)
 
-[Devlog](DEVLOG.md) [Cheat sheet](CHEATSHEET.md)
+# Levels
 
 Levels is a library an engine takes as a git submodule, for the reader of the Valve 220 map format,
 the meshes and collision shapes made from its brushes, and the TrenchBroom configuration and FGD
@@ -69,6 +69,7 @@ What the module gives out stands on these conventions.
 | Length | Meters, the file's units over `Level.UnitsPerMeter`, 32 where `worldspawn` names none |
 | Axes | Y up and right-handed, the file's (x, y, z) at (x, z, -y), an entity facing minus Z |
 | Triangles | Counterclockwise seen from outside, each face's corners its own |
+| Texture coordinates | A texel over the picture's size, its top left at (0, 0) and V growing down it, as TrenchBroom draws a material; an engine that samples from the bottom left takes 1 minus V |
 | Angles | Degrees, a pitch above zero looking down |
 | Color | Linear sRGB from 0 to 1, decoded from the file's sRGB of 0 to 255 |
 | Light | Lumens for a point over the whole sphere and for a spot over its outer cone, lux for the sun, a range in meters, a spot's cones in degrees from its axis; an engine whose spot takes the lumens of a point light of the same candelas gives it the lumens times 2 over 1 minus the outer cone's cosine |
