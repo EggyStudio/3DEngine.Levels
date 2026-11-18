@@ -115,6 +115,48 @@ public sealed partial class LevelBrush
         return polygons;
     }
 
+    /// <summary>
+    /// How far along a ray it first meets the brush's solid, or nothing where it meets none within
+    /// its reach.
+    /// </summary>
+    /// <param name="from">Where the ray starts, in the file's units.</param>
+    /// <param name="way">The way it runs, of any length but none.</param>
+    /// <param name="reach">How far it runs, in lengths of <paramref name="way"/>.</param>
+    /// <returns>
+    /// The distance in lengths of <paramref name="way"/>, the file's units where its length is one,
+    /// and zero for a ray that starts inside.
+    /// </returns>
+    /// <remarks>
+    /// The ray is cut by each plane in turn, where it enters the half behind the plane and where it
+    /// leaves, so the solid is met at the last entering and missed where that comes after the first
+    /// leaving. A ray along a plane outside it misses the brush.
+    /// </remarks>
+    /// <exception cref="ArgumentException">The way has no length, or the reach is below zero or not
+    /// a number.</exception>
+    public double? Hit(LevelPoint from, LevelPoint way, double reach)
+    {
+        if (!(way.Length > 0)) throw new ArgumentException("A ray's way has a length.", nameof(way));
+        if (!(reach >= 0)) throw new ArgumentException($"A ray's reach is {reach}, where zero or more is meant.", nameof(reach));
+        var (enter, leave) = (0.0, reach);
+        foreach (var face in Faces)
+        {
+            var (normal, distance) = (face.Normal, face.Distance);
+            var (along, outside) = (LevelPoint.Dot(normal, way), LevelPoint.Dot(normal, from) - distance);
+            if (Math.Abs(along) < 1e-12 * way.Length)
+            {
+                if (outside > Within) return null;
+                continue;
+            }
+
+            var cut = -outside / along;
+            if (along < 0) enter = Math.Max(enter, cut);
+            else leave = Math.Min(leave, cut);
+            if (enter > leave) return null;
+        }
+
+        return enter;
+    }
+
     /// <summary>Where three planes meet, or nothing where two of them run side by side.</summary>
     private static LevelPoint? Meet(LevelPoint n1, double d1, LevelPoint n2, double d2, LevelPoint n3, double d3)
     {

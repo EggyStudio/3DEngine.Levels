@@ -102,6 +102,25 @@ public static class LevelGeometry
         return hulls;
     }
 
+    /// <summary>
+    /// How far along a ray it first meets any of the brushes, or nothing where it meets none within
+    /// its reach, as <see cref="LevelBrush.Hit"/> reads each.
+    /// </summary>
+    /// <param name="brushes">The brushes, a level's or an entity's.</param>
+    /// <param name="from">Where the ray starts, in the file's units.</param>
+    /// <param name="way">The way it runs, of any length but none.</param>
+    /// <param name="reach">How far it runs, in lengths of <paramref name="way"/>.</param>
+    /// <exception cref="ArgumentException">The way has no length, or the reach is below zero or not
+    /// a number.</exception>
+    public static double? Hit(IEnumerable<LevelBrush> brushes, LevelPoint from, LevelPoint way, double reach)
+    {
+        ArgumentNullException.ThrowIfNull(brushes);
+        double? nearest = null;
+        foreach (var brush in brushes)
+            if (brush.Hit(from, way, reach) is { } at && (nearest is null || at < nearest)) nearest = at;
+        return nearest;
+    }
+
     /// <summary>An entity's meshes as one shape of triangles, for a static body.</summary>
     /// <param name="meshes">The meshes, as <see cref="Meshes"/> gives them.</param>
     /// <remarks>

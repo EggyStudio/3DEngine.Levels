@@ -607,3 +607,11 @@ from the first point's height. LevelPlacedShapesTests holds a slab to a box, a w
 a diagonal wall's corners within its thickness of the line, a ramp each way, a doorway put along a
 line and the refusals; the earlier shapes' tests pass unchanged on the builder. The README's row
 names the four. The tests pass, 133 where there were 126 (dotnet test Levels.Tests).
+
+The last of the six in the commit carrying this line. LevelBrush.Hit gives how far along a ray it
+first meets the brush's solid, cut by each plane in turn as the feature test's Hit was, zero for a
+ray that starts inside and nothing for one along a plane outside, and LevelGeometry.Hit the nearest
+of many brushes; a way of no length and a reach below zero are refused. LevelHitTests checks a ray
+down on a floor at two lengths of its way, misses beside, short and away, a ray along a plane
+outside and inside, a ramp's slope and the nearest of two brushes. The README's rows name both. The
+six are done. The tests pass, 139 where there were 133 (dotnet test Levels.Tests).
