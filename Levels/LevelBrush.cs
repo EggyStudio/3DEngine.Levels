@@ -25,8 +25,8 @@ public sealed partial class LevelBrush
     /// in the file's units, or nothing for a face whose plane only touches the solid.
     /// </summary>
     /// <returns>A polygon a face, in the order of <see cref="Faces"/>.</returns>
-    /// <exception cref="InvalidOperationException">A face's three points lie on one line, or the
-    /// planes close nothing.</exception>
+    /// <exception cref="InvalidOperationException">A face's three points lie on one line, the
+    /// planes close nothing, or the brush is flat and has no volume.</exception>
     /// <remarks>
     /// The corners are the points where three planes meet that stand behind every other plane, each
     /// found once and shared by the faces whose planes it lies on, so the faces of a brush meet
@@ -63,6 +63,15 @@ public sealed partial class LevelBrush
         }
 
         if (corners.Count < 4) throw new InvalidOperationException($"The brush's {count} planes close no solid.");
+
+        // A solid stands behind each of its planes, so a brush whose corners all lie in one of them
+        // is flat, two of its planes facing each other in one place, and has no volume.
+        for (var face = 0; face < count; face++)
+        {
+            var (normal, distance) = (normals[face], distances[face]);
+            if (corners.All(corner => LevelPoint.Dot(normal, corner) - distance >= -Same))
+                throw new InvalidOperationException($"The brush's corners all lie in its face {face}'s plane, so it has no volume.");
+        }
         for (var corner = 0; corner < corners.Count; corner++)
         for (var face = 0; face < count; face++)
         {

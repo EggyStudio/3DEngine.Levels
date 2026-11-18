@@ -294,3 +294,15 @@ given every default the fgd shows, its units a meter, its placement, its light a
 default changed in the fgd and a key taken out of it each turned the test red before the file was
 restored. LevelLightTests' check of the three light classes' names goes, the new test holding more.
 The strict build is clean and the tests pass, 79 where there were 73 (dotnet test Levels.Tests).
+
+The module read as a stranger reads it, its first fault mended in the commit carrying this line. A
+brush whose top is moved down onto its floor, two of its planes facing each other in one place,
+passed Polygons as two faces back to back and gave Hulls four corners in one plane, which a physics
+engine's convex hull cannot take. Polygons refuses it with an InvalidOperationException naming the
+face whose plane holds every corner, its test failing before the mend. LevelInputTests comes with
+it, the test room's text cut short at each of its characters and 3,000 copies of it with one to
+three characters changed among braces, quotes, backslashes and digits, each read or refused by a
+FormatException or an InvalidOperationException and none read without end, numbers of no end refused
+at their line, three points on one line refused by the face's number, and a brush too far out for
+its planes to meet refused. The strict build is clean and the tests pass, 89 where there were 79
+(dotnet test Levels.Tests).
