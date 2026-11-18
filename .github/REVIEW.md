@@ -345,3 +345,22 @@ are small and wait on the review's word.
 LevelPoint.Dot, Cross and Length are public in the commit carrying this line, each with its
 summary, Cross right-handed in the file's axes as LevelFace.Normal reads it, with LevelPointTests
 on the three and on a face's normal as its points' cross product.
+
+The bench is in `build/bench/` in the commit carrying this line, outside Levels.slnx, run with
+`dotnet run -c Release --project build/bench`, its comments saying what it builds and no figure of
+a run. Its level is the one above, 6.06 million characters, 56,667 faces and 106,668 triangles;
+each time is the best of five, and the two runs differ by the machine's load, 12 at 17:12 for the
+scratch copy of the same program and 29 at 17:16 for this one.
+
+| Step | ms at load 12 | ms at load 29 | MiB allocated |
+|---|---|---|---|
+| Level.Write | 91.8 | 165.2 | 82.8 |
+| Level.Parse | 118.9 | 366.9 | 139.2 |
+| LevelBrush.Polygons, every brush | 48.2 | 107.9 | 141.8 |
+| LevelGeometry.Meshes | 63.5 | 86.4 | 172.3 |
+| LevelGeometry.Hulls | 57.2 | 76.1 | 159.1 |
+| LevelGeometry.Triangles | 3.7 | 3.8 | 15.7 |
+| Polygons of one brush of 130 faces | 4.0 | 4.2 | |
+
+The peak working set is 147 MiB in both. AGENTS.md's row for `build` names the version alone, and
+the bench beside it waits on the owner's word for the row's text (N 7.4).

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <!-- The time and memory of reading and building a large level, run by hand and outside
+         Levels.slnx, so the build and the tests never wait on it. -->
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Levels\Levels.csproj" />
+    </ItemGroup>
+
+</Project>
