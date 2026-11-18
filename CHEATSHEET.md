@@ -1,4 +1,4 @@
-# 3DEngine.Levels cheat sheet
+# 3DEngine.Levels cheatsheet
 
 Every public type of the library with its public members, each a line of its declaration and the
 first sentence of its summary. The list is written by `Cheatsheet.Write` from the built library, and
@@ -22,7 +22,7 @@ IReadOnlyList<string> PictureExtensions { get; }         // The kinds of picture
 bool IsPrototype(string material);                       // Whether a material is a prototype, a name under PrototypeFolder
 string Slot(string material);                            // The slot a material is drawn as, a prototype's name without PrototypeFolder and any other name as it is
 LevelPicture? Find(string material);                     // The material's picture, a prototype's with no path, the first PNG or JPEG of its name whose header reads, or nothing
-(double, double)? PictureSize(string material);
+(double, double)? PictureSize(string material);          // How many texels the picture of a material spans each way, or nothing where the engine has none for it, which Meshes then takes as the level's units a meter, so a face at a scale of one repeats its material once a meter
 
 class Level                                              // A level file, its brushes and entities, in the Valve 220 map format TrenchBroom reads and writes
 double DefaultUnitsPerMeter = 32;                        // How many of a file's units make a meter where its worldspawn says none

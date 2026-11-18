@@ -1,4 +1,4 @@
-[Devlog](https://github.com/EggyStudio/Levels/blob/main/DEVLOG.md) [Cheat sheet](https://github.com/EggyStudio/Levels/blob/main/CHEATSHEET.md)
+[Devlog](https://github.com/EggyStudio/Levels/blob/main/DEVLOG.md) [Cheatsheet](https://github.com/EggyStudio/Levels/blob/main/CHEATSHEET.md)
 
 # Levels
 
@@ -146,9 +146,11 @@ public static class LevelBinding
 }
 ```
 
-The tests' host, `Levels.Tests/Host/LevelBinding.cs`, is this code, and the tests run it against a
-level and a folder of pictures with no engine, so the build and the suite hold the binding to the
-module.
+`TrenchBroom/examples/room.map` is a level of every class the module reads, a room with a door, a
+ramp, the three lights, the player's start and a tree, to open in TrenchBroom and load first; the
+tests load it through this binding. The tests' host, `Levels.Tests/Host/LevelBinding.cs`, is this
+code, and the tests run it against a level and a folder of pictures with no engine, so the build and
+the suite hold the binding to the module.
 
 ## Building and testing
 

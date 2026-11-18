@@ -17,3 +17,6 @@ it has registered. A `light` is a point light, a `light_spot` a spot and a `ligh
 sun, their `_color` in sRGB from 0 to 255 a channel, their `intensity` in lumens for a point or a
 spot and in lux for the sun, and a spot's `_inner_cone` and `_cone` in degrees from its axis. A spot
 and the sun face along the arrow TrenchBroom draws for their `angles`.
+
+`examples/room.map` is a room of every class `Levels.fgd` names, written by the module's tests,
+which hold the file to what they write.

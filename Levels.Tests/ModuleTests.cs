@@ -7,8 +7,9 @@ namespace Levels.Tests;
 /// <summary>
 /// The checks every module keeps, from the Tools submodule, a test each, that the library takes no
 /// engine, window or graphics API, names no engine in a public member or its documentation and has
-/// every public type named in the README, that the README's binding block is the host's code, and
-/// that the cheat sheet is what the built library writes.
+/// every public type named in the README, that the README's binding block is the host's code, that
+/// the cheatsheet is what the built library writes, that the README opens with its link row, and
+/// that no tracked text names an engine.
 /// </summary>
 public sealed class ModuleTests
 {
@@ -64,6 +65,20 @@ public sealed class ModuleTests
     public void The_Cheatsheet_Is_What_The_Built_Library_Writes()
     {
         var fault = ModuleChecks.CheatsheetFault(Assembly.Load(Library), Readme, Path.Combine(Root, "CHEATSHEET.md"));
+        Assert.True(fault is null, fault);
+    }
+
+    [Fact]
+    public void The_Readme_Opens_With_Its_Link_Row()
+    {
+        var fault = ModuleChecks.LinkRowFault(Assembly.Load(Library), Readme);
+        Assert.True(fault is null, fault);
+    }
+
+    [Fact]
+    public void No_Tracked_Text_Names_An_Engine()
+    {
+        var fault = ModuleChecks.EngineNameInTextFault(Root);
         Assert.True(fault is null, fault);
     }
 }

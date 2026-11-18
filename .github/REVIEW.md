@@ -644,7 +644,7 @@ MiB where it took 1,681.8, Meshes 443.2 where 1,984.1 and Hulls 194.9 where 1,85
 and 2.0 KiB a brush, and the peak working set stays at 1,253 MiB, which the level and its text
 hold. The tests pass, 143 where there were 140 (dotnet test Levels.Tests).
 
-The cheat sheet in the commit carrying this line. Tools' pin moves to `3720852`, ModuleTests gains
+The cheatsheet in the commit carrying this line. Tools' pin moves to `3720852`, ModuleTests gains
 its fifth fact, The_Cheatsheet_Is_What_The_Built_Library_Writes, and CHEATSHEET.md is written by
 running the tests with CHEATSHEET_WRITE=1, 176 lines of every public type in the README's order
 with its members, the hand-written lines above the list rewrapped to 100 columns, which a write
@@ -690,3 +690,16 @@ the wall, and on a floor seen from above, north the picture's top. The two tests
 module already gave, so neither failed first. The README's link row is its first line, above the
 title, its links the repository's on GitHub, as the owner gave the form. CHEATSHEET.md is written
 again. The tests pass, 146 where there were 144 (dotnet test Levels.Tests).
+
+The second of the three in the commit carrying this line, with Tools at `75d77f2`. ExampleLevelTests
+generates a room of 8 by 8 meters of every class the module reads, its floor, walls, a doorway with
+a door, a ramp to a platform, a light, a spot, the sun, the player's start and a tree, and holds
+`TrenchBroom/examples/room.map` to what it writes, the tests run with LEVELS_EXAMPLE_WRITE=1 writing
+it again; the file names the game Levels, as the module's GameConfig.cfg does, so TrenchBroom opens
+it with Levels.fgd. A second test loads it through the README's binding and reads its four slots,
+two bodies, three lights, four entities by class, its tree and the start facing east. Both failed
+before the file was written. The README's binding section and TrenchBroom's README name it.
+ModuleTests gains Tools' two facts, The_Readme_Opens_With_Its_Link_Row and
+No_Tracked_Text_Names_An_Engine, the link row reads Cheatsheet, and the page's title says
+cheatsheet, so `git grep -n -i "cheat sheet"` finds none. CHEATSHEET.md is written again. The tests
+pass, 150 where there were 146 (dotnet test Levels.Tests).
