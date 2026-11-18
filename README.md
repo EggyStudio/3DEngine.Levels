@@ -27,7 +27,8 @@ this repository does not have.
 ## Binding it in your engine
 
 The module reads a level and gives out its data, and an engine makes its own meshes, bodies, lights
-and entities of it. The module opens no window and no graphics device, reads no file but through an
+and entities of it. Its assembly is `3DEngine.Levels`, and its types stand in the namespace
+`Levels`. The module opens no window and no graphics device, reads no file but through an
 interface, and declares two interfaces for what it needs of an engine.
 
 | Interface | What the engine answers |

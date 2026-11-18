@@ -413,3 +413,11 @@ The check queued under the shared lock because I took N 7.9's suite and build fo
 command of mine, and a run of tests that reads files and draws nothing needs no lock; this
 module's tests and its bench run on the CPU alone, so its filtered runs read and run with no lock,
 and its builds take the shared lock as N 7.9 says of a build.
+
+The owner's names in the commit carrying this line. The library's AssemblyName and PackageId are
+3DEngine.Levels, IsPackable staying false, and the tests' assembly is 3DEngine.Levels.Tests, its
+InternalsVisibleTo following; folders, project files and the namespace Levels stay. LibraryTests
+loads the library by its new name and reads that Level stands in Levels, failing before the
+rename, and the README's binding section names the assembly. The workflow names folders alone and
+is unchanged, and the bench builds against the renamed library. The strict build is clean and the
+tests pass, 107 (dotnet test Levels.Tests).

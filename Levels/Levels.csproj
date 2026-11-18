@@ -1,7 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <!-- The library both engines reference from their own projects, which knows no engine (N 2.1). -->
+    <!-- The library both engines reference from their own projects, which knows no engine (N 2.1).
+         Its assembly and package are 3DEngine.Levels, the name it is published under beside the
+         other modules, while its types stand in the namespace Levels. -->
     <PropertyGroup>
+        <AssemblyName>3DEngine.Levels</AssemblyName>
+        <PackageId>3DEngine.Levels</PackageId>
         <RootNamespace>Levels</RootNamespace>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
@@ -15,7 +19,7 @@
 
     <!-- The tests read the internals a level is checked by, the number writer among them. -->
     <ItemGroup>
-        <InternalsVisibleTo Include="Levels.Tests" />
+        <InternalsVisibleTo Include="3DEngine.Levels.Tests" />
     </ItemGroup>
 
 </Project>
