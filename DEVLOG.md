@@ -217,6 +217,8 @@ read.
 
 Commits that day
 
+- `ff5a531` An entity's outputs are read as the event, target, input, parameter, delay and times
+  they hold, and a level finds the entities a target name names.
 - `7ddc1e2` A binding reads a level through a view in which TrenchBroom's layers and groups are the
   world and a layer omitted from export is left out, while the level writes back as it was read.
 - `5b63d28` The cells of a grid a brush fills are given with their materials by stated rules, so two

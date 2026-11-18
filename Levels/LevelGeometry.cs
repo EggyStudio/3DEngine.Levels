@@ -286,6 +286,63 @@ public static class LevelGeometry
         return [.. taken.OrderBy(pair => pair.Key).Select(pair => pair.Value)];
     }
 
+    /// <summary>
+    /// Boxes that fill the cells given, cells of one material made into as few as a stated greedy
+    /// order gives, so a tool that builds a level of blocks saves it as brushes.
+    /// </summary>
+    /// <param name="cells">The cells, a cell given twice taking the first one's material.</param>
+    /// <param name="cellMeters">A cell's size in meters along each axis, as
+    /// <see cref="Cells(LevelEntity, double, double)"/> takes it.</param>
+    /// <param name="unitsPerMeter">How many of the file's units make a meter.</param>
+    /// <returns>The boxes, each of one material on every face, mapped as a new face is.</returns>
+    /// <remarks>
+    /// The cells are taken in order of their material, then up, then along Z, then along X, and
+    /// each cell no box holds yet starts one, grown along X as far as the cells of its material
+    /// run, then along Z as far as whole rows of them run, then up as far as whole layers do. The
+    /// boxes stand on the cells' sides, so <see cref="Cells(LevelEntity, double, double)"/> of an
+    /// entity of them gives the cells back.
+    /// </remarks>
+    /// <exception cref="ArgumentOutOfRangeException">The cell's size or the units a meter is not
+    /// above zero.</exception>
+    public static IReadOnlyList<LevelBrush> Brushes(IEnumerable<LevelCell> cells, double cellMeters, double unitsPerMeter)
+    {
+        ArgumentNullException.ThrowIfNull(cells);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(cellMeters);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(unitsPerMeter);
+        var material = new Dictionary<(int X, int Y, int Z), string>();
+        foreach (var cell in cells) material.TryAdd((cell.X, cell.Y, cell.Z), cell.Material);
+
+        var taken = new HashSet<(int, int, int)>();
+        bool Free(int x, int y, int z, string of) =>
+            !taken.Contains((x, y, z)) && material.TryGetValue((x, y, z), out var at) && at == of;
+
+        var brushes = new List<LevelBrush>();
+        var order = material.OrderBy(pair => pair.Value, StringComparer.Ordinal)
+            .ThenBy(pair => pair.Key.Y).ThenBy(pair => pair.Key.Z).ThenBy(pair => pair.Key.X);
+        foreach (var ((x, y, z), of) in order)
+        {
+            if (taken.Contains((x, y, z))) continue;
+            var width = 1;
+            while (Free(x + width, y, z, of)) width++;
+            var depth = 1;
+            while (Enumerable.Range(x, width).All(a => Free(a, y, z + depth, of))) depth++;
+            var height = 1;
+            while (Enumerable.Range(x, width).All(a => Enumerable.Range(z, depth).All(c => Free(a, y + height, c, of)))) height++;
+            for (var a = x; a < x + width; a++)
+            for (var b = y; b < y + height; b++)
+            for (var c = z; c < z + depth; c++)
+                taken.Add((a, b, c));
+
+            // Meters with Y up at (x, y, z) stand in the file at (x, -z, y).
+            var step = cellMeters * unitsPerMeter;
+            var low = new LevelPoint(x * step, -(z + depth) * step, y * step);
+            var high = new LevelPoint((x + width) * step, -z * step, (y + height) * step);
+            brushes.Add(LevelBrush.Box(low, high, of));
+        }
+
+        return brushes;
+    }
+
     /// <summary>An entity's meshes as one shape of triangles, for a static body.</summary>
     /// <param name="meshes">The meshes, as <see cref="Meshes"/> gives them.</param>
     /// <remarks>

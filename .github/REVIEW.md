@@ -818,3 +818,14 @@ name both. LevelOutputsTests holds the test room's door's two outputs, a value s
 keyvalues that are no output, the two refusals and a target name's entities; all six failed on
 stubs. CHEATSHEET.md is written again. The tests pass, 201 where there were 195 (dotnet test
 Levels.Tests).
+
+The third of the three in the commit carrying this line. LevelGeometry.Brushes makes cells into
+boxes of one material each, taking the cells in order of their material, then up, then along Z,
+then along X, each cell no box holds starting one grown along X as far as its material's cells
+run, then along Z by whole rows, then up by whole layers, the boxes standing on the cells' sides so
+Cells of them gives the cells back, and a cell given twice taking the first one's material.
+LevelCellBrushesTests holds a solid block as one box, a room of a floor and four walls in cells of
+half a meter as five boxes and a staircase of five steps as five, each giving its cells back, two
+materials as two boxes with a cell given twice, and no cells as no brushes; all five failed on a
+stub. The README's Cells row states the order and its rows name Brushes. CHEATSHEET.md is written
+again. The three are done. The tests pass, 206 where there were 201 (dotnet test Levels.Tests).
