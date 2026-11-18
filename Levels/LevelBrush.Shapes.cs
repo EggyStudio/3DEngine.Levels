@@ -136,7 +136,20 @@ public sealed partial class LevelBrush
     /// one Y to another, each face's three points wound as the file winds them and its axes the
     /// world's.
     /// </summary>
-    internal static LevelBrush Prism(IReadOnlyList<(double X, double Z)> outline, double from, double to, string material, double scale)
+    /// <param name="outline">The outline's corners as (X, Z) in the file's units, three or more,
+    /// round it either way.</param>
+    /// <param name="from">One end along Y.</param>
+    /// <param name="to">The other end, either side of the first.</param>
+    /// <param name="material">What every face is drawn with.</param>
+    /// <param name="scale">The faces' scale, <see cref="DefaultScale"/> unless given.</param>
+    /// <remarks>
+    /// A box, a ramp and an arch's segment are prisms of four, three and four corners. Corners less
+    /// than a millionth of a unit apart are one.
+    /// </remarks>
+    /// <exception cref="ArgumentException">The outline has fewer than three corners, its corners
+    /// lie on one line or it is not convex, the two ends are one, or the material holds a
+    /// space.</exception>
+    public static LevelBrush Prism(IReadOnlyList<(double X, double Z)> outline, double from, double to, string material, double scale = DefaultScale)
     {
         ArgumentException.ThrowIfNullOrEmpty(material);
         if (material.Any(char.IsWhiteSpace)) throw new ArgumentException("A material is a name with no spaces.", nameof(material));
@@ -152,6 +165,21 @@ public sealed partial class LevelBrush
 
         if (points.Count > 1 && Math.Abs(points[0].X - points[^1].X) + Math.Abs(points[0].Z - points[^1].Z) <= 1e-9) points.RemoveAt(points.Count - 1);
         if (points.Count < 3) throw new ArgumentException("A brush's outline has three points or more.", nameof(outline));
+        if (!(Math.Abs(to - from) > 0)) throw new ArgumentException($"A prism from {from} to {to} along Y has no depth.", nameof(to));
+
+        // Each corner turns the outline the same way, or not at all, round a convex outline, and
+        // one that turns both ways bends in, which no brush's planes can hold.
+        var (left, right) = (false, false);
+        for (var i = 0; i < points.Count; i++)
+        {
+            var (a, b, c) = (points[i], points[(i + 1) % points.Count], points[(i + 2) % points.Count]);
+            var turn = (b.X - a.X) * (c.Z - b.Z) - (b.Z - a.Z) * (c.X - b.X);
+            if (turn > 1e-9) left = true;
+            if (turn < -1e-9) right = true;
+        }
+
+        if (left == right)
+            throw new ArgumentException(left ? "A brush's outline is convex, where this one bends in." : "A brush's outline has corners off one line.", nameof(outline));
 
         var (low, high) = (Math.Min(from, to), Math.Max(from, to));
         var inside = new LevelPoint(points.Average(p => p.X), (low + high) / 2, points.Average(p => p.Z));

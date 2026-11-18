@@ -586,3 +586,13 @@ runner prints "The library references Vortice.Fake, an engine, a " and the rule 
 never seen; `Assert.True(fault is null, fault)` would print the sentence whole. And the engine-name
 sentence says "F:Levels.LevelTree.Class name an engine" for one member. Both go to Tools in a
 message. The tests pass, 120 where there were 117 (dotnet test Levels.Tests).
+
+The fourth of the six in the commit carrying this line. LevelBrush.Prism is public, a brush of any
+convex outline across Y in either winding between two ends in either order, and refuses an outline
+that bends in, one whose corners lie on one line, and two ends that are one or not a number, its
+three refusals failing before the mend; the README's row names it. My table's row for the feature
+test's Slab was wrong. Its slab is an outline on the ground stretched up the file's Z, which Prism,
+standing across Y, does not make, so a slab of a ground outline goes with the wall and the ramp in
+the next commit. The README's top row links DEVLOG.md, and AGENTS.md's devlog row names its command,
+`python3 modules/Tools/scripts/devlog.py . Levels`, the rule the review gave today. The tests pass,
+126 where there were 120 (dotnet test Levels.Tests).
