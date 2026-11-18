@@ -449,3 +449,11 @@ prototyping. Two lines of the same kind may stand, LevelBrush.Shapes.cs's banner
 "as Hammer's and TrenchBroom's tools make them" and Arch's remark cutting the ring "as Hammer's
 arch tool cuts one"; the arch's even segments are a rule taken from that tool, so they are left for
 the review's word. The strict build is clean and the tests pass, 121 (dotnet test Levels.Tests).
+
+The second item in the commit carrying this line. LevelBindingTests gains Sky's test of the public
+surface, every exported type named whole in backticks in Binding it in your engine or in a row of a
+README table, and it turned red naming 13 of the 17, LevelBrush, LevelEntity, LevelFace,
+LevelGeometry, LevelHull, LevelLight, LevelLightKind, LevelMesh, LevelPicture, LevelPlacement,
+LevelPoint, LevelTree and LevelTriangles. The section gains a table of the types a binding reads,
+a row a type with the members it calls by, Level.Doorway among them. The tests pass, 122 where
+there were 121 (dotnet test Levels.Tests).

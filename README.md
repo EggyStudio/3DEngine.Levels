@@ -41,6 +41,25 @@ PNG or a JPEG of its name under `textures/`, and gives a name under `proto/` a p
 of 512 texels, which the engine draws by the slot of the rest of the name. An engine that names its
 pictures another way implements `ILevelMaterials` itself.
 
+The types a binding reads, each in the namespace `Levels`, are these.
+
+| Type | What it is |
+|---|---|
+| `Level` | A level file, read by `Level.Parse` or `Level.Load` and written by `Level.Write` or `Level.Save`, with its entities and `Level.UnitsPerMeter`, and `Level.Doorway`, a wall's brushes round a rounded opening |
+| `LevelEntity` | An entity, its keyvalues in order and its brushes, read by `Placement`, `Light`, `Tree`, `Number`, `WholeNumber`, `Point` and `KeysText` |
+| `LevelBrush` | A brush, a convex solid of its faces' planes, its polygons from `Polygons` and its shapes from `Box`, `Wedge`, `Arch`, `Turned` and `Moved` |
+| `LevelFace` | A face, its plane through three points, its material and its mapping of two axes, offsets, a rotation and two scales |
+| `LevelPoint` | A point or a way in the file's units with Z up, turned into meters by `Meters`, with `Dot`, `Cross` and `Length` |
+| `LevelPlacement` | Where an entity stands in meters and how it is turned, a `Vector3` and a `Quaternion` |
+| `LevelGeometry` | The brushes as meshes (`Meshes`), as convex hulls (`Hulls`) and as one shape of triangles (`Triangles`), and a picture's size from its header (`PictureSize`) |
+| `LevelMesh` | One material's triangles, their positions, normals, texture coordinates and indices |
+| `LevelHull` | One brush's corners in meters, a convex hull for a body |
+| `LevelTriangles` | An entity's triangles as one shape for a static body |
+| `LevelPicture` | A material's picture as `LevelPictures` finds it, its path and its size in texels |
+| `LevelLight` | A light in physical units, its kind, place, way, color, strength, range and cones |
+| `LevelLightKind` | A light's kind, `Point`, `Spot` or `Directional` |
+| `LevelTree` | A tree, the name of its species and its seed |
+
 What the module gives out stands on these conventions.
 
 | Quantity | Convention |
