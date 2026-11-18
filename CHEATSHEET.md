@@ -58,6 +58,9 @@ uint? WholeNumber(string key);                           // A key's value as a w
 LevelPoint? Point(string key);                           // A key's value as three numbers, a point in the file's units, or nothing where the entity has no such key
 LevelPlacement Placement(double unitsPerMeter);          // Where the entity stands in meters with Y up and how it is turned, as an engine places what it spawns for it
 LevelTree? Tree();                                       // The tree the entity places, read from its keys, or nothing where its class is not tree
+void Place(LevelPlacement placement, double unitsPerMeter);  // Writes where the entity stands and how it is turned to its origin and its angle or angles, as Placement reads them
+void SetLight(LevelLight light, double unitsPerMeter);   // Writes a light to the entity's keys, its class, place, way, color, strength, range and cones, as Light reads them
+void SetTree(LevelTree tree);                            // Writes a tree to the entity's keys, its class, its species and its seed, as Tree reads them
 
 class LevelBrush                                         // A brush of a level file, a convex solid, what lies behind every one of its faces' planes
 double DefaultScale = 0.0625;                            // The scale a face made here takes, a sixteenth, which TrenchBroom's game config beside the engine's levels gives a new face, so a prototype's picture of 512 texels spans 32 units, a meter at the default units a meter

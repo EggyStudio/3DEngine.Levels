@@ -716,3 +716,19 @@ four distances, at and past the range for a point and a spot, a spot's 30 degree
 the sun and the nearest centimeter, and eight of its nine cases failed on a stub that gave no
 number. The README's Light row says it, and CHEATSHEET.md is written again. The tests pass, 159
 where there were 150 (dotnet test Levels.Tests).
+
+The first of the three in the commit carrying this line. LevelEntity.Place writes a place in meters
+and a turn to the `origin` and the `angle` or `angles` Placement reads, the angle kept where the
+turn has no pitch and no roll and the entity no angles; SetLight writes a light's class, place, way
+as a pitch and a yaw with the roll kept, color in sRGB from 0 to 255, strength, range and cones; and
+SetTree its class, species, the key taken away for none, and seed. Each writes a key only where its
+value differs from what the reader reads now, a place to a thousandth of a unit and a turn to a
+thousandth of a degree, and two turns count as one under 1e-5 radians apart, measured by the turn
+between them, since two equal single-precision rotations' dot product falls short of 1 by more than
+a bound in it can tell. A brush entity given a turn and the world a place off its origin are
+refused. LevelWritersTests writes every class of the example room back unedited to the same text,
+reads back a moved and turned start, a turn of pitch and roll, a light's edits with its defaults
+left unwritten, a spot turned, a tree of no species and the refusals, holds 500 turns, the gimbal's
+two pitches among them, to the same rotation, and every whole channel of a color to the number it
+was read as; all seven of its first tests failed on stubs. The README's row names the three, and
+CHEATSHEET.md is written again. The tests pass, 168 where there were 159 (dotnet test Levels.Tests).
