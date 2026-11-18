@@ -535,3 +535,21 @@ for, and the README's Building and testing says a clone fetches the submodule.
 What went badly, plainly. One test of four facts hides every fault after the first, and its
 failures name no rule; one fact a test, or a message a fact, would serve the modules that follow.
 The tests pass, 107 where there were 122, the sixteen replaced by one (dotnet test Levels.Tests).
+
+The fourth item in the commit carrying this line. The bench takes one made level, a third each
+boxes, ramps and turned boxes, every hundredth brush a door's and a light, a spot and a tree for
+each hundred, through Write, Parse, Save, Load, every brush's Polygons, Meshes, Hulls and Triangles,
+and every entity's Placement, Light, Tree, KeysText and ParseKeys, at 100, 10,000 and 100,000
+brushes, holding the level read back and its text written again equal to the byte, and ending the
+run where either differs. The sheet is `.github/assets/readings/2026-11-18-format-reading.md`,
+which DEVLOG.md carries on its day. The round trip is equal at all three counts, and at 100,000
+brushes Level.Parse is the first step slow enough to see, 1,369 ms and 1,409 MiB for 63.17 million
+characters, some 23 bytes a character, Level.Load 1,218 ms and 1,650 MiB, and every brush's
+Polygons next in memory at 1,682 MiB; the process peaks at 1,337 MiB. AGENTS.md's bench row says
+what it runs.
+
+The light key. The module's light reads `intensity`, and a map written for BevyCSharp's page, with
+the key `light` holding lumens, reads as a light of LevelLight.DefaultLumens, 800, its `light` key
+kept among its keys and read by nothing; such a map needs each `light` key renamed `intensity`, the
+number unchanged, since both are lumens over the whole sphere. No map in BevyCSharp's games writes
+the key.
