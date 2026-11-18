@@ -673,3 +673,11 @@ keeps its `species` key with no default, described as a name the engine's vegeta
 FgdTests reads a key of no default. LevelTreeTests' case of no species failed before the mend.
 CHEATSHEET.md is written again and DEVLOG.md regenerated. The tests pass, 144 (dotnet test
 Levels.Tests).
+
+The six conventions the review keeps, each in a row of the README's conventions in the commit
+carrying this line, said as the module's own. The axes' row held minus Z forward and Y up, and the
+light's row lumens over the outer cone, which gains the conversion for an engine whose spot takes a
+point light's lumens. The table gains Materials, the proto/ and textures/ layout LevelPictures reads
+and ILevelMaterials for another, Collision, triangles beside hulls, Names, an entity's target name,
+class or index, and Faults, a FormatException naming the entity through Level.ReadEntities. The
+tests pass, 144 (dotnet test Levels.Tests).

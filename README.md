@@ -71,7 +71,11 @@ What the module gives out stands on these conventions.
 | Triangles | Counterclockwise seen from outside, each face's corners its own |
 | Angles | Degrees, a pitch above zero looking down |
 | Color | Linear sRGB from 0 to 1, decoded from the file's sRGB of 0 to 255 |
-| Light | Lumens for a point over the whole sphere and for a spot over its outer cone, lux for the sun, a range in meters, a spot's cones in degrees from its axis |
+| Light | Lumens for a point over the whole sphere and for a spot over its outer cone, lux for the sun, a range in meters, a spot's cones in degrees from its axis; an engine whose spot takes the lumens of a point light of the same candelas gives it the lumens times 2 over 1 minus the outer cone's cosine |
+| Materials | A name under `proto/` is a prototype's slot over a picture of 512 texels, and any other a PNG or a JPEG of its name under `textures/`, the layout `LevelPictures` reads; an engine that lays its pictures out otherwise implements `ILevelMaterials` |
+| Collision | An entity's brushes as one shape of triangles for a static body (`LevelGeometry.Triangles`), or as a convex hull a brush (`LevelGeometry.Hulls`) |
+| Names | An entity is called by its `targetname`, else its class, else `entity` and its index (`LevelEntity.Name`) |
+| Faults | A key or a brush the reading cannot take is a `FormatException` naming the entity's index and name, through `Level.ReadEntities` |
 
 An engine with Z up or left-handed axes turns the positions, normals and turns it is given, and an
 engine that takes clockwise triangles as their front takes each triangle's corners in the other
