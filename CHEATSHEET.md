@@ -9,6 +9,7 @@ the text around it by hand.
 interface ILevelFiles                                    // The files an engine reads a level and its pictures from, by paths relative to its own root, which Load and LevelPictures read (N 2.1)
 bool Exists(string path);                                // Whether the engine has a file at the path
 byte[] ReadAllBytes(string path);                        // The file's bytes
+Stream OpenRead(string path);                            // The file as a stream, which a level is read through
 
 interface ILevelMaterials                                // What an engine says of a level's materials, the size of the picture each is drawn with, which a face's texture coordinates are worked out over (N 2.1)
 (double, double)? PictureSize(string material);          // How many texels the picture of a material spans each way, or nothing where the engine has none for it, which Meshes then takes as the level's units a meter, so a face at a scale of one repeats its material once a meter
@@ -38,6 +39,7 @@ Level Load(string path);                                 // Reads a level from a
 Level Load(ILevelFiles files, string path);              // Reads a level from an engine's files, as its pictures are read
 string Save(string path);                                // Writes the level to a file, which Load reads back the same
 Level Parse(string text, string name = "the level");     // Reads a level from map text
+Level Read(Stream text, string name = "the level");      // Reads a level from a stream of map text, through a window of it, so a large file is never held as one text
 IReadOnlyList<LevelBrush> Doorway(LevelPoint low, LevelPoint high, double width, double height, string material, string? arch = null, int segments = 8, double scale = 0.0625);  // A wall along X with a rounded opening through its middle, a brush each side of the opening and the wall above it cut into straight segments round the opening's top, as a level editor's arch tool cuts one
 string Write();                                          // The level as map text in the Valve 220 format, as TrenchBroom lays it out
 

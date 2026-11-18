@@ -31,7 +31,26 @@ public sealed partial class Level
     public static Level Parse(string text, string name = "the level")
     {
         ArgumentNullException.ThrowIfNull(text);
-        var reader = new Reader(text, name);
+        return Read(new Reader(text, name));
+    }
+
+    /// <summary>
+    /// Reads a level from a stream of map text, through a window of it, so a large file is never
+    /// held as one text.
+    /// </summary>
+    /// <param name="text">The text, UTF-8 where it has no byte order mark saying otherwise.</param>
+    /// <param name="name">What the text is called in an error, as its file's path.</param>
+    /// <exception cref="FormatException">The text is not map text, the line it fails on
+    /// named.</exception>
+    public static Level Read(Stream text, string name = "the level")
+    {
+        ArgumentNullException.ThrowIfNull(text);
+        using var reader = new StreamReader(text, System.Text.Encoding.UTF8, detectEncodingFromByteOrderMarks: true, bufferSize: 1 << 16, leaveOpen: true);
+        return Read(new Reader(reader, name));
+    }
+
+    private static Level Read(Reader reader)
+    {
         var level = new Level();
         if (reader.Game is { } game) level.Game = game;
 
@@ -85,6 +104,10 @@ public sealed partial class Level
         if (reader.Is(material, '{') || reader.Is(material, '}') || reader.Is(material, '(') || reader.Is(material, '[') || material.Length == 0)
             throw reader.Fault(material, $"a face's material is meant, where it reads {reader.Text(material)}");
 
+        // Its name is taken now, since an unquoted token's place in a stream's window lasts only
+        // until the next is read.
+        var name = reader.Material(material);
+
         var opening = reader.Next();
         if (opening is not { } open || !reader.Is(open, '['))
             throw reader.Fault(opening, "a face's two axes in brackets are meant after its material, as the Valve 220 format writes them, so this is Quake's older format, which TrenchBroom converts to the Valve format from its map menu");
@@ -97,7 +120,7 @@ public sealed partial class Level
         if (reader.Peek() is { Quoted: false } extra && extra.Line == line && !reader.Is(extra, '(') && !reader.Is(extra, '}'))
             throw reader.Fault(extra, $"a face ends at its two scales, where it goes on with {reader.Text(extra)}");
 
-        return new LevelFace(first, second, third, reader.Material(material), uAxis, uOffset, vAxis, vOffset, rotation, scaleU, scaleV);
+        return new LevelFace(first, second, third, name, uAxis, uOffset, vAxis, vOffset, rotation, scaleU, scaleV);
     }
 
     private static LevelPoint ReadPoint(Reader reader, bool opened)
@@ -124,37 +147,79 @@ public sealed partial class Level
     }
 
     /// <summary>
-    /// A token of map text, where it stands in the text, whether it was quoted, its line, and for a
-    /// quoted text holding an escaped quote its text read out.
+    /// A token of map text, where it stands in the reader's window, whether it was quoted, its
+    /// line, and a quoted text's string, an unquoted token's place good until the next is read.
     /// </summary>
     private readonly record struct Token(int Start, int Length, bool Quoted, int Line, string? Unescaped = null);
 
-    /// <summary>Reads map text token by token, keeping the line each began on.</summary>
+    /// <summary>
+    /// Reads map text token by token, keeping the line each began on, from a whole text in place or
+    /// from a stream through a window that keeps the token being read as it moves on.
+    /// </summary>
     private sealed class Reader
     {
-        private readonly string _text;
+        private const int Window = 1 << 16;
+
+        private readonly string? _whole;
+        private readonly TextReader? _source;
+        private char[] _buffer = [];
+        private int _end;
         private readonly string _name;
         private readonly Dictionary<string, string> _materials = new(StringComparer.Ordinal);
+        private readonly StringBuilder _quoted = new();
         private int _at;
+        private int _keep;
         private int _line = 1;
         private Token? _peeked;
 
         public Reader(string text, string name)
         {
-            (_text, _name) = (text, name);
+            (_whole, _name) = (text, name);
+            _end = text.Length;
+            Game = GameOf(text);
+        }
 
-            // TrenchBroom's first comment names the game the level was drawn for.
-            const string said = "// Game: ";
-            var first = text.AsSpan().TrimStart('\uFEFF');
-            if (first.StartsWith(said, StringComparison.Ordinal))
-            {
-                var rest = first[said.Length..];
-                var end = rest.IndexOf('\n');
-                Game = (end < 0 ? rest : rest[..end]).Trim().ToString();
-            }
+        public Reader(TextReader source, string name)
+        {
+            (_source, _name) = (source, name);
+            _buffer = new char[Window];
+            _end = source.ReadBlock(_buffer, 0, _buffer.Length);
+            Game = GameOf(_buffer.AsSpan(0, _end));
         }
 
         public string? Game { get; }
+
+        private ReadOnlySpan<char> Span(int start, int length) =>
+            _whole is not null ? _whole.AsSpan(start, length) : _buffer.AsSpan(start, length);
+
+        private char Char(int at) => _whole is not null ? _whole[at] : _buffer[at];
+
+        // TrenchBroom's first comment names the game the level was drawn for.
+        private static string? GameOf(ReadOnlySpan<char> text)
+        {
+            const string said = "// Game: ";
+            var first = text.TrimStart('\uFEFF');
+            if (!first.StartsWith(said, StringComparison.Ordinal)) return null;
+            var rest = first[said.Length..];
+            var end = rest.IndexOf('\n');
+            return (end < 0 ? rest : rest[..end]).Trim().ToString();
+        }
+
+        // Whether the text holds a character ahead of where the reader stands, a stream's window
+        // moved on to hold it with what is kept of the token being read, and grown where a token is
+        // longer than the window.
+        private bool Has(int ahead = 0)
+        {
+            if (_at + ahead < _end) return true;
+            if (_source is null) return false;
+            var kept = _end - _keep;
+            if (_keep > 0) Array.Copy(_buffer, _keep, _buffer, 0, kept);
+            (_at, _end, _keep) = (_at - _keep, kept, 0);
+            if (_end == _buffer.Length) Array.Resize(ref _buffer, _buffer.Length * 2);
+            var read = _source.ReadBlock(_buffer, _end, _buffer.Length - _end);
+            _end += read;
+            return _at + ahead < _end;
+        }
 
         public Token? Peek() => _peeked ??= Read();
 
@@ -166,17 +231,17 @@ public sealed partial class Level
         }
 
         /// <summary>Whether a token is one of the format's marks, unquoted.</summary>
-        public bool Is(Token token, char mark) => !token.Quoted && token.Length == 1 && _text[token.Start] == mark;
+        public bool Is(Token token, char mark) => !token.Quoted && token.Length == 1 && Char(token.Start) == mark;
 
         /// <summary>A token's text, made as a string.</summary>
-        public string Text(Token token) => token.Unescaped ?? _text.Substring(token.Start, token.Length);
+        public string Text(Token token) => token.Unescaped ?? new string(Span(token.Start, token.Length));
 
         /// <summary>A material's name, one string for every face that names it.</summary>
         public string Material(Token token)
         {
+            if (token.Unescaped is { } quoted) return quoted;
             var lookup = _materials.GetAlternateLookup<ReadOnlySpan<char>>();
-            var span = _text.AsSpan(token.Start, token.Length);
-            if (token.Unescaped is null && lookup.TryGetValue(span, out var known)) return known;
+            if (lookup.TryGetValue(Span(token.Start, token.Length), out var known)) return known;
             var name = Text(token);
             _materials[name] = name;
             return name;
@@ -186,7 +251,7 @@ public sealed partial class Level
         {
             var token = Next();
             if (token is not { Quoted: false } read
-                || !double.TryParse(_text.AsSpan(read.Start, read.Length), NumberStyles.Float, CultureInfo.InvariantCulture, out var value)
+                || !double.TryParse(Span(read.Start, read.Length), NumberStyles.Float, CultureInfo.InvariantCulture, out var value)
                 || !double.IsFinite(value))
                 throw Fault(token, $"{what} is meant as a number, where it reads {(token is { } t ? Text(t) : "the file's end")}");
             return value;
@@ -199,9 +264,11 @@ public sealed partial class Level
 
         private Token? Read()
         {
-            while (_at < _text.Length)
+            while (true)
             {
-                var c = _text[_at];
+                _keep = _at;
+                if (!Has()) return null;
+                var c = Char(_at);
                 if (c == '\n') _line++;
                 if (char.IsWhiteSpace(c) || c == '\uFEFF')
                 {
@@ -209,9 +276,14 @@ public sealed partial class Level
                     continue;
                 }
 
-                if (c == '/' && _at + 1 < _text.Length && _text[_at + 1] == '/')
+                if (c == '/' && Has(1) && Char(_at + 1) == '/')
                 {
-                    while (_at < _text.Length && _text[_at] != '\n') _at++;
+                    while (Has() && Char(_at) != '\n')
+                    {
+                        _keep = _at;
+                        _at++;
+                    }
+
                     continue;
                 }
 
@@ -220,36 +292,33 @@ public sealed partial class Level
 
                 if (c == '"') return Quoted();
 
-                var start = _at;
-                while (_at < _text.Length && !char.IsWhiteSpace(_text[_at]) && _text[_at] is not ('"' or '(' or ')' or '[' or ']' or '{' or '}')) _at++;
-                return new Token(start, _at - start, false, _line);
+                while (Has() && !char.IsWhiteSpace(Char(_at)) && Char(_at) is not ('"' or '(' or ')' or '[' or ']' or '{' or '}')) _at++;
+                return new Token(_keep, _at - _keep, false, _line);
             }
-
-            return null;
         }
 
         // A quoted string, a quote inside it written with a backslash before it, as TrenchBroom
-        // writes one. A string with no such quote stands in the text as it is.
+        // writes one, read out as a string as it is read.
         private Token Quoted()
         {
             var line = _line;
-            var start = ++_at;
-            StringBuilder? built = null;
+            _quoted.Clear();
+            _at++;
             while (true)
             {
-                if (_at >= _text.Length) throw new FormatException($"{_name}, line {line}: A quoted text is never closed.");
-                var c = _text[_at++];
-                if (c == '"') return new Token(start, _at - 1 - start, true, line, built?.ToString());
-                if (c == '\\' && _at < _text.Length && _text[_at] == '"')
+                _keep = _at;
+                if (!Has()) throw new FormatException($"{_name}, line {line}: A quoted text is never closed.");
+                var c = Char(_at++);
+                if (c == '"') return new Token(0, _quoted.Length, true, line, _quoted.ToString());
+                if (c == '\\' && Has() && Char(_at) == '"')
                 {
-                    built ??= new StringBuilder().Append(_text, start, _at - 1 - start);
-                    built.Append('"');
+                    _quoted.Append('"');
                     _at++;
                     continue;
                 }
 
                 if (c == '\n') _line++;
-                built?.Append(c);
+                _quoted.Append(c);
             }
         }
     }

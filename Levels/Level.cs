@@ -114,7 +114,8 @@ public sealed partial class Level
     {
         ArgumentException.ThrowIfNullOrEmpty(path);
         if (!File.Exists(path)) throw new FileNotFoundException($"There is no level at {path}.", path);
-        return Parse(File.ReadAllText(path), path);
+        using var file = File.OpenRead(path);
+        return Read(file, path);
     }
 
     /// <summary>Reads a level from an engine's files, as its pictures are read.</summary>
@@ -122,8 +123,8 @@ public sealed partial class Level
     /// <param name="path">The level's path among them, relative and with forward slashes, which
     /// a fault names.</param>
     /// <remarks>
-    /// The bytes are read as UTF-8, as TrenchBroom writes a map, a byte order mark before them
-    /// skipped.
+    /// The file is read through <see cref="ILevelFiles.OpenRead"/> as UTF-8, as TrenchBroom writes
+    /// a map, a byte order mark before it skipped, and never held as one text.
     /// </remarks>
     /// <exception cref="FileNotFoundException">The engine has no file at the path.</exception>
     /// <exception cref="FormatException">The file is not map text, the line it fails on
@@ -133,7 +134,8 @@ public sealed partial class Level
         ArgumentNullException.ThrowIfNull(files);
         ArgumentException.ThrowIfNullOrEmpty(path);
         if (!files.Exists(path)) throw new FileNotFoundException($"There is no level at {path}.", path);
-        return Parse(System.Text.Encoding.UTF8.GetString(files.ReadAllBytes(path)), path);
+        using var file = files.OpenRead(path);
+        return Read(file, path);
     }
 
     /// <summary>

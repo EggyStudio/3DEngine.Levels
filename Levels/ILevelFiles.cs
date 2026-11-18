@@ -18,4 +18,12 @@ public interface ILevelFiles
     /// <summary>The file's bytes.</summary>
     /// <param name="path">The path, relative and with forward slashes, one that exists.</param>
     byte[] ReadAllBytes(string path);
+
+    /// <summary>The file as a stream, which a level is read through.</summary>
+    /// <param name="path">The path, relative and with forward slashes, one that exists.</param>
+    /// <remarks>
+    /// The stream over <see cref="ReadAllBytes"/> unless the engine gives its own, so an engine
+    /// that streams its files reads a large level with no copy of it whole.
+    /// </remarks>
+    Stream OpenRead(string path) => new MemoryStream(ReadAllBytes(path), writable: false);
 }

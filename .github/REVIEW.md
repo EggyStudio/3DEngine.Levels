@@ -745,3 +745,17 @@ the review's word: KHR_lights_punctual's range window is 1 minus (d over the ran
 not squared, where the module's is squared, which takes more of the light away inside the range, 88
 where glTF's leaves 94 in a hundred at half of it, and fades it with no slope at the range.
 CHEATSHEET.md is written again. The tests pass, 179 where there were 168 (dotnet test Levels.Tests).
+
+The third of the three in the commit carrying this line. Level.Load read a file whole into a string,
+and through an engine's files its bytes and then a string of them; it reads either through a stream
+into a window of 64 kilo-characters, which moves on keeping the token being read and grows for one
+longer than itself, and Level.Read of a stream is public beside Parse. ILevelFiles gains OpenRead, a
+default member over ReadAllBytes, so an engine's binding builds as it was and one that streams its
+files overrides it. A face's material is taken as soon as it is read, since an unquoted token's
+place in the window lasts only until the next is read, and a quoted text is read out as it is read.
+LevelLoadMemoryTests holds Load of a path and through an engine's stream of 10,000 brushes, 5,994,813
+characters, to 4 bytes a character, which failed at 6.2 and 5.2, and both write back as the file's
+text; the parser's refusals, its cut-short and spoiled files among them, pass unchanged. The sheet
+after is `.github/assets/readings/2026-11-18-load-after.md`, where at 100,000 brushes Load
+allocates 122.8 MiB where it took 364.1, as Parse does of the text in hand. CHEATSHEET.md is written
+again. The tests pass, 182 where there were 179 (dotnet test Levels.Tests).
