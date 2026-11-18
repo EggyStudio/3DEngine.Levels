@@ -95,18 +95,18 @@ public sealed record LevelLight(
     /// <para>
     /// A point light's lumens over the whole sphere are its candelas times 4 pi, and a spot's over
     /// its outer cone its candelas times 2 pi times 1 minus the cone's cosine. Its light falls as
-    /// the inverse square of the distance, a distance under a centimeter taken as one, and is
-    /// brought to nothing at the range by the window (1 minus (d over the range) to the fourth),
-    /// squared, so it fades with no edge and gives nothing at the range or past it. The sun gives
-    /// its lux at any distance. Off a spot's axis its light is full inside the inner cone, nothing
-    /// past the outer, and between them the square of a ramp in the angle's cosine from the outer
-    /// cone's to the inner's, as glTF's KHR_lights_punctual gives a spot's falloff.
+    /// the inverse square of the distance, a distance under a centimeter taken as one, times
+    /// glTF's KHR_lights_punctual window, 1 minus (d over the range) to the fourth, so it gives
+    /// nothing at the range or past it. The sun gives its lux at any distance. Off a spot's axis
+    /// its light is full inside the inner cone, nothing past the outer, and between them the square
+    /// of a ramp in the angle's cosine from the outer cone's to the inner's, as the same extension
+    /// gives a spot's falloff.
     /// </para>
     /// <para>
-    /// The window leaves 88 parts in a hundred of the inverse square at half the range and 12 at
+    /// The window leaves 94 parts in a hundred of the inverse square at half the range and 34 at
     /// nine tenths of it, so an engine whose light is cut at its range with no window gives some
-    /// eight times as much just inside the range, and one with no range gives the inverse square
-    /// alone.
+    /// three times as much at nine tenths of the range, one with another window more or less near
+    /// it, and one with no range the inverse square alone.
     /// </para>
     /// </remarks>
     public double IlluminanceAt(double meters, double degreesFromAxis = 0)
@@ -117,8 +117,8 @@ public sealed record LevelLight(
         var candelas = Kind == LevelLightKind.Point
             ? Intensity / (4 * Math.PI)
             : Intensity / (2 * Math.PI * (1 - Math.Cos(OuterCone * Math.PI / 180)));
-        var window = 1 - Math.Pow(near / Range, 4);
-        return candelas / (near * near) * window * window * Cone(degreesFromAxis);
+        var window = Math.Clamp(1 - Math.Pow(near / Range, 4), 0, 1);
+        return candelas / (near * near) * window * Cone(degreesFromAxis);
     }
 
     // A spot's share of its light at an angle from its axis, full inside the inner cone, nothing

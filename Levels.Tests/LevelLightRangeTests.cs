@@ -5,15 +5,16 @@ namespace Levels.Tests;
 
 /// <summary>
 /// What a light's range means, the light falling as the inverse square of the distance and brought
-/// smoothly to nothing at the range, held on the light's own numbers.
+/// to nothing at the range by glTF's window, held on the light's own numbers.
 /// </summary>
 public sealed class LevelLightRangeTests
 {
     private static LevelLight Light(LevelLightKind kind, double lumens, double range, double outer = 0) =>
         new(kind, Vector3.Zero, -Vector3.UnitY, Vector3.One, lumens, range, 0, outer);
 
+    // glTF's KHR_lights_punctual window, 1 minus (d over the range) to the fourth, held to 0 and 1.
     private static double Window(double meters, double range) =>
-        Math.Pow(Math.Max(0, 1 - Math.Pow(meters / range, 4)), 2);
+        Math.Clamp(1 - Math.Pow(meters / range, 4), 0, 1);
 
     [Theory]
     [InlineData(1)]

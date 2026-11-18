@@ -759,3 +759,12 @@ text; the parser's refusals, its cut-short and spoiled files among them, pass un
 after is `.github/assets/readings/2026-11-18-load-after.md`, where at 100,000 brushes Load
 allocates 122.8 MiB where it took 364.1, as Parse does of the text in hand. CHEATSHEET.md is written
 again. The tests pass, 182 where there were 179 (dotnet test Levels.Tests).
+
+The range's window in the commit carrying this line, the review's word taken. LevelLight's window
+is glTF's KHR_lights_punctual one, 1 minus (d over the range) to the fourth, held to 0 and 1, in
+place of its square, so the cone and the range stand on one named source; its remarks give 94 parts
+in a hundred at half the range and 34 at nine tenths, some three times as much there for a light
+cut at the range with no window, and the README's Light row names the window and says an engine
+with another gives more or less light near the range. Five of LevelLightRangeTests' and
+LevelSpotConeTests' cases failed on the squared window once the test's was glTF's. The tests pass,
+182 (dotnet test Levels.Tests).
