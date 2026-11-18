@@ -431,3 +431,10 @@ dependency file records for it against the engines' names and the windows, graph
 bindings it lists. A reference from the library to a scratch project named Vortice.Fake turned it
 red with that name in its message, and taking the reference out turned it green. The strict build
 is clean and the tests pass, 119 where there were 107 (dotnet test Levels.Tests).
+
+The fourth ask in the commit carrying this line. EngineNameTests reads the library's exported
+types and their public members by reflection and its documentation file's members, its assembly's
+own name apart, and fails on either engine's name or 3DEngine's API prefix. No name was found; a
+summary given BevyCSharp's name turned it red naming the member, and taking the name out turned it
+green. The engines stand in the README alone, as two examples. The strict build is clean and the
+tests pass, 121 where there were 119 (dotnet test Levels.Tests).
