@@ -506,3 +506,9 @@ So the module lacks six things both engines' bindings stand on, each proposed as
 own in this order: Level.Load over ILevelFiles; an entity's name; a fault naming the entity's
 index; Prism public; a wall and a ramp between two points; and a ray against brushes. The
 prototypes' pictures wait on Modeling.
+
+The two lines the review left, in the commit carrying this line. LevelBrush.Shapes.cs's banner says
+the brushes by their outline and their mapping alone, and Arch's summary says its rule, every
+segment spanning an equal share of the arch's angle. LevelBrush.cs's remark that a brush is kept as
+its planes "as Quake's tools, Hammer and TrenchBroom keep one" names where the format's rule comes
+from and stands unless the review says otherwise. The tests pass, 122 (dotnet test Levels.Tests).

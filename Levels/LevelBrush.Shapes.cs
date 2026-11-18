@@ -1,8 +1,8 @@
 namespace Levels;
 
-// The brushes a level is blocked out with, made as Hammer's and TrenchBroom's tools make them, each
-// a convex outline across Y stretched from one Y to another, its faces given the world-aligned
-// mapping a new face takes, so a level built in code reads in TrenchBroom as one drawn there does.
+// The brushes a level is blocked out with, each a convex outline across Y stretched from one Y to
+// another, its faces given the world-aligned mapping a new face takes, so a level built in code
+// reads in TrenchBroom as one drawn there does.
 public sealed partial class LevelBrush
 {
     /// <summary>
@@ -42,7 +42,7 @@ public sealed partial class LevelBrush
 
     /// <summary>
     /// An arch standing across X, a half ring or a part of one cut into straight segments, a brush
-    /// each, as Hammer's arch tool cuts one.
+    /// each, every segment spanning an equal share of the arch's angle.
     /// </summary>
     /// <param name="center">The middle of the ring, the arch standing on its X axis and its Y the
     /// middle of its depth.</param>
