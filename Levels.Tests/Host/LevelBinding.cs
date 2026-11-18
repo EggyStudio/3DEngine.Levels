@@ -48,7 +48,7 @@ public static class LevelBinding
                     world.Draw(mesh, LevelPictures.Slot(mesh.Material), picture, placed.Position);
                 }
 
-                world.Collide(LevelGeometry.Triangles(meshes), placed.Position);
+                world.Collide(LevelGeometry.Collision(entity, units, placed.Position), placed.Position);
             }
 
             if (entity.Light(units) is { } light) world.Light(light);

@@ -895,3 +895,13 @@ and the last Replies, then README.md's Binding it in your engine and its convent
 CHEATSHEET.md; it builds under N 7.9's shared lock, regenerates CHEATSHEET.md with CHEATSHEET_WRITE=1
 and DEVLOG.md with Tools' devlog.py in every commit, moves Tools' pin by its pin.py, and runs Tools'
 commitcheck.py with --staged before each commit.
+
+The hour's step in the commit carrying this line, the tool materials. LevelTools names
+`tools/clip`, `tools/nodraw`, `tools/trigger` and `tools/skip` and says whether a face of a
+material is drawn and collides: clip and nodraw collide unseen, trigger is neither, its brush a
+volume its entity reads, and skip is left out of every mesh and shape. Meshes leaves the four out,
+LevelGeometry.Collision gives the faces that collide as one shape, and Hulls leaves out a brush with
+no face that collides; the README's binding collides through Collision, and the conventions gain a
+Tool materials row. LevelToolsTests holds a box of one face of each, a trigger brush and a clip
+brush, and each name's rule; all eight failed on stubs. CHEATSHEET.md is written again. The tests
+pass, 226 where there were 218 (dotnet test Levels.Tests).

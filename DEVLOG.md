@@ -225,6 +225,8 @@ read.
 
 Commits that day
 
+- `ad4d7ed` The example room's sheet takes its tones from the Materials module's prototype table,
+  and the review holds a handoff of what the module gives and what its readers still owe.
 - `a7dd3b3` A door's travel is read from the keys the module's door class names, the way it opens by
   its size that way less its lip.
 - `1e5ecff` A level gives every problem it holds at once, each named by its entity and its key or

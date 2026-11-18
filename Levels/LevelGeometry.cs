@@ -37,7 +37,26 @@ public static class LevelGeometry
     /// <param name="materials">The engine's pictures, each material's size in texels, the level's
     /// units a meter where none is given.</param>
     /// <returns>The meshes, none for an entity with no brushes.</returns>
-    public static IReadOnlyList<LevelMesh> Meshes(LevelEntity source, double unitsPerMeter, Vector3 origin, ILevelMaterials? materials = null)
+    public static IReadOnlyList<LevelMesh> Meshes(LevelEntity source, double unitsPerMeter, Vector3 origin, ILevelMaterials? materials = null) =>
+        Build(source, unitsPerMeter, origin, materials, LevelTools.Drawn);
+
+    /// <summary>
+    /// An entity's faces that collide as one shape of triangles, for a static body, its drawn faces
+    /// and its clip and nodraw faces, in meters with Y up about a place.
+    /// </summary>
+    /// <param name="source">The entity, the world's brushes or a brush entity's.</param>
+    /// <param name="unitsPerMeter">How many of the file's units make a meter.</param>
+    /// <param name="origin">The place in meters the corners are given about.</param>
+    /// <remarks>
+    /// <see cref="Triangles"/> of <see cref="Meshes"/> holds the drawn faces alone, so a clip brush
+    /// collides through this and not through that; trigger and skip faces collide with neither
+    /// (<see cref="LevelTools"/>).
+    /// </remarks>
+    public static LevelTriangles Collision(LevelEntity source, double unitsPerMeter, Vector3 origin) =>
+        Triangles(Build(source, unitsPerMeter, origin, null, LevelTools.Collides));
+
+    // The faces a rule keeps, as triangles a mesh a material.
+    private static IReadOnlyList<LevelMesh> Build(LevelEntity source, double unitsPerMeter, Vector3 origin, ILevelMaterials? materials, Func<string, bool> keep)
     {
         ArgumentNullException.ThrowIfNull(source);
         var built = new Dictionary<string, (List<Vector3> Positions, List<Vector3> Normals, List<Vector2> Uvs, List<uint> Indices)>(StringComparer.Ordinal);
@@ -53,6 +72,7 @@ public static class LevelGeometry
             {
                 if (polygons[f] is not { } polygon) continue;
                 var face = brush.Faces[f];
+                if (!keep(face.Material)) continue;
                 if (!built.TryGetValue(face.Material, out var mesh))
                 {
                     built[face.Material] = mesh = ([], [], [], []);
@@ -95,6 +115,9 @@ public static class LevelGeometry
         var hulls = new List<LevelHull>();
         foreach (var brush in source.Brushes)
         {
+            // A brush with no face that collides is a volume, as a trigger's is, and no hull.
+            if (!brush.Faces.Any(face => LevelTools.Collides(face.Material))) continue;
+
             // Each corner once, in the order the polygons first give it.
             var seen = new List<LevelPoint>(8);
             foreach (var polygon in brush.Polygons())

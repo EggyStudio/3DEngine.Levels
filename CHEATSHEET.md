@@ -124,6 +124,7 @@ Quaternion Rotation { get; init; }                       // The turn, which take
 
 class LevelGeometry                                      // An entity's brushes as the triangles an engine draws, a mesh a material, and as the convex hulls it collides with, in meters with Y up about a place, and the texel math and the pictures' sizes they are made with
 IReadOnlyList<LevelMesh> Meshes(LevelEntity source, double unitsPerMeter, Vector3 origin, ILevelMaterials? materials = null);  // An entity's brushes as triangles, a mesh each material in the order the faces first name them
+LevelTriangles Collision(LevelEntity source, double unitsPerMeter, Vector3 origin);  // An entity's faces that collide as one shape of triangles, for a static body, its drawn faces and its clip and nodraw faces, in meters with Y up about a place
 IReadOnlyList<LevelHull> Hulls(LevelEntity source, double unitsPerMeter, Vector3 origin);  // An entity's brushes as convex hulls, a hull each brush with a solid
 double? Hit(IEnumerable<LevelBrush> brushes, LevelPoint from, LevelPoint way, double reach);  // How far along a ray it first meets any of the brushes, or nothing where it meets none within its reach, as Hit reads each
 bool Inside(LevelBrush brush, LevelPoint point);         // Whether a point in the file's units lies inside a brush, behind every one of its faces' planes
@@ -204,6 +205,14 @@ int Entity { get; init; }                                // The index of the ent
 string? Key { get; init; }                               // The key it stands in, or nothing for a brush or a material
 int? Brush { get; init; }                                // The index of the brush it stands in, among the entity's, or nothing for a key
 string Message { get; init; }                            // What is wrong, as a sentence
+
+class LevelTools                                         // The tool materials, faces a level editor marks for what they do rather than how they look, which Meshes, Collision and Hulls read by name
+string Clip = "tools/clip";                              // A face that collides and is never drawn
+string Trigger = "tools/trigger";                        // A face of a volume its entity reads, neither drawn nor collided with
+string Nodraw = "tools/nodraw";                          // A face that collides and is never drawn, where no surface is seen
+string Skip = "tools/skip";                              // A face left out of every mesh and shape
+bool Drawn(string material);                             // Whether a face of a material is drawn
+bool Collides(string material);                          // Whether a face of a material collides
 
 record struct LevelCell                                  // A cell of a grid in meters with Y up that a level's brushes fill, by its index along each axis from the level's origin, and the material it is laid with, as Cells gives it
 LevelCell(int X, int Y, int Z, string Material);
