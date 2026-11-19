@@ -55,12 +55,16 @@
 [
 	angle(integer) : "Opens toward" : 0 : "The way it opens in degrees about the vertical, -1 up and -2 down"
 	lip(float) : "Lip" : 8 : "How many units of it stay short of its full travel"
+	speed(float) : "Speed" : 100 : "Units a second it moves"
+	wait(float) : "Wait" : 3 : "Seconds open before it returns, -1 to stay"
 ]
 
 @SolidClass = func_button : "A button, its brushes moving the way it is pressed by their size that way less its lip"
 [
 	angle(integer) : "Pressed toward" : 0 : "The way it moves in degrees about the vertical, -1 up and -2 down"
 	lip(float) : "Lip" : 4 : "How many units of it stay short of its full travel"
+	speed(float) : "Speed" : 40 : "Units a second it moves"
+	wait(float) : "Wait" : 1 : "Seconds open before it returns, -1 to stay"
 ]
 
 @SolidClass = func_rotating : "A part that turns about an axis through its origin or its brushes' middle"

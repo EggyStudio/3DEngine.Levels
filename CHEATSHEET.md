@@ -66,6 +66,7 @@ LevelPoint? Point(string key);                           // A key's value as thr
 LevelPlacement Placement(double unitsPerMeter);          // Where the entity stands in meters with Y up and how it is turned, as an engine places what it spawns for it
 Vector3? Travel(double unitsPerMeter);                   // How far and which way a door or a button moves from shut to open or from out to in, in meters with Y up, or nothing where the entity is no func_door or func_button
 LevelSpin? Spin(double unitsPerMeter);                   // How a func_rotating turns about an axis through its Placement, or nothing for another class
+LevelTiming? Timing(double unitsPerMeter);               // How fast a func_door or a func_button moves and how long it waits before it returns, or nothing for another class
 LevelTree? Tree();                                       // The tree the entity places, read from its keys, or nothing where its class is not tree
 void Place(LevelPlacement placement, double unitsPerMeter);  // Writes where the entity stands and how it is turned to its origin and its angle or angles, as Placement reads them
 void SetLight(LevelLight light, double unitsPerMeter);   // Writes a light to the entity's keys, its class, place, way, color, strength, range and cones, as Light reads them
@@ -231,6 +232,12 @@ LevelAmbient(string? Sky, Vector3 Color, double Lux);
 string? Sky { get; init; }                               // The sky's name, which the engine resolves, or nothing for none
 Vector3 Color { get; init; }                             // The ambient light's color in linear sRGB, each channel from 0 to 1
 double Lux { get; init; }                                // The lux it gives every surface, 0 for none
+
+record struct LevelTiming                                // How fast a door or a button moves and how long it waits before it returns, as Timing reads them
+LevelTiming(double MetersPerSecond, double Wait);
+double MetersPerSecond { get; init; }                    // How fast it moves along its travel, in meters a second
+double Wait { get; init; }                               // How many seconds it waits open before it returns, below 0 to stay
+bool Stays { get; }                                      // Whether it stays where it moved to and never returns
 
 record struct LevelCell                                  // A cell of a grid in meters with Y up that a level's brushes fill, by its index along each axis from the level's origin, and the material it is laid with, as Cells gives it
 LevelCell(int X, int Y, int Z, string Material);

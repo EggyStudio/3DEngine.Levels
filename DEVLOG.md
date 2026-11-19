@@ -10,6 +10,8 @@ notes written beside them as Markdown files named the same way. A line under Don
 
 Commits that day
 
+- `0fe4b1b` The world's sky name and its ambient light's color and lux are read from its keys, with
+  their defaults in the editor's classes.
 - `2590e7a` A trigger's volume is given as a hull a brush, and a place is said to stand in it by the
   same rule the cells keep.
 - `d6f26ba` A button travels as a door does, and a rotating part turns about the axis and at the

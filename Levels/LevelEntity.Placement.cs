@@ -173,4 +173,27 @@ public sealed partial class LevelEntity
         var axis = (flags & 4) != 0 ? new LevelPoint(1, 0, 0) : (flags & 8) != 0 ? new LevelPoint(0, 1, 0) : new LevelPoint(0, 0, 1);
         return new LevelSpin(axis.Meters(1), (flags & 2) != 0 ? -speed : speed);
     }
+
+    /// <summary>
+    /// How fast a <c>func_door</c> or a <c>func_button</c> moves and how long it waits before it
+    /// returns, or nothing for another class.
+    /// </summary>
+    /// <param name="unitsPerMeter">How many of the file's units make a meter.</param>
+    /// <remarks>
+    /// The keys are Levels.fgd's: <c>speed</c>, units a second, 100 for a door and 40 for a
+    /// button where it is missing, and <c>wait</c>, seconds open before it returns, 3 for a door
+    /// and 1 for a button where it is missing, and below 0 to stay, as a level editor's doors and
+    /// buttons have them.
+    /// </remarks>
+    /// <exception cref="FormatException">The speed is not a number above zero or the wait not a
+    /// number.</exception>
+    public LevelTiming? Timing(double unitsPerMeter)
+    {
+        if (ClassName is not ("func_door" or "func_button")) return null;
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(unitsPerMeter);
+        var door = ClassName == "func_door";
+        var speed = Number("speed") ?? (door ? 100 : 40);
+        if (!(speed > 0)) throw Refused("speed", this["speed"]!, "a number of units a second above zero");
+        return new LevelTiming(speed / unitsPerMeter, Number("wait") ?? (door ? 3 : 1));
+    }
 }

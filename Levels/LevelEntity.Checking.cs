@@ -58,7 +58,12 @@ public sealed partial class LevelEntity
             Try("_ambient", () => Point("_ambient"));
             Try("_ambient_lux", () => AtLeastZero("_ambient_lux", 0));
         }
-        if (ClassName is "func_door" or "func_button") Try("lip", () => Number("lip"));
+        if (ClassName is "func_door" or "func_button")
+        {
+            Try("lip", () => Number("lip"));
+            Try("speed", () => Timing(1));
+            Try("wait", () => Number("wait"));
+        }
         if (ClassName == "func_rotating")
         {
             Try("speed", () => Number("speed"));

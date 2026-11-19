@@ -945,3 +945,12 @@ one so TrenchBroom's color picker edits the color. Levels.fgd's worldspawn gains
 FgdTests holds a bare world to its defaults, Check names a color or a lux that does not read, and the
 README gains a Sky and ambient row. LevelAmbientTests' five cases failed on stubs. CHEATSHEET.md is
 written again. The tests pass, 259 where there were 254 (dotnet test Levels.Tests).
+
+The hour's step in the commit carrying this line, the movers' speed and wait. LevelEntity.Timing
+reads a func_door's or a func_button's `speed`, units a second turned into meters, 100 for a door
+and 40 for a button where none is given, and its `wait`, seconds open before it returns, 3 and 1
+where none is given and below 0 to stay, as a LevelTiming whose Stays says so; a speed of none or
+less is refused, since such a mover never moves. Levels.fgd gives both classes the two keys,
+FgdTests holds a bare mover to the defaults, Check names a speed or a wait that does not read, and
+the README gains a Movers' timing row. LevelTimingTests' six cases failed on stubs. CHEATSHEET.md is
+written again. The tests pass, 265 where there were 259 (dotnet test Levels.Tests).
