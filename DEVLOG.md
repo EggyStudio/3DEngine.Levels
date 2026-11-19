@@ -10,6 +10,8 @@ notes written beside them as Markdown files named the same way. A line under Don
 
 Commits that day
 
+- `2590e7a` A trigger's volume is given as a hull a brush, and a place is said to stand in it by the
+  same rule the cells keep.
 - `d6f26ba` A button travels as a door does, and a rotating part turns about the axis and at the
   speed its keys give.
 - `1040b27` A light's style is read as the letter pattern its brightness follows, ten letters a

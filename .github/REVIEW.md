@@ -936,3 +936,12 @@ the entity's brushes by Inside's half-open rule, so a place on two brushes' shar
 one; Hulls and Volume share one brush's hull. The README gains a Volumes row. LevelVolumeTests' eight
 cases failed on stubs. CHEATSHEET.md is written again. The tests pass, 254 where there were 246
 (dotnet test Levels.Tests).
+
+The hour's step in the commit carrying this line, the world's sky and ambient. LevelEntity.Ambient
+reads the worldspawn's `_sky`, a name for the engine to resolve and none where it is empty, its
+`_ambient`, a color in sRGB from 0 to 255, white by default, and its `_ambient_lux`, 0 by default,
+as a LevelAmbient of the name, the linear color and the lux, two keys rather than four numbers in
+one so TrenchBroom's color picker edits the color. Levels.fgd's worldspawn gains the three keys,
+FgdTests holds a bare world to its defaults, Check names a color or a lux that does not read, and the
+README gains a Sky and ambient row. LevelAmbientTests' five cases failed on stubs. CHEATSHEET.md is
+written again. The tests pass, 259 where there were 254 (dotnet test Levels.Tests).

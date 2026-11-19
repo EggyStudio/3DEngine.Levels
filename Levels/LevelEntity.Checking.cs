@@ -53,6 +53,11 @@ public sealed partial class LevelEntity
         }
 
         if (ClassName == LevelTree.Class) Try("seed", () => WholeNumber("seed"));
+        if (ClassName == "worldspawn")
+        {
+            Try("_ambient", () => Point("_ambient"));
+            Try("_ambient_lux", () => AtLeastZero("_ambient_lux", 0));
+        }
         if (ClassName is "func_door" or "func_button") Try("lip", () => Number("lip"));
         if (ClassName == "func_rotating")
         {

@@ -69,4 +69,24 @@ public sealed partial class LevelEntity
         var value = Number(key) ?? otherwise;
         return value >= 0 ? value : throw Refused(key, this[key]!, "a number of zero or more");
     }
+
+    /// <summary>
+    /// The world's sky and its ambient light, read from the <c>worldspawn</c>'s keys, or nothing
+    /// for another class.
+    /// </summary>
+    /// <remarks>
+    /// The keys are Levels.fgd's: <c>_sky</c>, a sky's name for the engine to resolve, none where
+    /// it is missing or empty; <c>_ambient</c>, a color in sRGB from 0 to 255 a channel, white
+    /// where it is missing; and <c>_ambient_lux</c>, the lux the ambient light gives every surface,
+    /// 0 where it is missing.
+    /// </remarks>
+    /// <exception cref="FormatException">The color is not three numbers or the lux is not a
+    /// number of zero or more.</exception>
+    public LevelAmbient? Ambient()
+    {
+        if (ClassName != "worldspawn") return null;
+        var sky = this["_sky"] is { Length: > 0 } name ? name : null;
+        var color = Point("_ambient") is { } c ? LevelLight.Linear(c.X, c.Y, c.Z) : Vector3.One;
+        return new LevelAmbient(sky, color, AtLeastZero("_ambient_lux", 0));
+    }
 }

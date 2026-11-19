@@ -15,7 +15,7 @@ public sealed partial class FgdTests
     // The keys each class's reader reads, besides classname and origin, which every entity has.
     private static readonly Dictionary<string, string[]> Read = new()
     {
-        ["worldspawn"] = [Level.UnitsPerMeterKey],
+        ["worldspawn"] = [Level.UnitsPerMeterKey, "_sky", "_ambient", "_ambient_lux"],
         ["info_player_start"] = ["angle"],
         [LevelLight.PointClass] = ["_color", "intensity", "range", "style", "pattern"],
         [LevelLight.SpotClass] = ["angles", "_color", "intensity", "range", "_inner_cone", "_cone", "style", "pattern"],
@@ -75,6 +75,12 @@ public sealed partial class FgdTests
             entity.Brushes.Add(LevelBrush.Box(new LevelPoint(0, 0, 0), new LevelPoint(64, 8, 96), "door"));
         Assert.Equal(bare.Travel(32), given.Travel(32));
         Assert.Equal(bare.Spin(32), given.Spin(32));
+        if (bare.Ambient() is { } ambient)
+        {
+            var other = given.Ambient()!.Value;
+            Assert.Equal((ambient.Sky, ambient.Lux), (other.Sky, other.Lux));
+            Assert.True(Vector3.Distance(ambient.Color, other.Color) < Close);
+        }
         if (bare.Light(32) is { } light)
         {
             var other = given.Light(32)!;

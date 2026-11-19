@@ -48,7 +48,7 @@ The types a binding reads, each in the namespace `Levels`, are these.
 | Type | What it is |
 |---|---|
 | `Level` | A level file, read by `Level.Parse`, or by `Level.Load` from a path or through an `ILevelFiles`, and written by `Level.Write` or `Level.Save`, with its entities, handed to the engine one by one by `Level.ReadEntities` with a fault naming the entity, and `Level.UnitsPerMeter`, `Level.Check`, every problem of the level at once, `Level.Targeted`, the entities a target name names, `Level.Flattened`, the view a binding reads in which TrenchBroom's layers and groups are the world and a layer omitted from export is left out, and `Level.Doorway`, a wall's brushes round a rounded opening |
-| `LevelEntity` | An entity, its keyvalues in order and its brushes, read by `Placement`, `Light`, `Tree`, `Number`, `WholeNumber`, `Point`, `KeysText`, `Outputs`, `Travel` and `Spin`, written back by `Place`, `SetLight` and `SetTree`, each writing only what differs so a level saved unedited is the same text, and called by `Name` |
+| `LevelEntity` | An entity, its keyvalues in order and its brushes, read by `Placement`, `Light`, `Tree`, `Number`, `WholeNumber`, `Point`, `KeysText`, `Outputs`, `Travel`, `Spin` and `Ambient`, written back by `Place`, `SetLight` and `SetTree`, each writing only what differs so a level saved unedited is the same text, and called by `Name` |
 | `LevelBrush` | A brush, a convex solid of its faces' planes, its polygons from `Polygons` and its shapes from `Box`, `Wedge`, `Prism` of any convex outline, `Slab` of a ground outline, `Arch`, `Wall` and `Ramp` between two points, `Along`, `Turned` and `Moved`, and how far a ray meets it from `Hit` |
 | `LevelFace` | A face, its plane through three points, its material and its mapping of two axes, offsets, a rotation and two scales |
 | `LevelPoint` | A point or a way in the file's units with Z up, turned into meters by `Meters`, with `Dot`, `Cross` and `Length` |
@@ -65,6 +65,7 @@ The types a binding reads, each in the namespace `Levels`, are these.
 | `LevelProblem` | A problem `Level.Check` names, the entity it stands in, its key or its brush, and a sentence |
 | `LevelTools` | The tool materials' names and whether a face of a material is drawn and collides |
 | `LevelSpin` | How a rotating part turns, its axis in meters and its degrees a second |
+| `LevelAmbient` | The world's sky name and its ambient light's color and lux |
 | `LevelCell` | A cell of a grid a level's brushes fill, its index along each axis and its material |
 
 What the module gives out stands on these conventions.
@@ -80,6 +81,7 @@ What the module gives out stands on these conventions.
 | Light | Lumens for a point over the whole sphere and for a spot over its outer cone, lux for the sun, a range in meters within which the light falls as the inverse square of the distance times glTF's KHR_lights_punctual window, 1 minus (d over the range) to the fourth, nothing at the range and past it (`LevelLight.IlluminanceAt`), an engine with another window giving more or less light near the range, a spot's cones in degrees from its axis, full inside the inner and between the two the square of a ramp in the angle's cosine, as glTF's KHR_lights_punctual gives a spot's falloff; an engine whose spot takes the lumens of a point light of the same candelas gives it the lumens times 2 over 1 minus the outer cone's cosine |
 | Materials | A name under `proto/` is a prototype's slot over a picture of 512 texels, and any other a PNG or a JPEG of its name under `textures/`, the layout `LevelPictures` reads; an engine that lays its pictures out otherwise implements `ILevelMaterials` |
 | Collision | An entity's brushes as one shape of triangles for a static body (`LevelGeometry.Collision`), or as a convex hull a brush (`LevelGeometry.Hulls`) |
+| Sky and ambient | The world's `_sky` is a name for the engine to resolve, and its `_ambient`, sRGB from 0 to 255, and `_ambient_lux` the light every surface takes where no light reaches, white and 0 where none is given (`LevelEntity.Ambient`) |
 | Light styles | A light's brightness follows its `pattern`, letters a to z ten a second and round again, a none, m its strength and z 25 over 12 of it, or the one of the map format's twelve conventional patterns its `style` numbers, 0 steady (`LevelLight.StyleAt`) |
 | Volumes | A trigger's volume is a convex hull a brush whatever its material (`LevelGeometry.Volume`), and a place in meters stands in it where it stands in any brush by the half-open rule of Cells (`LevelGeometry.InsideVolume`) |
 | Tool materials | A face of `tools/clip` or `tools/nodraw` collides and is not drawn, one of `tools/trigger` is neither, its brush a volume its entity reads, and one of `tools/skip` is left out of every mesh and shape (`LevelTools`) |

@@ -59,6 +59,7 @@ IEnumerable<string> All(string key);                     // Every value of a key
 string KeysText();                                       // The keyvalues as the level file writes them, a line each in their order, which an engine keeps on what it spawns for the entity and ParseKeys reads back
 List<KeyValuePair<string, string>> ParseKeys(string text);  // The keyvalues of KeysText's text, in their order
 LevelLight? Light(double unitsPerMeter);                 // The light the entity is, read from its keys, or nothing where its class is not a light's
+LevelAmbient? Ambient();                                 // The world's sky and its ambient light, read from the worldspawn's keys, or nothing for another class
 double? Number(string key);                              // A key's value as a number, or nothing where the entity has no such key
 uint? WholeNumber(string key);                           // A key's value as a whole number of zero or more, or nothing where the entity has no such key
 LevelPoint? Point(string key);                           // A key's value as three numbers, a point in the file's units, or nothing where the entity has no such key
@@ -224,6 +225,12 @@ record struct LevelSpin                                  // How a rotating part 
 LevelSpin(Vector3 Axis, double DegreesPerSecond);
 Vector3 Axis { get; init; }                              // The axis in meters with Y up, a length of one
 double DegreesPerSecond { get; init; }                   // How fast it turns about the axis, counterclockwise seen from the axis's tip, below none the other way
+
+record struct LevelAmbient                               // The world's sky and its light where no light reaches, as Ambient reads them from the worldspawn's keys
+LevelAmbient(string? Sky, Vector3 Color, double Lux);
+string? Sky { get; init; }                               // The sky's name, which the engine resolves, or nothing for none
+Vector3 Color { get; init; }                             // The ambient light's color in linear sRGB, each channel from 0 to 1
+double Lux { get; init; }                                // The lux it gives every surface, 0 for none
 
 record struct LevelCell                                  // A cell of a grid in meters with Y up that a level's brushes fill, by its index along each axis from the level's origin, and the material it is laid with, as Cells gives it
 LevelCell(int X, int Y, int Z, string Material);
