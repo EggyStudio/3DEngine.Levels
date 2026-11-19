@@ -118,19 +118,7 @@ public static class LevelGeometry
             // A brush with no face that collides is a volume, as a trigger's is, and no hull.
             if (!brush.Faces.Any(face => LevelTools.Collides(face.Material))) continue;
 
-            // Each corner once, in the order the polygons first give it.
-            var seen = new List<LevelPoint>(8);
-            foreach (var polygon in brush.Polygons())
-            {
-                if (polygon is null) continue;
-                foreach (var corner in polygon)
-                    if (!seen.Contains(corner)) seen.Add(corner);
-            }
-
-            if (seen.Count < 4) continue;
-            var meters = new Vector3[seen.Count];
-            for (var k = 0; k < seen.Count; k++) meters[k] = seen[k].Meters(unitsPerMeter) - origin;
-            hulls.Add(new LevelHull(meters));
+            if (Hull(brush, unitsPerMeter, origin) is { } hull) hulls.Add(hull);
         }
 
         return hulls;
@@ -364,6 +352,58 @@ public static class LevelGeometry
         }
 
         return brushes;
+    }
+
+    /// <summary>
+    /// An entity's volume, a convex hull for each of its brushes whatever their material, as a
+    /// trigger's brushes of <see cref="LevelTools.Trigger"/> are, in meters with Y up about a
+    /// place.
+    /// </summary>
+    /// <param name="source">The entity, a trigger's brushes or any brush entity's.</param>
+    /// <param name="unitsPerMeter">How many of the file's units make a meter.</param>
+    /// <param name="origin">The place in meters the corners are given about.</param>
+    /// <remarks>
+    /// <see cref="Hulls"/> leaves a brush with no face that collides out, since it makes no body;
+    /// this keeps it, for an engine that tests what enters the volume.
+    /// </remarks>
+    public static IReadOnlyList<LevelHull> Volume(LevelEntity source, double unitsPerMeter, Vector3 origin)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        return [.. source.Brushes.Select(brush => Hull(brush, unitsPerMeter, origin)).OfType<LevelHull>()];
+    }
+
+    /// <summary>
+    /// Whether a place in meters with Y up about the level's origin stands inside any of an
+    /// entity's brushes, as <see cref="Inside"/> says of each, so every engine fires a trigger
+    /// alike.
+    /// </summary>
+    /// <param name="source">The entity.</param>
+    /// <param name="at">The place, in meters with Y up about the level's origin.</param>
+    /// <param name="unitsPerMeter">How many of the file's units make a meter.</param>
+    public static bool InsideVolume(LevelEntity source, Vector3 at, double unitsPerMeter)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(unitsPerMeter);
+        var point = new LevelPoint(at.X * unitsPerMeter, -(double)at.Z * unitsPerMeter, at.Y * unitsPerMeter);
+        return source.Brushes.Any(brush => Inside(brush, point));
+    }
+
+    // A brush's hull, each corner once in the order its polygons first give it, or nothing for a
+    // brush of fewer than four corners.
+    private static LevelHull? Hull(LevelBrush brush, double unitsPerMeter, Vector3 origin)
+    {
+        var seen = new List<LevelPoint>(8);
+        foreach (var polygon in brush.Polygons())
+        {
+            if (polygon is null) continue;
+            foreach (var corner in polygon)
+                if (!seen.Contains(corner)) seen.Add(corner);
+        }
+
+        if (seen.Count < 4) return null;
+        var meters = new Vector3[seen.Count];
+        for (var k = 0; k < seen.Count; k++) meters[k] = seen[k].Meters(unitsPerMeter) - origin;
+        return new LevelHull(meters);
     }
 
     /// <summary>An entity's meshes as one shape of triangles, for a static body.</summary>

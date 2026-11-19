@@ -927,3 +927,12 @@ description names the values, since an fgd's bracketed flags would not read as o
 a bad lip, speed or flags; and the README gains a Rotating parts row. LevelMoversTests' ten cases
 failed on stubs. CHEATSHEET.md is written again. The tests pass, 246 where there were 234 (dotnet
 test Levels.Tests).
+
+The hour's step in the commit carrying this line, the trigger volumes. LevelGeometry.Volume gives a
+convex hull for each of an entity's brushes whatever their material, as a trigger's brushes of
+tools/trigger are, where Hulls leaves a brush with no colliding face out, and
+LevelGeometry.InsideVolume says whether a place in meters about the level's origin stands in any of
+the entity's brushes by Inside's half-open rule, so a place on two brushes' shared face stands in
+one; Hulls and Volume share one brush's hull. The README gains a Volumes row. LevelVolumeTests' eight
+cases failed on stubs. CHEATSHEET.md is written again. The tests pass, 254 where there were 246
+(dotnet test Levels.Tests).
