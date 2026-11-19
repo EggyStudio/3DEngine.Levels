@@ -20,3 +20,20 @@ the sun face along the arrow TrenchBroom draws for their `angles`.
 
 `examples/room.map` is a room of every class `Levels.fgd` names, written by the module's tests,
 which hold the file to what they write.
+
+The classes Levels.fgd names are these, each with its keys and their defaults and the reader that
+reads it, the table written from the fgd by the tests.
+
+<!-- written by FgdTests from Levels.fgd -->
+
+| Class | Keys, with their defaults | Read by |
+|---|---|---|
+| `worldspawn` | `_units_per_meter` 32, `_sky`, `_ambient` 255 255 255, `_ambient_lux` 0 | `Level.UnitsPerMeter`, `LevelEntity.Ambient` |
+| `info_player_start` | `angle` 0 | `LevelEntity.Placement` |
+| `light` | `_color` 255 255 255, `intensity` 800, `range` 10, `style` 0, `pattern` | `LevelEntity.Light` |
+| `light_spot` | `angles` 0 0 0, `_color` 255 255 255, `intensity` 800, `range` 10, `_inner_cone` 25, `_cone` 30, `style` 0, `pattern` | `LevelEntity.Light` |
+| `light_environment` | `angles` 0 0 0, `_color` 255 255 255, `intensity` 100000, `style` 0, `pattern` | `LevelEntity.Light` |
+| `tree` | `species`, `seed` 0 | `LevelEntity.Tree` |
+| `func_door` | `angle` 0, `lip` 8, `speed` 100, `wait` 3 | `LevelEntity.Travel`, `LevelEntity.Timing` |
+| `func_button` | `angle` 0, `lip` 4, `speed` 40, `wait` 1 | `LevelEntity.Travel`, `LevelEntity.Timing` |
+| `func_rotating` | `speed` 100, `spawnflags` 0 | `LevelEntity.Spin` |

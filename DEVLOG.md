@@ -10,6 +10,8 @@ notes written beside them as Markdown files named the same way. A line under Don
 
 Commits that day
 
+- `19c51c2` A door's and a button's speed and wait are read from their keys, so a mover is timed
+  alike wherever it is played.
 - `0fe4b1b` The world's sky name and its ambient light's color and lux are read from its keys, with
   their defaults in the editor's classes.
 - `2590e7a` A trigger's volume is given as a hull a brush, and a place is said to stand in it by the

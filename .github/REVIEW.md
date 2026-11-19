@@ -954,3 +954,9 @@ less is refused, since such a mover never moves. Levels.fgd gives both classes t
 FgdTests holds a bare mover to the defaults, Check names a speed or a wait that does not read, and
 the README gains a Movers' timing row. LevelTimingTests' six cases failed on stubs. CHEATSHEET.md is
 written again. The tests pass, 265 where there were 259 (dotnet test Levels.Tests).
+
+The hour's step in the commit carrying this line, the classes' table. TrenchBroom's README ends with
+a table of every class Levels.fgd names, its keys with their defaults and the reader that reads it,
+under a mark; FgdTests builds it from the fgd and holds the README's to it, and the tests run with
+LEVELS_TABLE_WRITE=1 write it again, so the table cannot drift from the fgd; the test failed while
+the README had no table. The tests pass, 266 where there were 265 (dotnet test Levels.Tests).

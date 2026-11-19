@@ -107,4 +107,48 @@ public sealed partial class FgdTests
         Assert.True(Math.Abs(Quaternion.Dot(expected.Rotation, actual.Rotation)) > 1 - Close,
             $"{actual.Rotation} where {expected.Rotation} is meant");
     }
+
+    // The reader each class is read by, for the table TrenchBroom's README holds.
+    private static readonly Dictionary<string, string> ReadBy = new()
+    {
+        ["worldspawn"] = "`Level.UnitsPerMeter`, `LevelEntity.Ambient`",
+        ["info_player_start"] = "`LevelEntity.Placement`",
+        [LevelLight.PointClass] = "`LevelEntity.Light`",
+        [LevelLight.SpotClass] = "`LevelEntity.Light`",
+        [LevelLight.DirectionalClass] = "`LevelEntity.Light`",
+        [LevelTree.Class] = "`LevelEntity.Tree`",
+        ["func_door"] = "`LevelEntity.Travel`, `LevelEntity.Timing`",
+        ["func_button"] = "`LevelEntity.Travel`, `LevelEntity.Timing`",
+        ["func_rotating"] = "`LevelEntity.Spin`",
+    };
+
+    private const string TableMark = "<!-- written by FgdTests from Levels.fgd -->";
+
+    [Fact]
+    public void TrenchBroomsReadmeTablesTheClassesAsTheFgdGivesThem()
+    {
+        var at = new DirectoryInfo(AppContext.BaseDirectory);
+        while (at is not null && !File.Exists(Path.Combine(at.FullName, "Levels.slnx"))) at = at.Parent;
+        var path = Path.Combine(at!.FullName, "TrenchBroom", "README.md");
+        var lines = new List<string> { TableMark, "", "| Class | Keys, with their defaults | Read by |", "|---|---|---|" };
+        foreach (var (name, keys) in Classes())
+        {
+            var listed = string.Join(", ", keys.Select(pair => pair.Value.Length > 0 ? $"`{pair.Key}` {pair.Value}" : $"`{pair.Key}`"));
+            lines.Add($"| `{name}` | {listed} | {ReadBy[name]} |");
+        }
+
+        var table = string.Join("\n", lines);
+        var readme = File.ReadAllText(path).ReplaceLineEndings("\n");
+        var start = readme.IndexOf(TableMark, StringComparison.Ordinal);
+        var end = start < 0 ? -1 : readme.IndexOf("\n\n", readme.IndexOf("|---|", start, StringComparison.Ordinal), StringComparison.Ordinal);
+        var held = start < 0 ? "" : readme[start..(end < 0 ? readme.TrimEnd('\n').Length : end)];
+        if (Environment.GetEnvironmentVariable("LEVELS_TABLE_WRITE") == "1" && held != table)
+        {
+            readme = start < 0 ? readme.TrimEnd('\n') + "\n\n" + table + "\n" : readme.Replace(held, table);
+            File.WriteAllText(path, readme);
+            held = table;
+        }
+
+        Assert.True(held == table, "TrenchBroom/README.md's table of classes is not what Levels.fgd gives. Run the tests with LEVELS_TABLE_WRITE=1 to write it again.");
+    }
 }
