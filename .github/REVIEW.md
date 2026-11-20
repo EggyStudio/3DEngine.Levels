@@ -960,3 +960,10 @@ a table of every class Levels.fgd names, its keys with their defaults and the re
 under a mark; FgdTests builds it from the fgd and holds the README's to it, and the tests run with
 LEVELS_TABLE_WRITE=1 write it again, so the table cannot drift from the fgd; the test failed while
 the README had no table. The tests pass, 266 where there were 265 (dotnet test Levels.Tests).
+
+The repositories' new names in the commit carrying this line. pin.py moved Tools from `1452dbe` to
+`13ca744`, 14 commits, its submodule's address to 3DEngine.Tools, and named one changed fact,
+No_Tracked_Text_Names_An_Engine by `70543a2`, whose form the module's test already has; the
+cheatsheet stood as it was and the devlog was written again. The README's link row and its
+submodule command name 3DEngine.Levels, and no file but the review's names a module's old address.
+The tests pass, 266 (dotnet test Levels.Tests).
