@@ -892,9 +892,10 @@ module's API, its fgd's tree class dropped, any `light` key renamed `intensity`,
 the old assembly name. 3DEngine owes its binding, with public static-mesh and convex-hull bodies.
 The game takes Cells for its blocks. A fresh session reads AGENTS.md, then this file's head, Now
 and the last Replies, then README.md's Binding it in your engine and its conventions table, then
-CHEATSHEET.md; it builds under N 7.9's shared lock, regenerates CHEATSHEET.md with CHEATSHEET_WRITE=1
-and DEVLOG.md with Tools' devlog.py in every commit, moves Tools' pin by its pin.py, and runs Tools'
-commitcheck.py with --staged before each commit.
+CHEATSHEET.md; a build or test that opens no device needs no lock, and a program that does runs
+through N 7.9's gate, Tools' `scripts/gpu.py shared -- <command>`. It regenerates CHEATSHEET.md with
+CHEATSHEET_WRITE=1 and DEVLOG.md with Tools' devlog.py in every commit, moves Tools' pin by its
+pin.py, and runs Tools' commitcheck.py with --staged before each commit.
 
 The hour's step in the commit carrying this line, the tool materials. LevelTools names
 `tools/clip`, `tools/nodraw`, `tools/trigger` and `tools/skip` and says whether a face of a
@@ -967,3 +968,8 @@ No_Tracked_Text_Names_An_Engine by `70543a2`, whose form the module's test alrea
 cheatsheet stood as it was and the devlog was written again. The README's link row and its
 submodule command name 3DEngine.Levels, and no file but the review's names a module's old address.
 The tests pass, 266 (dotnet test Levels.Tests).
+
+The pin moved to `be1b6ab` in the commit carrying this line, with NORM.md's sentence that
+`scripts/gpu.py` is the one gate for the GPU lock. The handoff above now names the gate and says that
+a build or test that opens no device needs no lock. N 7.9's sentence that a build takes the shared
+lock stands as written, so the two read apart until it is mended.

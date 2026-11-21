@@ -6,6 +6,12 @@ repository keeps under `.github/assets` and the pictures made while an item was 
 notes written beside them as Markdown files named the same way. A line under Done names the item of
 .github/REVIEW.md or .github/REVIEW-ARCHIVE.md and the commit that closed it.
 
+## 2026-11-20
+
+Commits that day
+
+- `e2ac40c` The module and its tools are addressed by their repositories' new names.
+
 ## 2026-11-19
 
 Commits that day
