@@ -6,6 +6,19 @@ repository keeps under `.github/assets` and the pictures made while an item was 
 notes written beside them as Markdown files named the same way. A line under Done names the item of
 .github/REVIEW.md or .github/REVIEW-ARCHIVE.md and the commit that closed it.
 
+## 2026-11-22
+
+![](.github/assets/readings/2026-11-22-room-meshes.webp)
+The example room's brushes as the meshes made from them, from an oblique eye to the south-east, each
+face in the Materials module's prototype tone for its material and shaded flat by one sun, the ramp
+and the door in its doorway; the first picture of the README.
+
+## 2026-11-21
+
+Commits that day
+
+- `96b8010` The Tools pin moves to be1b6ab and the handoff names the GPU gate.
+
 ## 2026-11-20
 
 Commits that day

@@ -2,6 +2,10 @@
 
 # Levels
 
+![](.github/assets/readings/2026-11-22-room-meshes.webp)
+
+The example room's brushes as the meshes the module makes from them, seen from the south-east.
+
 Levels is a library an engine takes as a git submodule, for the reader of the Valve 220 map format,
 the meshes and collision shapes made from its brushes, and the TrenchBroom configuration and FGD
 file those maps are edited with. It references no engine, and an engine implements the interfaces it
