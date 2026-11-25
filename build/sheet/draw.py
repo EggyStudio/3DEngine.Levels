@@ -1,8 +1,9 @@
 # Draws a level as the module gives it, from build/sheet's JSON, on a white ground, from above, the
 # file's north up, each face lighter the higher it stands, its lights, a spot's way, the sun's and
 # its entities marked by class; from an oblique eye; each triangle shaded flat by the way it faces a
-# fixed sun, the nearest kept at each pixel; and the lux the lights give the floor, as the module
-# reads it, on a scale of its own. It needs Pillow.
+# fixed sun, the nearest kept at each of nine samples a pixel, which are averaged so an edge is
+# smooth; and the lux the lights give the floor, as the module reads it, on a scale of its own. It
+# needs Pillow.
 #
 #   python3 -I build/sheet/draw.py <level.json> <above.png> <oblique.png> <lux.png>
 import json
@@ -13,6 +14,9 @@ from PIL import Image, ImageDraw, ImageFont
 
 level = json.load(open(sys.argv[1]))
 SIZE, MARGIN = 720, 56
+# Each pixel of a shaded view is the average of SAMPLES by SAMPLES samples, so an edge between two
+# faces, or a face and the ground, is smooth and not a staircase of whole pixels.
+SAMPLES = 3
 SUN = (0.35, 0.85, 0.4)
 # The prototypes' tones, the Materials module's as build/sheet writes them, a gray for any other.
 COLORS = {name: tuple(int(round(c * 255)) for c in tone) for name, tone in level["tones"].items()}
@@ -60,20 +64,22 @@ def view(right, up, toward, name, rise=0.0):
             if rise:
                 height = sum(p[1] for p in t) / 3
                 light *= 1 - rise + rise * (height - low) / ((high - low) or 1)
-            faces.append(([dot(p, toward) for p in t], [place(p) for p in t], tuple(int(c * light) for c in base)))
+            faces.append(([dot(p, toward) for p in t], [tuple(c * SAMPLES for c in place(p)) for p in t], tuple(int(c * light) for c in base)))
 
-    # Each pixel keeps the nearest triangle that covers it, its depth read across the triangle
-    # from its corners', so a large face never hides a small one before it.
-    image = Image.new("RGB", (SIZE, SIZE), (255, 255, 255))
+    # Each sample keeps the nearest triangle that covers it, its depth read across the triangle
+    # from its corners', so a large face never hides a small one before it. The samples are
+    # averaged down to the picture's pixels.
+    big = SIZE * SAMPLES
+    image = Image.new("RGB", (big, big), (255, 255, 255))
     pixels = image.load()
-    nearest = [[math.inf] * SIZE for _ in range(SIZE)]
+    nearest = [[math.inf] * big for _ in range(big)]
     for depths, corners, color in faces:
         (ax, ay), (bx, by), (cx2, cy2) = corners
         area = (bx - ax) * (cy2 - ay) - (cx2 - ax) * (by - ay)
         if abs(area) < 1e-9:
             continue
-        for y in range(max(0, int(min(ay, by, cy2))), min(SIZE, int(max(ay, by, cy2)) + 1)):
-            for x in range(max(0, int(min(ax, bx, cx2))), min(SIZE, int(max(ax, bx, cx2)) + 1)):
+        for y in range(max(0, int(min(ay, by, cy2))), min(big, int(max(ay, by, cy2)) + 1)):
+            for x in range(max(0, int(min(ax, bx, cx2))), min(big, int(max(ax, bx, cx2)) + 1)):
                 px, py = x + 0.5, y + 0.5
                 w0 = ((bx - px) * (cy2 - py) - (cx2 - px) * (by - py)) / area
                 w1 = ((cx2 - px) * (ay - py) - (ax - px) * (cy2 - py)) / area
@@ -84,6 +90,7 @@ def view(right, up, toward, name, rise=0.0):
                 if depth < nearest[y][x]:
                     nearest[y][x] = depth
                     pixels[x, y] = color
+    image = image.resize((SIZE, SIZE), Image.BOX)
     draw = ImageDraw.Draw(image)
     return image, draw, place, scale
 

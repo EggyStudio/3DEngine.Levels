@@ -11,7 +11,13 @@ notes written beside them as Markdown files named the same way. A line under Don
 ![](.github/assets/readings/2026-11-22-room-meshes.webp)
 The example room's brushes as the meshes made from them, from an oblique eye to the south-east, each
 face in the Materials module's prototype tone for its material and shaded flat by one sun, the ramp
-and the door in its doorway; the first picture of the README.
+and the door in its doorway, its edges smooth from nine samples a pixel; the first picture of the
+README.
+
+Commits that day
+
+- `87f7188` The README opens with a picture of the example room's brushes as the meshes made from
+  them.
 
 ## 2026-11-21
 
